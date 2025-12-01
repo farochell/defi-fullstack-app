@@ -29,4 +29,12 @@ class Station extends AggregateRoot
             $longName,
         );
     }
+
+    public function toArray(): array {
+        return [
+            'id' => $this->id->value(),
+            'shortName' => $this->shortName,
+            'longName' => $this->longName,
+        ];
+    }
 }

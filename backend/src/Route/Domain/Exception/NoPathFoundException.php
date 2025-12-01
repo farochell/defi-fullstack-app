@@ -10,25 +10,24 @@ namespace App\Route\Domain\Exception;
 use App\Shared\Domain\Exception\ApiExceptionInterface;
 use App\Shared\Domain\Exception\ApiExceptionTrait;
 use App\Shared\Domain\Exception\ErrorCode;
-use App\Shared\Domain\Exception\RepositoryException;
 
-class StationNotFoundException extends RepositoryException implements ApiExceptionInterface
+class NoPathFoundException extends \DomainException implements ApiExceptionInterface
 {
     use ApiExceptionTrait;
 
-    public function __construct(private readonly string $name)
+    public function __construct(private readonly string $from, private readonly string $to)
     {
         parent::__construct(
-            message: "Station not found",
-            code: 500
+            message: "Path not found for {$from} to {$to}",
+            code: 400
         );
     }
 
     public function getErrorCode(): ErrorCode {
-        return ErrorCode::STATION_NOT_FOUND;
+        return ErrorCode::EMPTY_PATH;
     }
 
     public function getDetails(): array {
-        return [$this->name];
+        return [];
     }
 }
