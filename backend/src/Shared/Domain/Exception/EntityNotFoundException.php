@@ -9,19 +9,34 @@ namespace App\Shared\Domain\Exception;
 
 use Throwable;
 
-class EntityNotFoundException extends RepositoryException
+class EntityNotFoundException extends RepositoryException implements ApiExceptionInterface
 {
-    public static function withId(string $entityName, string $id): self
-    {
-        return new self(sprintf("Entity %s with ID %s not found", $entityName, $id));
+    use ApiExceptionTrait;
+
+    public function __construct(
+        public string $entityName,
+        public string $identifier,
+        Throwable $previous = null
+    ) {
+        parent::__construct(
+            sprintf("Entity %s with ID %s not found", $entityName, $identifier),
+            404,
+            $previous
+        );
     }
 
-    public static function fromPrevious(string $entityName, Throwable $throwable): self
+    public static function withId(string $entityName, string $id): self
     {
-        return new self(
-            sprintf("Error while saving the entity %s: %s", $entityName, $throwable->getMessage()),
-            0,
-            $throwable
-        );
+        return new self($entityName, $id);
+    }
+
+    public function getErrorCode(): ErrorCode
+    {
+        return ErrorCode::ENTITY_NOT_FOUND;
+    }
+
+    public function getDetails(): array
+    {
+        return [$this->entityName, $this->identifier];
     }
 }

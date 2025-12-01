@@ -32,5 +32,10 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Shared\Infrastructure\Bus\Command\InMemoryCommandBus:
         arguments: [ !tagged_iterator app.command_handler ]
+
     App\Shared\Infrastructure\Bus\Query\InMemoryQueryBus:
         arguments: [ !tagged_iterator app.query_handler ]
+
+    App\Route\Infrastructure\Repository\JsonStationRepository:
+        arguments:
+            $stationsFile: '%kernel.project_dir%/public/data/stations.json'
