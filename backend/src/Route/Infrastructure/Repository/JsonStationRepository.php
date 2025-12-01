@@ -19,23 +19,23 @@ class JsonStationRepository implements StationRepositoryInterface
 {
     private Stations $stations;
 
-    public function __construct(string $stationsFile)
+    public function __construct(public readonly string $stationsFile)
     {
-        if (!file_exists($stationsFile)) {
-            throw new StationsFileNotFoundException($stationsFile);
+        if (!file_exists($this->stationsFile)) {
+            throw new StationsFileNotFoundException($this->stationsFile);
         }
 
-        $content = file_get_contents($stationsFile);
+        $content = file_get_contents($this->stationsFile);
 
         if ($content === false || trim($content) === '') {
-            throw new StationsFileEmptyException($stationsFile);
+            throw new StationsFileEmptyException($this->stationsFile);
         }
 
         $data = json_decode($content, true);
 
         if (!is_array($data)) {
             throw new StationsFileInvalidJsonException(
-                $stationsFile,
+                $this->stationsFile,
                 json_last_error_msg()
             );
         }

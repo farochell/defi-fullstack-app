@@ -16,7 +16,7 @@ class EntityNotFoundException extends RepositoryException implements ApiExceptio
     public function __construct(
         public string $entityName,
         public string $identifier,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct(
             sprintf("Entity %s with ID %s not found", $entityName, $identifier),

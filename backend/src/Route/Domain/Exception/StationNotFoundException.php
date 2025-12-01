@@ -12,25 +12,23 @@ use App\Shared\Domain\Exception\ApiExceptionTrait;
 use App\Shared\Domain\Exception\ErrorCode;
 use App\Shared\Domain\Exception\RepositoryException;
 
-class StationsFileEmptyException extends RepositoryException implements ApiExceptionInterface
+class StationNotFoundException extends RepositoryException implements ApiExceptionInterface
 {
     use ApiExceptionTrait;
 
-    public function __construct(private readonly string $path)
+    public function __construct(private readonly string $msg)
     {
         parent::__construct(
-            message: "Stations file is empty",
+            message: "Station not found",
             code: 500
         );
     }
 
-    public function getErrorCode(): ErrorCode
-    {
-        return ErrorCode::STATIONS_FILE_EMPTY;
+    public function getErrorCode(): ErrorCode {
+        return ErrorCode::STATION_NOT_FOUND;
     }
 
-    public function getDetails(): array
-    {
-        return [$this->path];
+    public function getDetails(): array {
+        return [$this->msg];
     }
 }

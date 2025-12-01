@@ -12,25 +12,25 @@ use App\Shared\Domain\Exception\ApiExceptionTrait;
 use App\Shared\Domain\Exception\ErrorCode;
 use App\Shared\Domain\Exception\RepositoryException;
 
-class StationsFileEmptyException extends RepositoryException implements ApiExceptionInterface
+class DistancesFileInvalidJsonException extends RepositoryException implements ApiExceptionInterface
 {
     use ApiExceptionTrait;
 
-    public function __construct(private readonly string $path)
+    public function __construct(private readonly string $path, private readonly string $jsonError)
     {
         parent::__construct(
-            message: "Stations file is empty",
+            message: "Invalid JSON format in Distances file",
             code: 500
         );
     }
 
     public function getErrorCode(): ErrorCode
     {
-        return ErrorCode::STATIONS_FILE_EMPTY;
+        return ErrorCode::DISTANCES_FILE_INVALID_JSON;
     }
 
     public function getDetails(): array
     {
-        return [$this->path];
+        return [$this->path, $this->jsonError];
     }
 }

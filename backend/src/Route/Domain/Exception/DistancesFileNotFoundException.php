@@ -12,21 +12,21 @@ use App\Shared\Domain\Exception\ApiExceptionTrait;
 use App\Shared\Domain\Exception\ErrorCode;
 use App\Shared\Domain\Exception\RepositoryException;
 
-class StationsFileEmptyException extends RepositoryException implements ApiExceptionInterface
+class DistancesFileNotFoundException extends RepositoryException implements ApiExceptionInterface
 {
     use ApiExceptionTrait;
 
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Stations file is empty",
+            message: "Distances file not found",
             code: 500
         );
     }
 
     public function getErrorCode(): ErrorCode
     {
-        return ErrorCode::STATIONS_FILE_EMPTY;
+        return ErrorCode::DISTANCES_FILE_NOT_FOUND;
     }
 
     public function getDetails(): array

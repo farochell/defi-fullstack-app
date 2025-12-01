@@ -39,3 +39,8 @@ services:
     App\Route\Infrastructure\Repository\JsonStationRepository:
         arguments:
             $stationsFile: '%kernel.project_dir%/public/data/stations.json'
+
+    App\Route\Infrastructure\Service\JsonRailNetwork:
+        arguments:
+            $distancesFile: '%kernel.project_dir%/public/data/distances.json'
+            $stationRepo: '@App\Route\Infrastructure\Repository\JsonStationRepository'
