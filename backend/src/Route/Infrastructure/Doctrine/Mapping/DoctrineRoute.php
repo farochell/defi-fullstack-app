@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'route')]
-class DoctrineRoute {
+class DoctrineRoute
+{
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: 'route_id', unique: true)]
     public RouteId $id;

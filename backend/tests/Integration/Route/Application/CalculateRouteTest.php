@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Tests\Integration\Route;
+namespace App\Tests\Integration\Route\Application;
 
 use App\Route\Application\CalculateRoute\CalculateRouteCommand;
 use App\Route\Application\CalculateRoute\CalculateRouteCommandHandler;
