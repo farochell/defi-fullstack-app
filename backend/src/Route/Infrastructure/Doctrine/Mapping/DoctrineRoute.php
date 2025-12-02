@@ -1,0 +1,42 @@
+<?php
+/**
+ * @author Emile Camara <camara.emile@gmail.com>
+ * @project  defi-fullstack-app
+ */
+declare(strict_types=1);
+
+namespace App\Route\Infrastructure\Doctrine\Mapping;
+
+use App\Route\Domain\Entity\Station;
+use App\Route\Domain\ValueObject\AnalyticCodeEnum;
+use App\Route\Domain\ValueObject\RouteId;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'route')]
+class DoctrineRoute {
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'route_id', unique: true)]
+    public RouteId $id;
+
+    #[ORM\Column(name: 'from_station', type: 'string')]
+    public string $fromStation;
+
+    #[ORM\Column(name: 'to_station', type: 'string')]
+    public string $toStation;
+
+    #[ORM\Column(name: 'analytic_code', type: 'analytic_code', length: 20)]
+    public AnalyticCodeEnum $analyticCode;
+
+    #[ORM\Column(name: 'distance_km', type: 'float')]
+    public float $distanceKm;
+
+    /**
+     * @var array<Station>
+     */
+    #[ORM\Column(name: 'path', type: 'json')]
+    public array $path;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    public \DateTimeImmutable $createdAt;
+}
