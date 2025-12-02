@@ -9,6 +9,7 @@ namespace App\Route\Domain\ValueObject;
 
 use App\Route\Domain\Entity\Station;
 use App\Shared\Domain\Collection;
+use function Lambdish\Phunctional\map;
 use function Lambdish\Phunctional\reindex;
 
 /**
@@ -60,5 +61,17 @@ class Stations extends Collection {
         });
 
         return new Stations($results);
+    }
+
+    public function toArray(): array
+    {
+        return map(
+            fn (Station $station) => [
+                'id' => $station->id->value(),
+                'shortName' => $station->shortName,
+                'longName' => $station->longName
+            ],
+            $this->items()
+        );
     }
 }
