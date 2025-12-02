@@ -15,6 +15,8 @@ use App\Route\Domain\ValueObject\DistanceLinks;
 use App\Route\Domain\ValueObject\ShortestPathResult;
 use App\Route\Domain\ValueObject\StationId;
 use App\Route\Infrastructure\Service\DijkstraShortestPathFinder;
+use App\Tests\Shared\Faker\StationFaker;
+use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 
 class DijkstraShortestPathFinderTest extends TestCase
@@ -27,17 +29,16 @@ class DijkstraShortestPathFinderTest extends TestCase
     }
 
     public function testFindShortestPathReturnsCorrectResult(): void {
-        $stationA = new Station(id: StationId::fromInt(1), shortName: 'A', longName: 'Station A');
-        $stationB = new Station(id: StationId::fromInt(2), shortName: 'B', longName: 'Station B');
-        $stationC = new Station(id: StationId::fromInt(3), shortName: 'C', longName: 'Station C');
+        $stationA = StationFaker::createStation();
+        $stationB = StationFaker::createStation();
+        $stationC = StationFaker::createStation();
 
-        // Mock du réseau
         $network = $this->createMock(RailNetworkInterface::class);
 
         $network->method('getStationByShortName')->willReturnMap([
-            ['A', $stationA],
-            ['B', $stationB],
-            ['C', $stationC]
+            [$stationA->shortName, $stationA],
+            [$stationB->shortName, $stationB],
+            [$stationB->shortName, $stationC]
         ]);
 
         $network->method('getOutgoingLinks')->willReturnMap([
@@ -52,10 +53,8 @@ class DijkstraShortestPathFinderTest extends TestCase
         ]);
 
         $result = $this->finder->findShortestPath($network, $stationA, $stationC);
-
-        $this->assertInstanceOf(ShortestPathResult::class, $result);
         $this->assertEquals(
-            ['A', 'B', 'C'],
+            [$stationA->shortName, $stationB->shortName, $stationC->shortName],
             array_map(fn(Station $s) => $s->shortName, $result->stations->all())
         );
         $this->assertEquals(8, $result->distanceKm);
@@ -65,13 +64,13 @@ class DijkstraShortestPathFinderTest extends TestCase
     {
         $this->expectException(NoPathFoundException::class);
 
-        $stationA = new Station(id: StationId::fromInt(1), shortName: 'A', longName: 'Station A');
-        $stationB = new Station(id: StationId::fromInt(2), shortName: 'B', longName: 'Station B');
+        $stationA = StationFaker::createStation();
+        $stationB = StationFaker::createStation();
 
         $network = $this->createMock(RailNetworkInterface::class);
         $network->method('getStationByShortName')->willReturnMap([
-            ['A', $stationA],
-            ['B', $stationB]
+            [$stationA->shortName, $stationA],
+            [$stationB->shortName, $stationB]
         ]);
 
         $network->method('getOutgoingLinks')->willReturnMap([

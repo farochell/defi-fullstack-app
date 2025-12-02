@@ -15,6 +15,7 @@ use App\Route\Domain\Exception\StationNotFoundException;
 use App\Route\Domain\Repository\StationRepositoryInterface;
 use App\Route\Domain\ValueObject\StationId;
 use App\Route\Infrastructure\Service\JsonRailNetwork;
+use App\Tests\Shared\Faker\StationFaker;
 use PHPUnit\Framework\TestCase;
 
 class JsonRailNetworkTest extends TestCase {
@@ -77,21 +78,25 @@ class JsonRailNetworkTest extends TestCase {
     }
 
     public function testGetOutgoingLinksReturnsCorrectLinks(): void {
-        $stationA = new Station(id: StationId::fromInt(1), shortName: 'A', longName: 'Station A');
-        $stationB = new Station(id: StationId::fromInt(2), shortName: 'B', longName: 'Station B');
+        $stationA = StationFaker::createStation();
+        $stationB = StationFaker::createStation();
 
         $jsonData = [
             [
                 'distances' => [
-                    ['parent' => 'A', 'child' => 'B', 'distance' => 12.5],
+                    [
+                        'parent' => $stationA->shortName,
+                        'child' => $stationB->shortName,
+                        'distance' => 12.5
+                    ],
                 ],
             ],
         ];
         $file = $this->createTempJsonFile($jsonData);
         $mockRepo = $this->createMock(StationRepositoryInterface::class);
         $mockRepo->method('findByShortName')->willReturnMap([
-            ['A', $stationA],
-            ['B', $stationB],
+            [$stationA->shortName, $stationA],
+            [$stationB->shortName, $stationB],
         ]);
 
         $network = new JsonRailNetwork($file, $mockRepo);
@@ -106,16 +111,15 @@ class JsonRailNetworkTest extends TestCase {
     }
 
     public function testGetStationByShortNameReturnsStation(): void {
-        $stationA = new Station(id: StationId::fromInt(1), shortName: 'A', longName: 'Station A');
-
+        $stationA = StationFaker::createStation();
         $mockRepo = $this->createMock(StationRepositoryInterface::class);
-        $mockRepo->method('findByShortName')->with('A')->willReturn($stationA);
+        $mockRepo->method('findByShortName')->with($stationA->shortName)->willReturn($stationA);
 
         $file = $this->createTempJsonFile([]);
 
         $network = new JsonRailNetwork($file, $mockRepo);
 
-        $this->assertSame($stationA, $network->getStationByShortName('A'));
+        $this->assertSame($stationA, $network->getStationByShortName($stationA->shortName));
     }
 
     protected function tearDown(): void {
