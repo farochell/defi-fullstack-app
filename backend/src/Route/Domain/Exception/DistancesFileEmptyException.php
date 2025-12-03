@@ -19,7 +19,7 @@ class DistancesFileEmptyException extends RepositoryException implements ApiExce
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Distances file is empty",
+            message: "Le fichiers distances.json est vide.",
             code: 500
         );
     }
@@ -31,6 +31,8 @@ class DistancesFileEmptyException extends RepositoryException implements ApiExce
 
     public function getDetails(): array
     {
-        return [$this->path];
+        return [
+            'chemin ' => $this->path,
+        ];
     }
 }

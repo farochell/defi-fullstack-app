@@ -19,7 +19,7 @@ class StationsFileInvalidJsonException extends RepositoryException implements Ap
     public function __construct(private readonly string $path, private readonly string $jsonError)
     {
         parent::__construct(
-            message: "Invalid JSON format in stations file",
+            message: "Le fichier stations.json n'est pas au format JSON valide. ",
             code: 500
         );
     }
@@ -31,6 +31,9 @@ class StationsFileInvalidJsonException extends RepositoryException implements Ap
 
     public function getDetails(): array
     {
-        return [$this->path, $this->jsonError];
+        return [
+            'chemin ' => $this->path,
+            'erreur' =>$this->jsonError,
+            ];
     }
 }

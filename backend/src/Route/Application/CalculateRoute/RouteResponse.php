@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace App\Route\Application\CalculateRoute;
 
 use App\Shared\Application\SerializableResponse;
+use App\Shared\Domain\Bus\Command\CommandResponse;
 
-class RouteResponse extends SerializableResponse {
-
+class RouteResponse extends SerializableResponse implements CommandResponse {
     public function __construct(
         public string $id,
         public string $fromStationId,

@@ -12,7 +12,6 @@ use App\Security\Application\Login\LoginResponse;
 use App\Security\Domain\Service\AccessTokenGenerator;
 use App\Security\Domain\ValueObject\UserIdentity;
 use App\Security\UI\Http\Rest\Input\LoginInput;
-use App\Shared\Domain\Bus\Command\CommandBus;
 use App\Shared\Domain\Bus\Query\QueryBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -21,8 +20,8 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 #[AsController]
 class LoginController {
     public function __construct(
-        private QueryBus $queryBus,
-        private AccessTokenGenerator $accessTokenGenerator
+        private readonly QueryBus $queryBus,
+        private readonly AccessTokenGenerator $accessTokenGenerator
     )
     {
 

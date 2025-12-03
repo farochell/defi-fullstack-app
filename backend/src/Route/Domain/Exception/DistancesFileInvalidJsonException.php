@@ -19,7 +19,7 @@ class DistancesFileInvalidJsonException extends RepositoryException implements A
     public function __construct(private readonly string $path, private readonly string $jsonError)
     {
         parent::__construct(
-            message: "Invalid JSON format in Distances file",
+            message: "Le fichier distances.json n'est pas au format JSON valide.",
             code: 500
         );
     }
@@ -31,6 +31,8 @@ class DistancesFileInvalidJsonException extends RepositoryException implements A
 
     public function getDetails(): array
     {
-        return [$this->path, $this->jsonError];
+        return [
+            'chemin' =>$this->path,
+            'erreur' => $this->jsonError];
     }
 }

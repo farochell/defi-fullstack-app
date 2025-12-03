@@ -50,6 +50,8 @@ class CalculateRouteCommandHandler implements CommandHandler
             distanceKm: $pathResult->distanceKm,
             path: $pathResult->stations
         );
+
+
         $this->routeRepo->save($route);
 
         return new RouteResponse(

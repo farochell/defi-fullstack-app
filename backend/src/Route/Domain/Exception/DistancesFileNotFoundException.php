@@ -19,7 +19,7 @@ class DistancesFileNotFoundException extends RepositoryException implements ApiE
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Distances file not found",
+            message: "Le fichier distances.json n'existe pas.",
             code: 500
         );
     }
@@ -31,6 +31,8 @@ class DistancesFileNotFoundException extends RepositoryException implements ApiE
 
     public function getDetails(): array
     {
-        return [$this->path];
+        return [
+            'chemin' => $this->path
+        ];
     }
 }

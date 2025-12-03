@@ -19,7 +19,7 @@ class StationsFileEmptyException extends RepositoryException implements ApiExcep
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Stations file is empty",
+            message: "Le fichier stations.json est vide.",
             code: 500
         );
     }
@@ -31,6 +31,8 @@ class StationsFileEmptyException extends RepositoryException implements ApiExcep
 
     public function getDetails(): array
     {
-        return [$this->path];
+        return [
+            'chemin' =>$this->path
+        ];
     }
 }

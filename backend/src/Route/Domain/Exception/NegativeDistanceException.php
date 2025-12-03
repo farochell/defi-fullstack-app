@@ -19,7 +19,7 @@ class NegativeDistanceException extends RuntimeException implements ApiException
     public function __construct(private readonly float $distance)
     {
         parent::__construct(
-            message: "Distance cannot be negative",
+            message: "La distance ne peut pas être négative.",
             code: 400
         );
     }

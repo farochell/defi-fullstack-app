@@ -19,7 +19,7 @@ class EmptyPathException extends RuntimeException implements ApiExceptionInterfa
     public function __construct()
     {
         parent::__construct(
-            message: "Path cannot be negative",
+            message: "Le chemin est vide.",
             code: 400
         );
     }

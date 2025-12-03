@@ -19,7 +19,7 @@ class StationsFileNotFoundException extends RepositoryException implements ApiEx
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Stations file not found",
+            message: "Fichier stations.json introuvable.",
             code: 500
         );
     }
@@ -31,10 +31,6 @@ class StationsFileNotFoundException extends RepositoryException implements ApiEx
 
     public function getDetails(): array
     {
-        return [$this->path];
-    }
-
-    public function toOpenApiError(): array {
-        // TODO: Implement toOpenApiError() method.
+        return ['chemin' =>$this->path];
     }
 }

@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace App\Route\Domain\ValueObject;
 
+use App\Route\Domain\Exception\InvalidAnalyticCodeException;
+
 enum AnalyticCodeEnum: string
 {
     case FRET = 'FRET';
-    case PASSENGER = 'PASSAGER';
+    case PASSAGER = 'PASSAGER';
     case MAINTENANCE = 'MAINTENANCE';
 
     public static function tryFromName(string $name): ?self
@@ -20,6 +22,6 @@ enum AnalyticCodeEnum: string
                 return self::from($case->value);
             }
         }
-        return null;
+        throw new InvalidAnalyticCodeException($name);
     }
 }

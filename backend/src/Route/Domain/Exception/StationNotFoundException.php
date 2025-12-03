@@ -19,7 +19,7 @@ class StationNotFoundException extends RepositoryException implements ApiExcepti
     public function __construct(private readonly string $stationName)
     {
         parent::__construct(
-            message: "Station not found",
+            message: "Station non trouvée",
             code: 500
         );
     }
@@ -29,6 +29,8 @@ class StationNotFoundException extends RepositoryException implements ApiExcepti
     }
 
     public function getDetails(): array {
-        return [$this->stationName];
+        return [
+            'station' => $this->stationName,
+        ];
     }
 }
