@@ -1,0 +1,26 @@
+http:
+  routers:
+    frontend:
+      entryPoints:
+        - websecure
+      rule: "Host(`app.defifullstack.com`)"
+      tls: {}
+      service: frontend
+
+    backend:
+      entryPoints:
+        - websecure
+      rule: "Host(`api.defifullstack.com`)"
+      tls: {}
+      service: backend
+
+  services:
+    frontend:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:5173"
+
+    backend:
+      loadBalancer:
+        servers:
+          - url: "http://backend:8000"
