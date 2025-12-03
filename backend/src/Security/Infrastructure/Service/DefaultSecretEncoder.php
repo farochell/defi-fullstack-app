@@ -14,10 +14,12 @@ class DefaultSecretEncoder implements SecretEncoder
 {
     public function encode(Password $password): Password
     {
+
         $hashedPassword = password_hash(
             $password->value(),
             PASSWORD_ARGON2ID,
         );
+
         return Password::fromString($hashedPassword);
     }
 }

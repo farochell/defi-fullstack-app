@@ -19,7 +19,7 @@ use Firebase\JWT\Key;
 use Throwable;
 
 class JWTAccessToken implements AccessTokenGenerator , AccessTokenDecoder{
-    private const string ALGORITHM = 'HS256';
+    private const string ALGORITHM = 'RS256';
 
     public function __construct(
         private readonly string $privateKeyPath,

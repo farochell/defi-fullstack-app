@@ -31,7 +31,6 @@ class UserCreator
         if ($this->repository->findByEmail($email)) {
             throw new EmailAlreadyExistException();
         }
-
         $hashedPassword = HashedPassword::fromString(
             $this->encoder->encode($plainPassword)->value()
         );
@@ -41,6 +40,7 @@ class UserCreator
             $hashedPassword,
             Roles::fromArray([$role->value]),
         );
+
         $this->repository->save($user);
 
         return $user;

@@ -24,7 +24,7 @@ class DoctrineUser
     #[ORM\Column(type: 'email', length: 100, unique: true)]
     public Email $email;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: 'roles')]
     public Roles $roles;
 
     #[ORM\Column(type: 'hashed_password', length: 255)]

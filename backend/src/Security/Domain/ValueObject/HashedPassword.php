@@ -12,7 +12,7 @@ use App\Shared\Domain\ValueObject\StringValueObject;
 
 class HashedPassword extends StringValueObject
 {
-    private const string BCRYPT_PATTERN = '/^\$2[ayb]\$.{56}$/';
+    private const string ARGON2ID_PATTERN = '/^\$argon2id\$v=\d+\$m=\d+,t=\d+,p=\d+\$[A-Za-z0-9\/+]+={0,2}\$[A-Za-z0-9\/+]+={0,2}$/';
 
     /**
      * @throws InvalidFormat
@@ -20,15 +20,15 @@ class HashedPassword extends StringValueObject
     public function __construct(string $value)
     {
         parent::__construct($value);
-        $this->ensureIsBcryptPattern();
+        $this->ensureIsArgon2idPattern();
     }
 
-    private function ensureIsBcryptPattern(): void
+    private function ensureIsArgon2idPattern(): void
     {
         $hashedPassword = $this->value;
 
-        if (!preg_match(self::BCRYPT_PATTERN, $hashedPassword)) {
-            throw new InvalidFormat('The hashed password isn\'t bcrypt encoded format');
+        if (!preg_match(self::ARGON2ID_PATTERN, $hashedPassword)) {
+            throw new InvalidFormat('The hashed password argon2id encoded format');
         }
     }
 

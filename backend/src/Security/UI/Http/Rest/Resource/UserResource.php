@@ -16,7 +16,7 @@ use App\Security\UI\Http\Rest\Input\CreateUserInput;
 #[ApiResource(
     operations: [
         new Post(
-            uriTemplate: '/users',
+            uriTemplate: '/users/create',
             inputFormats: ['json' => ['application/json']],
             status: 201,
             controller: CreateUserController::class,

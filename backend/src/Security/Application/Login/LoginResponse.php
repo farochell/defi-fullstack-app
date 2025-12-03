@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace App\Security\Application\Login;
 
 use App\Shared\Application\SerializableResponse;
+use App\Shared\Domain\Bus\Query\QueryResponse;
 
-class LoginResponse extends SerializableResponse
+class LoginResponse extends SerializableResponse implements QueryResponse
 {
     /**
      * @param array<string> $roles

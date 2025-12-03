@@ -54,8 +54,8 @@ class MysqlUserRepository extends BaseRepository implements UserRepository
             ->findOneBy(['email' => $email->value()]);
         if ($user === null) {
             $this->logAndThrowNotFoundException($email->value());
+            return null;
         }
-
         return $this->toDomainEntity($user);
     }
 

@@ -45,6 +45,7 @@ class LoginQueryHandler implements QueryHandler
             fn(Role $role): string => $role->value,
             $user->roles
         );
+
         return new LoginResponse(
             $user->id->value(),
             $user->email->value(),

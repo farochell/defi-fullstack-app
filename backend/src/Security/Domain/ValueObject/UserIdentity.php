@@ -10,7 +10,7 @@ namespace App\Security\Domain\ValueObject;
 class UserIdentity
 {
     /**
-     * @param array<Role> $roles
+     * @param array<string> $roles
      */
     public function __construct(
         public string $userId,
