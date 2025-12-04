@@ -30,6 +30,8 @@
         "webmozart/assert": "*"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "*",
+        "doctrine/doctrine-fixtures-bundle": "*",
         "fakerphp/faker": "^1.24",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12.4",

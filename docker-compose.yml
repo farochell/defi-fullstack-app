@@ -28,9 +28,11 @@ services:
       - ./backend/src:/app/src
       - ./backend/config:/app/config
       - ./backend/public:/app/public
+      - ./backend/tests:/app/tests
     environment:
       - SERVER_NAME=:8000
       - DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}?charset=utf8mb4&serverVersion=mariadb-10.6.0
+      - DATABASE_TEST_URL=mysql://root:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}?charset=utf8mb4&serverVersion=mariadb-10.6.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`api.defifullstack.com`)"
