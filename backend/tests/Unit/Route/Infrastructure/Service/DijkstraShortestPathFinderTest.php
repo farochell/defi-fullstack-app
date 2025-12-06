@@ -16,7 +16,6 @@ use App\Route\Domain\ValueObject\ShortestPathResult;
 use App\Route\Domain\ValueObject\StationId;
 use App\Route\Infrastructure\Service\DijkstraShortestPathFinder;
 use App\Tests\Shared\Faker\StationFaker;
-use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 
 class DijkstraShortestPathFinderTest extends TestCase

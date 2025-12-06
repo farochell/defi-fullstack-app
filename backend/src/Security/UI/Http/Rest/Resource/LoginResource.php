@@ -11,8 +11,10 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Response;
 use App\Security\UI\Http\Rest\Controller\LoginController;
 use App\Security\UI\Http\Rest\Input\LoginInput;
+use ArrayObject;
 
 #[ApiResource(
     operations: [
@@ -22,8 +24,60 @@ use App\Security\UI\Http\Rest\Input\LoginInput;
             status: 201,
             controller: LoginController::class,
             openapi: new Operation(
-                summary: 'Login',
-                description: 'Login',
+                tags: ['Authentification'],
+                responses: [
+                    '200' => new Response(
+                        description: 'Retourne le token JWT',
+                        content: new ArrayObject([
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'object',
+                                    'properties' => [
+                                        'token' => ['type' => 'string']
+                                    ]
+                                ]
+                            ]
+                        ]),
+                    ),
+                    '401' => new Response(
+                        description: 'Email ou mot de passe incorrect',
+                        content: new ArrayObject([
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'object',
+                                    'properties' => [
+                                        'code' => ['type' => 'string'],
+                                        'message' => ['type' => 'string'],
+                                        'details' => [
+                                            'type' => 'array',
+                                            'items' => ['type' => 'string']
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ])
+                    ),
+                    '422' => new Response(
+                        description: 'Email ou mot de passe manquants',
+                        content: new ArrayObject([
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'object',
+                                    'properties' => [
+                                        'code' => ['type' => 'string'],
+                                        'message' => ['type' => 'string'],
+                                        'details' => [
+                                            'type' => 'array',
+                                            'items' => ['type' => 'string']
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ])
+                    )
+                ],
+                summary: 'Identification utilisateur',
+                description: 'Identification utilisateur'
             ),
             validationContext: ['groups' => ['login']],
             input: LoginInput::class,

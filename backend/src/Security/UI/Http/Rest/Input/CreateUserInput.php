@@ -11,11 +11,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateUserInput
 {
-    #[Assert\NotNull(message: "Champ email requis.")]
+    #[Assert\NotBlank(message: "Champ email requis.")]
     #[Assert\Email(message: "Adresse email invalide.")]
     public string $email;
 
-    #[Assert\NotNull(message: "Champ mot de passe requis.")]
     #[Assert\NotBlank(message: "Veuillez fournir un mot de passe.")]
     public string $password;
 }

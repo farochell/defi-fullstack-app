@@ -18,8 +18,8 @@ class InvalidCredentialsException extends DomainException implements ApiExceptio
     public function __construct()
     {
         parent::__construct(
-            message: "Invalid credentials",
-            code: 500
+            message: "Identifiants invalides",
+            code: 401
         );
     }
 
@@ -28,6 +28,8 @@ class InvalidCredentialsException extends DomainException implements ApiExceptio
     }
 
     public function getDetails(): array {
-        return [];
+        return [
+            'message' => 'Identifiant ou mot de passe invalide',
+        ];
     }
 }

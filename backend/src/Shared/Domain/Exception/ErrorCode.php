@@ -9,7 +9,8 @@ namespace App\Shared\Domain\Exception;
 
 enum ErrorCode : string
 {
-    case INVALID_REQUEST = 'INVALID_REQUEST';
+    case AUTH_MISSING_TOKEN = 'AUTH_MISSING_TOKEN';
+    case AUTH_FORBIDDEN = 'AUTH_FORBIDDEN';
     case STATION_NOT_FOUND = 'STATION_NOT_FOUND';
     case ROUTE_NOT_FOUND = 'ROUTE_NOT_FOUND';
     case NETWORK_DISCONNECTED = 'NETWORK_DISCONNECTED';

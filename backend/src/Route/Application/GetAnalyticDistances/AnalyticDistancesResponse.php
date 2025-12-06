@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace App\Route\Application\GetAnalyticDistances;
 
 use App\Shared\Application\SerializableResponse;
+use App\Shared\Domain\Bus\Query\QueryResponse;
 
-class AnalyticDistancesResponse extends SerializableResponse
+class AnalyticDistancesResponse  extends SerializableResponse implements QueryResponse
 {
     public function __construct(
         public ?string $from = null,

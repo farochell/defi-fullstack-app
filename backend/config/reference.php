@@ -688,6 +688,11 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         enabled?: bool, // Default: false
  *     },
  * }
+ * @psalm-type MakerConfig = array{
+ *     root_namespace?: scalar|null, // Default: "App"
+ *     generate_final_classes?: bool, // Default: true
+ *     generate_final_entities?: bool, // Default: false
+ * }
  * @psalm-type ApiPlatformConfig = array{
  *     title?: scalar|null, // The title of the API. // Default: ""
  *     description?: scalar|null, // The description of the API. // Default: ""
@@ -1643,11 +1648,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     enable_static_meta_data_cache?: bool, // Default: true
  *     enable_static_query_cache?: bool, // Default: true
  *     connection_keys?: list<mixed>,
- * }
- * @psalm-type MakerConfig = array{
- *     root_namespace?: scalar|null, // Default: "App"
- *     generate_final_classes?: bool, // Default: true
- *     generate_final_entities?: bool, // Default: false
  * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,

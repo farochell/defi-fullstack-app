@@ -9,6 +9,7 @@ namespace App\Security\Infrastructure\EventSubscriber;
 
 use App\Security\Domain\Service\AccessTokenDecoder;
 use App\Security\Infrastructure\Context\InMemoryContextService;
+use App\Shared\Domain\Exception\ErrorCode;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,17 +38,19 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
         }
 
         $header = $requestEvent->getRequest()->headers->get('authorization');
+
         // Récupération du token
         if (null === $header) {
             $requestEvent->setResponse(
-                new JsonResponse(
-                    ['message' => 'Unauthorized'],
-                    Response::HTTP_UNAUTHORIZED,
-                ),
+                new JsonResponse([
+                    'code'    => ErrorCode::AUTH_MISSING_TOKEN,
+                    'message' => 'Bearer token non trouvé',
+                    'details' => [],
+                ], Response::HTTP_UNAUTHORIZED),
             );
             return;
         }
-
+         ;
         $token = str_replace('Bearer ', '', $header);
         try {
             $user = $this->accessTokenDecoder->decode($token);
@@ -56,10 +59,11 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
             $memoryContextService = new InMemoryContextService();
         } catch (Exception) {
             $requestEvent->setResponse(
-                new JsonResponse(
-                    ['message' => 'Unauthorized'],
-                    Response::HTTP_UNAUTHORIZED,
-                ),
+                new JsonResponse([
+                    'code'    => ErrorCode::AUTH_FORBIDDEN,
+                    'message' => 'Accès non autorisé',
+                    'details' => [],
+                ], Response::HTTP_FORBIDDEN),
             );
             return;
         }

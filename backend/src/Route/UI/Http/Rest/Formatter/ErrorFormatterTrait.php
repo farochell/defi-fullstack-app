@@ -10,23 +10,46 @@ namespace App\Route\UI\Http\Rest\Formatter;
 use ApiPlatform\Validator\Exception\ValidationException;
 use App\Route\Domain\Exception\InvalidAnalyticCodeException;
 use App\Route\Domain\Exception\StationNotFoundException;
+use App\Security\Domain\Exception\EmailAlreadyExistException;
+use App\Security\Domain\Exception\InvalidCredentialsException;
+use App\Shared\Domain\Exception\ErrorCode;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 trait ErrorFormatterTrait {
     public function formatError(Throwable $error): ?JsonResponse
     {
-        if ($error instanceof StationNotFoundException || $error instanceof InvalidAnalyticCodeException) {
+        if (
+            $error instanceof StationNotFoundException
+            || $error instanceof InvalidAnalyticCodeException
+            || $error instanceof EmailAlreadyExistException
+            || $error instanceof InvalidCredentialsException
+        ) {
             return new JsonResponse([
                 'code'    => $error->getErrorCode(),
                 'message' => $error->getMessage(),
                 'details' => $error->getDetails(),
-            ], 422);
+            ], $error->getCode());
         }
 
         if ($error instanceof ValidationException) {
             return new JsonResponse(SymfonyValidationExceptionFormatter::format($error), 400);
         }
-        return null;
+
+        if ($error instanceof HttpException) {
+            return new JsonResponse([
+                'code'    => ErrorCode::MISSING_PARAMETERS,
+                'message' => $error->getMessage(),
+                'details' => []
+            ]);
+        }
+        return new JsonResponse([
+            'code'    => 'internal_server_error',
+            'message' => 'An unexpected error occurred.',
+            'details' => [
+                $error->getMessage(),
+            ],
+        ], 500);
     }
 }

@@ -57,3 +57,7 @@ services:
             $privateKeyPath: '%kernel.project_dir%/config/%env(JWT_SECRET_KEY)%'
             $publicKeyPath: '%kernel.project_dir%/config/%env(JWT_PUBLIC_KEY)%'
             $passphrase: '%env(JWT_PASSPHRASE)%'
+
+    App\Shared\UI\Http\Rest\ApiExceptionListener:
+       tags:
+        -   { name: kernel.event_listener, event: kernel.exception }

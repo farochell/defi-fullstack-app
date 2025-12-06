@@ -12,22 +12,25 @@ use App\Shared\Domain\Exception\ApiExceptionTrait;
 use App\Shared\Domain\Exception\ErrorCode;
 use DomainException;
 
-class EmailAlreadyExistException extends DomainException implements ApiExceptionInterface
-{
+class UnAuthorizedException extends DomainException  implements ApiExceptionInterface{
+
     use ApiExceptionTrait;
     public function __construct()
     {
         parent::__construct(
-            message: "Email déjà utilisé",
-            code: 409
+            message: "Access Forbidden",
+            code: 403
         );
     }
-
     public function getErrorCode(): ErrorCode {
-        return ErrorCode::EMAIL_ALREADY_EXISTS;
+        return ErrorCode::ACCESS_FORBIDDEN;
     }
 
     public function getDetails(): array {
         return [];
+    }
+
+    public function toOpenApiError(): array {
+        // TODO: Implement toOpenApiError() method.
     }
 }

@@ -38,7 +38,7 @@ class UserCreatorTest extends KernelTestCase
             $this->userRepository,
             $this->secretEncoder
         );
-        $this->faker = \Faker\Factory::create();
+        $this->faker = Factory::create();
     }
 
     public function testCreateUserSuccess(): void {

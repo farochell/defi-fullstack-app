@@ -11,7 +11,7 @@ class AccessToken
 {
     public function __construct(
         public string $content,
-        public int $id,
+        public string $id,
         public string $username,
         public array $roles,
         public int $createdAt,
