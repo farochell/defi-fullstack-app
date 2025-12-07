@@ -14,7 +14,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\Response;
-use App\Route\UI\Http\Rest\V1\Controller\GetAnalyticDistancesController;
+use App\Route\UI\Http\Rest\V1\Controller\GetStatsController;
 
 #[ApiResource(
     operations: [
@@ -22,7 +22,7 @@ use App\Route\UI\Http\Rest\V1\Controller\GetAnalyticDistancesController;
             uriTemplate: '/stats/distances',
             routePrefix: '/v1',
             status: 200,
-            controller: GetAnalyticDistancesController::class,
+            controller: GetStatsController::class,
             openapi: new Operation(
                 operationId: 'getAnalyticDistances',
                 tags: ['Analytics'],

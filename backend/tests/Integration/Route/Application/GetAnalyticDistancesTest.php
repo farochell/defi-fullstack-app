@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Route\Application;
 
-use App\Route\Application\GetAnalyticDistances\AnalyticDistancesResponse;
-use App\Route\Application\GetAnalyticDistances\GetAnalyticDistancesQuery;
-use App\Route\Application\GetAnalyticDistances\GetAnalyticDistancesQueryHandler;
+use App\Route\Application\GetStats\AnalyticDistancesResponse;
+use App\Route\Application\GetStats\GetStatsQuery;
+use App\Route\Application\GetStats\GetStatsQueryHandler;
 use App\Route\Domain\Repository\RouteRepositoryInterface;
 use App\Route\Domain\ValueObject\AnalyticDistances;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -36,9 +36,9 @@ class GetAnalyticDistancesTest extends KernelTestCase
         /** @var RouteRepositoryInterface $routeRepo */
         $routeRepo = $this->container->get(RouteRepositoryInterface::class);
 
-        $handler = new GetAnalyticDistancesQueryHandler($routeRepo);
+        $handler = new GetStatsQueryHandler($routeRepo);
 
-        $query = new GetAnalyticDistancesQuery(
+        $query = new GetStatsQuery(
             from: '2024-01-01',
             to: '2024-12-31',
             groupBy: 'month'
@@ -58,9 +58,9 @@ class GetAnalyticDistancesTest extends KernelTestCase
     {
         /** @var RouteRepositoryInterface $routeRepo */
         $routeRepo = $this->container->get(RouteRepositoryInterface::class);
-        $handler = new GetAnalyticDistancesQueryHandler($routeRepo);
+        $handler = new GetStatsQueryHandler($routeRepo);
 
-        $query = new GetAnalyticDistancesQuery(
+        $query = new GetStatsQuery(
             from: null,
             to: null,
             groupBy: null
@@ -81,9 +81,9 @@ class GetAnalyticDistancesTest extends KernelTestCase
     {
         /** @var RouteRepositoryInterface $routeRepo */
         $routeRepo = $this->container->get(RouteRepositoryInterface::class);
-        $handler = new GetAnalyticDistancesQueryHandler($routeRepo);
+        $handler = new GetStatsQueryHandler($routeRepo);
 
-        $query = new GetAnalyticDistancesQuery(
+        $query = new GetStatsQuery(
             from: '2024-01-01',
             to: '2024-02-01',
             groupBy: 'INVALID_GROUP'

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /app/src/Security/Infrastructure</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../../_css/bootstrap.min.css?v=12.5.0" rel="stylesheet" type="text/css">
+  <link href="../../_css/billboard.min.css?v=12.5.0" rel="stylesheet" type="text/css">
+  <link href="../../_css/style.css?v=12.5.0" rel="stylesheet" type="text/css">
+  <link href="../../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../../index.html">/app/src</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">Security</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Infrastructure</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classesCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/PasswordHasherService.php.html#19">App\Security\Infrastructure\Service\PasswordHasherService</a></td><td class="text-right">42%</td></tr>
+       <tr><td><a href="Context/InMemoryContextService.php.html#12">App\Security\Infrastructure\Context\InMemoryContextService</a></td><td class="text-right">50%</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#16">App\Security\Infrastructure\Doctrine\Type\UserIdType</a></td><td class="text-right">50%</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#16">App\Security\Infrastructure\Doctrine\Type\RolesType</a></td><td class="text-right">63%</td></tr>
+       <tr><td><a href="EventSubscriber/MiddlewareSubscriber.php.html#21">App\Security\Infrastructure\EventSubscriber\MiddlewareSubscriber</a></td><td class="text-right">64%</td></tr>
+       <tr><td><a href="Repository/MysqlUserRepository.php.html#24">App\Security\Infrastructure\Repository\MysqlUserRepository</a></td><td class="text-right">73%</td></tr>
+       <tr><td><a href="Service/JWTAccessToken.php.html#22">App\Security\Infrastructure\Service\JWTAccessToken</a></td><td class="text-right">81%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="EventSubscriber/MiddlewareSubscriber.php.html#21">App\Security\Infrastructure\EventSubscriber\MiddlewareSubscriber</a></td><td class="text-right">64.6%</td><td class="text-right">14</td><td class="text-right">22</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#16">App\Security\Infrastructure\Doctrine\Type\UserIdType</a></td><td class="text-right">50.0%</td><td class="text-right">7</td><td class="text-right">13</td></tr>
+       <tr><td><a href="Service/JWTAccessToken.php.html#22">App\Security\Infrastructure\Service\JWTAccessToken</a></td><td class="text-right">81.8%</td><td class="text-right">12</td><td class="text-right">12</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#16">App\Security\Infrastructure\Doctrine\Type\RolesType</a></td><td class="text-right">63.6%</td><td class="text-right">7</td><td class="text-right">9</td></tr>
+       <tr><td><a href="Repository/MysqlUserRepository.php.html#24">App\Security\Infrastructure\Repository\MysqlUserRepository</a></td><td class="text-right">73.7%</td><td class="text-right">7</td><td class="text-right">7</td></tr>
+       <tr><td><a href="Service/PasswordHasherService.php.html#19">App\Security\Infrastructure\Service\PasswordHasherService</a></td><td class="text-right">42.9%</td><td class="text-right">4</td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2 style="margin-top: 3rem;">Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodsCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Context/InMemoryContextService.php.html#24"><abbr title="App\Security\Infrastructure\Context\InMemoryContextService::get">get</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#20"><abbr title="App\Security\Infrastructure\Doctrine\Type\RolesType::getName">getName</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#49"><abbr title="App\Security\Infrastructure\Doctrine\Type\RolesType::requiresSQLCommentHint">requiresSQLCommentHint</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#20"><abbr title="App\Security\Infrastructure\Doctrine\Type\UserIdType::getSQLDeclaration">getSQLDeclaration</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#58"><abbr title="App\Security\Infrastructure\Doctrine\Type\UserIdType::getName">getName</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/PasswordHasherService.php.html#28"><abbr title="App\Security\Infrastructure\Service\PasswordHasherService::hash">hash</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/MysqlUserRepository.php.html#38"><abbr title="App\Security\Infrastructure\Repository\MysqlUserRepository::save">save</abbr></a></td><td class="text-right">23%</td></tr>
+       <tr><td><a href="EventSubscriber/MiddlewareSubscriber.php.html#37"><abbr title="App\Security\Infrastructure\EventSubscriber\MiddlewareSubscriber::checkSecurityHeader">checkSecurityHeader</abbr></a></td><td class="text-right">34%</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#29"><abbr title="App\Security\Infrastructure\Doctrine\Type\UserIdType::convertToDatabaseValue">convertToDatabaseValue</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Service/JWTAccessToken.php.html#33"><abbr title="App\Security\Infrastructure\Service\JWTAccessToken::decode">decode</abbr></a></td><td class="text-right">68%</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#38"><abbr title="App\Security\Infrastructure\Doctrine\Type\RolesType::convertToPHPValue">convertToPHPValue</abbr></a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#25"><abbr title="App\Security\Infrastructure\Doctrine\Type\RolesType::convertToDatabaseValue">convertToDatabaseValue</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#45"><abbr title="App\Security\Infrastructure\Doctrine\Type\UserIdType::convertToPHPValue">convertToPHPValue</abbr></a></td><td class="text-right">80%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="EventSubscriber/MiddlewareSubscriber.php.html#37"><abbr title="App\Security\Infrastructure\EventSubscriber\MiddlewareSubscriber::checkSecurityHeader">checkSecurityHeader</abbr></a></td><td class="text-right">34.6%</td><td class="text-right">4</td><td class="text-right">8</td></tr>
+       <tr><td><a href="Service/PasswordHasherService.php.html#28"><abbr title="App\Security\Infrastructure\Service\PasswordHasherService::hash">hash</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/JWTAccessToken.php.html#33"><abbr title="App\Security\Infrastructure\Service\JWTAccessToken::decode">decode</abbr></a></td><td class="text-right">68.8%</td><td class="text-right">4</td><td class="text-right">4</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#25"><abbr title="App\Security\Infrastructure\Doctrine\Type\RolesType::convertToDatabaseValue">convertToDatabaseValue</abbr></a></td><td class="text-right">80.0%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#29"><abbr title="App\Security\Infrastructure\Doctrine\Type\UserIdType::convertToDatabaseValue">convertToDatabaseValue</abbr></a></td><td class="text-right">66.7%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Repository/MysqlUserRepository.php.html#38"><abbr title="App\Security\Infrastructure\Repository\MysqlUserRepository::save">save</abbr></a></td><td class="text-right">23.1%</td><td class="text-right">2</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Doctrine/Type/RolesType.php.html#38"><abbr title="App\Security\Infrastructure\Doctrine\Type\RolesType::convertToPHPValue">convertToPHPValue</abbr></a></td><td class="text-right">75.0%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+       <tr><td><a href="Doctrine/Type/UserIdType.php.html#45"><abbr title="App\Security\Infrastructure\Doctrine\Type\UserIdType::convertToPHPValue">convertToPHPValue</abbr></a></td><td class="text-right">80.0%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 12.5.0</a> using <a href="https://www.php.net/" target="_top">PHP 8.4.15</a> and <a href="https://phpunit.de/">PHPUnit 12.4.5</a> at Sun Dec 7 19:10:22 UTC 2025.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../../_js/billboard.pkgd.min.js?v=12.5.0" type="text/javascript"></script>
+  <script type="application/json" id="complexity_class">[[42.857142857142854,4,"Service\/PasswordHasherService.php.html#19","App\\Security\\Infrastructure\\Service\\PasswordHasherService","6.99"],[50,2,"Context\/InMemoryContextService.php.html#12","App\\Security\\Infrastructure\\Context\\InMemoryContextService","2.50"],[50,7,"Doctrine\/Type\/UserIdType.php.html#16","App\\Security\\Infrastructure\\Doctrine\\Type\\UserIdType","13.12"],[63.63636363636363,7,"Doctrine\/Type\/RolesType.php.html#16","App\\Security\\Infrastructure\\Doctrine\\Type\\RolesType","9.36"],[64.58333333333334,14,"EventSubscriber\/MiddlewareSubscriber.php.html#21","App\\Security\\Infrastructure\\EventSubscriber\\MiddlewareSubscriber","22.71"],[73.68421052631578,7,"Repository\/MysqlUserRepository.php.html#24","App\\Security\\Infrastructure\\Repository\\MysqlUserRepository","7.89"],[81.81818181818183,12,"Service\/JWTAccessToken.php.html#22","App\\Security\\Infrastructure\\Service\\JWTAccessToken","12.87"],[100,0,"Doctrine\/Mapping\/DoctrineUser.php.html#18","App\\Security\\Infrastructure\\Doctrine\\Mapping\\DoctrineUser","0"],[100,1,"Doctrine\/Type\/EmailType.php.html#16","App\\Security\\Infrastructure\\Doctrine\\Type\\EmailType","1"],[100,1,"Doctrine\/Type\/HashedPasswordType.php.html#16","App\\Security\\Infrastructure\\Doctrine\\Type\\HashedPasswordType","1"],[100,1,"Service\/DefaultSecretEncoder.php.html#15","App\\Security\\Infrastructure\\Service\\DefaultSecretEncoder","1"],[100,0,"Service\/SymfonyPasswordHasherBridge.php.html#12","App\\Security\\Infrastructure\\Service\\SymfonyPasswordHasherBridge","0"]]</script>
+  <script type="application/json" id="complexity_method">[[0,1,"Context\/InMemoryContextService.php.html#24","App\\Security\\Infrastructure\\Context\\InMemoryContextService::get","2"],[0,1,"Doctrine\/Type\/RolesType.php.html#20","App\\Security\\Infrastructure\\Doctrine\\Type\\RolesType::getName","2"],[0,1,"Doctrine\/Type\/RolesType.php.html#49","App\\Security\\Infrastructure\\Doctrine\\Type\\RolesType::requiresSQLCommentHint","2"],[0,1,"Doctrine\/Type\/UserIdType.php.html#20","App\\Security\\Infrastructure\\Doctrine\\Type\\UserIdType::getSQLDeclaration","2"],[0,1,"Doctrine\/Type\/UserIdType.php.html#58","App\\Security\\Infrastructure\\Doctrine\\Type\\UserIdType::getName","2"],[0,2,"Service\/PasswordHasherService.php.html#28","App\\Security\\Infrastructure\\Service\\PasswordHasherService::hash","6"],[23.076923076923077,2,"Repository\/MysqlUserRepository.php.html#38","App\\Security\\Infrastructure\\Repository\\MysqlUserRepository::save","3.82"],[34.61538461538461,4,"EventSubscriber\/MiddlewareSubscriber.php.html#37","App\\Security\\Infrastructure\\EventSubscriber\\MiddlewareSubscriber::checkSecurityHeader","8.47"],[66.66666666666666,3,"Doctrine\/Type\/UserIdType.php.html#29","App\\Security\\Infrastructure\\Doctrine\\Type\\UserIdType::convertToDatabaseValue","3.33"],[68.75,4,"Service\/JWTAccessToken.php.html#33","App\\Security\\Infrastructure\\Service\\JWTAccessToken::decode","4.49"],[75,2,"Doctrine\/Type\/RolesType.php.html#38","App\\Security\\Infrastructure\\Doctrine\\Type\\RolesType::convertToPHPValue","2.06"],[80,3,"Doctrine\/Type\/RolesType.php.html#25","App\\Security\\Infrastructure\\Doctrine\\Type\\RolesType::convertToDatabaseValue","3.07"],[80,2,"Doctrine\/Type\/UserIdType.php.html#45","App\\Security\\Infrastructure\\Doctrine\\Type\\UserIdType::convertToPHPValue","2.03"],[92.85714285714286,2,"Service\/JWTAccessToken.php.html#58","App\\Security\\Infrastructure\\Service\\JWTAccessToken::generate","2.00"],[100,1,"Context\/InMemoryContextService.php.html#19","App\\Security\\Infrastructure\\Context\\InMemoryContextService::set","1"],[100,1,"Doctrine\/Type\/EmailType.php.html#20","App\\Security\\Infrastructure\\Doctrine\\Type\\EmailType::convertToPHPValue","1"],[100,1,"Doctrine\/Type\/HashedPasswordType.php.html#20","App\\Security\\Infrastructure\\Doctrine\\Type\\HashedPasswordType::convertToPHPValue","1"],[100,1,"EventSubscriber\/MiddlewareSubscriber.php.html#23","App\\Security\\Infrastructure\\EventSubscriber\\MiddlewareSubscriber::__construct","1"],[100,1,"EventSubscriber\/MiddlewareSubscriber.php.html#28","App\\Security\\Infrastructure\\EventSubscriber\\MiddlewareSubscriber::getSubscribedEvents","1"],[100,8,"EventSubscriber\/MiddlewareSubscriber.php.html#77","App\\Security\\Infrastructure\\EventSubscriber\\MiddlewareSubscriber::ignoredUri","8"],[100,1,"Repository\/MysqlUserRepository.php.html#26","App\\Security\\Infrastructure\\Repository\\MysqlUserRepository::__construct","1"],[100,2,"Repository\/MysqlUserRepository.php.html#57","App\\Security\\Infrastructure\\Repository\\MysqlUserRepository::findByEmail","2"],[100,1,"Repository\/MysqlUserRepository.php.html#71","App\\Security\\Infrastructure\\Repository\\MysqlUserRepository::toDomainEntity","1"],[100,1,"Repository\/MysqlUserRepository.php.html#81","App\\Security\\Infrastructure\\Repository\\MysqlUserRepository::toDoctrineEntity","1"],[100,1,"Service\/DefaultSecretEncoder.php.html#17","App\\Security\\Infrastructure\\Service\\DefaultSecretEncoder::encode","1"],[100,1,"Service\/JWTAccessToken.php.html#26","App\\Security\\Infrastructure\\Service\\JWTAccessToken::__construct","1"],[100,5,"Service\/JWTAccessToken.php.html#80","App\\Security\\Infrastructure\\Service\\JWTAccessToken::isValidPayload","5"],[100,1,"Service\/PasswordHasherService.php.html#23","App\\Security\\Infrastructure\\Service\\PasswordHasherService::__construct","1"],[100,1,"Service\/PasswordHasherService.php.html#38","App\\Security\\Infrastructure\\Service\\PasswordHasherService::verify","1"]]</script>
+  <script type="text/javascript" defer>
+  const barLabels = [
+    '0%',
+    '0-10%',
+    '10-20%',
+    '20-30%',
+    '30-40%',
+    '40-50%',
+    '50-60%',
+    '60-70%',
+    '70-80%',
+    '80-90%',
+    '90-100%',
+    '100%'
+  ];
+  const barConfig = (name, fullName, values) => ({
+    axis: {
+      x: {
+        type: "category",
+        categories: barLabels,
+      },
+      y: {
+        label: {
+          text: `#${name}`,
+          position: 'outer-top',
+        },
+      },
+    },
+    bindto: `#${name}CoverageDistribution`,
+    data: {
+      columns: [
+        [fullName].concat(values),
+      ],
+      colors: {
+        [fullName]: "rgba(69, 114, 167, 0.75)",
+      },
+      type: "bar",
+    },
+    bar: {
+      width: {
+        ratio: 0.9,
+      },
+    },
+    grid: {
+      focus: {
+        show: false,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">Coverage ${barLabels[data[0].x]}</th></tr>
+            <tr><td class="value">${data[0].value} ${name}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  bb.generate(
+    barConfig('classes', "Class Coverage", [0,0,0,0,0,1,2,2,1,1,0,5])
+  );
+  bb.generate(
+    barConfig('methods', "Method Coverage", [6,0,0,1,1,0,0,2,1,2,1,15])
+  );
+
+  const scatterConfig = (name, complexityData) => ({
+    axis: {
+      x: {
+        label: {
+          text: 'Code Coverage (in percent)',
+          position: 'outer-right',
+        },
+        tick: {
+          values: [0, 20, 40, 60, 80, 100],
+        },
+      },
+      y: {
+        label: {
+          text: 'Cyclomatic Complexity',
+          position: 'outer-top',
+        },
+        min: 0,
+        padding: {
+          bottom: 0,
+          top: 5,
+        },
+      },
+    },
+    bindto: `#${name}Complexity`,
+    data: {
+      columns: [
+        ["complexity_x"].concat(complexityData.map(d => d[0])),
+        ["complexity"].concat(complexityData.map(d => d[1])),
+      ],
+      onclick: function(data, element) {
+        window.location = complexityData[data.index][2];
+      },
+      type: "scatter",
+      xs: {
+        "complexity": "complexity_x",
+      },
+    },
+    grid: {
+      focus: {
+        show: true,
+        y: true,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        const coverage = Math.round(data[0].x);
+        const complexity = data[0].value;
+        const targetName = complexityData[data[0].index][3];
+        const crap = complexityData[data[0].index][4];
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">${targetName}</th></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Coverage</td><td class="name">${coverage}%</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Complexity</td><td class="value">${complexity}</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Crap</td><td class="value">${crap}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  const classComplexityData = JSON.parse(document.getElementById('complexity_class').textContent);
+  bb.generate(
+    scatterConfig("class", classComplexityData)
+  );
+  const methodComplexityData = JSON.parse(document.getElementById('complexity_method').textContent);
+  bb.generate(
+    scatterConfig("method", methodComplexityData),
+  );
+  </script>
+ </body>
+</html>

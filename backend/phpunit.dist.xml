@@ -29,8 +29,16 @@
             restrictWarnings="true"
     >
         <include>
-            <directory>src</directory>
+            <directory suffix=".php">src/Route</directory>
+            <directory suffix=".php">src/Security</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">tests</directory>
+            <directory suffix=".php">vendor</directory>
+            <directory suffix=".php">src/Phpstan</directory>
+            <directory suffix=".php">src/DataFixtures</directory>
+            <directory suffix=".php">src/Shared</directory>
+        </exclude>
 
         <deprecationTrigger>
             <method>Doctrine\Deprecations\Deprecation::trigger</method>

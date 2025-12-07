@@ -14,7 +14,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\OpenApi\Model\Response;
-use App\Route\UI\Http\Rest\V1\Controller\CalculerRouteController;
+use App\Route\UI\Http\Rest\V1\Controller\CalculateRouteController;
 use App\Route\UI\Http\Rest\V1\Input\RouteInput;
 
 #[ApiResource(
@@ -24,7 +24,7 @@ use App\Route\UI\Http\Rest\V1\Input\RouteInput;
             inputFormats: ['json' => ['application/json']],
             routePrefix: '/v1',
             status: 201,
-            controller: CalculerRouteController::class,
+            controller: CalculateRouteController::class,
             openapi: new Operation(
                 operationId: 'calculerRoute',
                 tags: ['Routing'],
