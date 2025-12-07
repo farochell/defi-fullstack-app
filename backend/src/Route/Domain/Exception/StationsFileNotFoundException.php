@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -19,7 +21,7 @@ class StationsFileNotFoundException extends RepositoryException implements ApiEx
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Fichier stations.json introuvable.",
+            message: 'Fichier stations.json introuvable.',
             code: 500
         );
     }
@@ -31,6 +33,6 @@ class StationsFileNotFoundException extends RepositoryException implements ApiEx
 
     public function getDetails(): array
     {
-        return ['chemin' =>$this->path];
+        return ['chemin' => $this->path];
     }
 }

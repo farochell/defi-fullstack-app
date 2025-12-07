@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -24,7 +26,7 @@ class JsonRailNetwork implements RailNetworkInterface
 
     public function __construct(
         private readonly string $distancesFile,
-        private readonly StationRepositoryInterface $stationRepo
+        private readonly StationRepositoryInterface $stationRepo,
     ) {
         if (!file_exists($this->distancesFile)) {
             throw new DistancesFileNotFoundException($this->distancesFile);
@@ -32,46 +34,42 @@ class JsonRailNetwork implements RailNetworkInterface
 
         $content = file_get_contents($this->distancesFile);
 
-        if ($content === false || trim($content) === '') {
+        if (false === $content || '' === trim($content)) {
             throw new DistancesFileEmptyException($this->distancesFile);
         }
 
         $data = json_decode($content, true);
 
         if (!is_array($data)) {
-            throw new DistancesFileInvalidJsonException(
-                $this->distancesFile,
-                json_last_error_msg()
-            );
+            throw new DistancesFileInvalidJsonException($this->distancesFile, json_last_error_msg());
         }
 
         foreach ($data as $network) {
             foreach ($network['distances'] as $item) {
-
                 $from = $this->stationRepo->findByShortName($item['parent']);
-                $to   = $this->stationRepo->findByShortName($item['child']);
+                $to = $this->stationRepo->findByShortName($item['child']);
 
                 if (!$from || !$to) {
-                    throw new StationNotFoundException("Station inconnue dans distances.json : "
-                        . $item['parent'] . " ou " . $item['child']);
+                    throw new StationNotFoundException('Station inconnue dans distances.json : '.$item['parent'].' ou '.$item['child']);
                 }
 
                 $this->links[] = new DistanceLink(
                     from: $from,
                     to: $to,
-                    distanceKm: (float)$item['distance']
+                    distanceKm: (float) $item['distance']
                 );
 
                 $this->links[] = new DistanceLink(
                     from: $to,
                     to: $from,
-                    distanceKm: (float)$item['distance']
+                    distanceKm: (float) $item['distance']
                 );
             }
         }
     }
 
-    public function getOutgoingLinks(Station $station): DistanceLinks {
+    public function getOutgoingLinks(Station $station): DistanceLinks
+    {
         $filteredStations = array_filter(
             $this->links,
             fn (DistanceLink $link) => $link->from->shortName === $station->shortName
@@ -80,7 +78,8 @@ class JsonRailNetwork implements RailNetworkInterface
         return new DistanceLinks($filteredStations);
     }
 
-    public function getStationByShortName(string $shortName): ?Station {
+    public function getStationByShortName(string $shortName): ?Station
+    {
         return $this->stationRepo->findByShortName($shortName);
     }
 }

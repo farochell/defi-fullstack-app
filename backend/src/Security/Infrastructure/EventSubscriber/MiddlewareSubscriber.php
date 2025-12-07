@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -10,7 +12,6 @@ namespace App\Security\Infrastructure\EventSubscriber;
 use App\Security\Domain\Service\AccessTokenDecoder;
 use App\Security\Infrastructure\Context\InMemoryContextService;
 use App\Shared\Domain\Exception\ErrorCode;
-use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,9 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
         private AccessTokenDecoder $accessTokenDecoder,
     ) {
     }
-    public static function getSubscribedEvents(): array {
+
+    public static function getSubscribedEvents(): array
+    {
         return [
             RequestEvent::class => [
                 ['checkSecurityHeader', 0],
@@ -43,28 +46,30 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
         if (null === $header) {
             $requestEvent->setResponse(
                 new JsonResponse([
-                    'code'    => ErrorCode::AUTH_MISSING_TOKEN,
+                    'code' => ErrorCode::AUTH_MISSING_TOKEN,
                     'message' => 'Bearer token non trouvé',
                     'details' => [],
                 ], Response::HTTP_UNAUTHORIZED),
             );
+
             return;
         }
-         ;
+
         $token = str_replace('Bearer ', '', $header);
         try {
             $user = $this->accessTokenDecoder->decode($token);
             InMemoryContextService::set('user', $user);
             $requestEvent->getRequest()->attributes->set('user', $user);
             $memoryContextService = new InMemoryContextService();
-        } catch (Exception) {
+        } catch (\Exception) {
             $requestEvent->setResponse(
                 new JsonResponse([
-                    'code'    => ErrorCode::AUTH_FORBIDDEN,
+                    'code' => ErrorCode::AUTH_FORBIDDEN,
                     'message' => 'Accès non autorisé',
                     'details' => [],
                 ], Response::HTTP_FORBIDDEN),
             );
+
             return;
         }
     }
@@ -80,7 +85,7 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
             '/',
         );
 
-        return $uri === '/'
+        return '/' === $uri
             || str_starts_with($uri, '/api/login')
             || str_starts_with($uri, '/api/users/create')
             || str_starts_with($uri, '/api/routes')

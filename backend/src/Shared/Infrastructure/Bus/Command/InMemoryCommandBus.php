@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -21,18 +23,20 @@ use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
-final class InMemoryCommandBus implements CommandBus {
+final class InMemoryCommandBus implements CommandBus
+{
     private MessageBus $messageBus;
 
     /**
      * @param iterable<callable> $commandHandlers Les handlers de commandes
      */
-    public function __construct(iterable $commandHandlers, LoggerInterface $logger) {
+    public function __construct(iterable $commandHandlers, LoggerInterface $logger)
+    {
         $this->messageBus = new MessageBus([
             new HandleMessageMiddleware(
                 new HandlersLocator(CallableFirstParameterExtractor::forCallables($commandHandlers))
             ),
-            new LoggerMiddleware($logger)
+            new LoggerMiddleware($logger),
         ]);
     }
 

@@ -1,14 +1,14 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
-
 namespace App\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
 use Symfony\Component\Uid\Uuid as SymfonyUuid;
 
 class Uuid extends StringValueObject
@@ -31,8 +31,8 @@ class Uuid extends StringValueObject
 
     private function ensureIsValidUuid(string $value): void
     {
-        if (! SymfonyUuid::isValid($value)) {
-            throw new InvalidArgumentException(sprintf('<%s> does not allow the value <%s>.', static::class, $value));
+        if (!SymfonyUuid::isValid($value)) {
+            throw new \InvalidArgumentException(sprintf('<%s> does not allow the value <%s>.', static::class, $value));
         }
     }
 }

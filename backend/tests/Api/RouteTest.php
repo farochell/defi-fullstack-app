@@ -44,7 +44,7 @@ class RouteTest extends ApiTestCase
 
     public function testCalculateRouteWithInvalidAnalyticCode(): void
     {
-        self::$httpClient->request('POST', '/api/routes', [
+        $response = self::$httpClient->request('POST', '/api/routes', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'fromStationId' => 'IO',

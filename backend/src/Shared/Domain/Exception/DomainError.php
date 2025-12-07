@@ -1,14 +1,15 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
 namespace App\Shared\Domain\Exception;
-use DomainException;
 
-abstract class DomainError extends DomainException implements ApiExceptionInterface
+abstract class DomainError extends \DomainException implements ApiExceptionInterface
 {
     public function __construct()
     {
@@ -18,5 +19,4 @@ abstract class DomainError extends DomainException implements ApiExceptionInterf
     abstract public function errorCode(): string;
 
     abstract protected function errorMessage(): string;
-
 }

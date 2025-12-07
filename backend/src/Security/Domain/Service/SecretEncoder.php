@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  automarkt
  */
 declare(strict_types=1);

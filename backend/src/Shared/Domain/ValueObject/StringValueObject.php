@@ -1,18 +1,17 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
-
 namespace App\Shared\Domain\ValueObject;
 
-use Stringable;
-
-abstract class StringValueObject implements  StringValueObjectInterface, Stringable
+abstract class StringValueObject implements StringValueObjectInterface, \Stringable
 {
-    public function __construct(protected  string $value)
+    public function __construct(protected string $value)
     {
     }
 

@@ -1,21 +1,20 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
 namespace App\Shared\Domain;
 
-use ArrayIterator;
-use Countable;
-use IteratorAggregate;
-
 /**
  * @template T of object
- * @implements IteratorAggregate<int, T>
+ *
+ * @implements \IteratorAggregate<int, T>
  */
-abstract class Collection implements Countable, IteratorAggregate
+abstract class Collection implements \Countable, \IteratorAggregate
 {
     /** @var array<int, T> */
     private array $items;
@@ -32,10 +31,10 @@ abstract class Collection implements Countable, IteratorAggregate
     /** @return class-string<T> */
     abstract protected function type(): string;
 
-    /** @return ArrayIterator<int, T> */
-    public function getIterator(): ArrayIterator
+    /** @return \ArrayIterator<int, T> */
+    public function getIterator(): \ArrayIterator
     {
-        return new ArrayIterator($this->items);
+        return new \ArrayIterator($this->items);
     }
 
     public function count(): int
@@ -53,7 +52,7 @@ abstract class Collection implements Countable, IteratorAggregate
 
     public function isEmpty(): bool
     {
-        return $this->items === [];
+        return [] === $this->items;
     }
 
     /** @return array<int, T> */

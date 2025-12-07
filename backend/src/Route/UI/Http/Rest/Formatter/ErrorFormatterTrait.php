@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -16,10 +18,10 @@ use App\Security\Domain\Exception\InvalidCredentialsException;
 use App\Shared\Domain\Exception\ErrorCode;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Throwable;
 
-trait ErrorFormatterTrait {
-    public function formatError(Throwable $error): ?JsonResponse
+trait ErrorFormatterTrait
+{
+    public function formatError(\Throwable $error): ?JsonResponse
     {
         if (
             $error instanceof StationNotFoundException
@@ -29,7 +31,7 @@ trait ErrorFormatterTrait {
             || $error instanceof NoPathFoundException
         ) {
             return new JsonResponse([
-                'code'    => $error->getErrorCode(),
+                'code' => $error->getErrorCode(),
                 'message' => $error->getMessage(),
                 'details' => $error->getDetails(),
             ], $error->getCode());
@@ -41,13 +43,14 @@ trait ErrorFormatterTrait {
 
         if ($error instanceof HttpException) {
             return new JsonResponse([
-                'code'    => ErrorCode::MISSING_PARAMETERS,
+                'code' => ErrorCode::MISSING_PARAMETERS,
                 'message' => $error->getMessage(),
-                'details' => []
+                'details' => [],
             ]);
         }
+
         return new JsonResponse([
-            'code'    => 'internal_server_error',
+            'code' => 'internal_server_error',
             'message' => 'An unexpected error occurred.',
             'details' => [
                 $error->getMessage(),

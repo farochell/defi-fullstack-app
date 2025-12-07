@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -19,16 +21,18 @@ class StationNotFoundException extends RepositoryException implements ApiExcepti
     public function __construct(private readonly string $stationName)
     {
         parent::__construct(
-            message: "Station non trouvée",
-            code: 500
+            message: 'Station non trouvée',
+            code: 422
         );
     }
 
-    public function getErrorCode(): ErrorCode {
+    public function getErrorCode(): ErrorCode
+    {
         return ErrorCode::STATION_NOT_FOUND;
     }
 
-    public function getDetails(): array {
+    public function getDetails(): array
+    {
         return [
             'station' => $this->stationName,
         ];

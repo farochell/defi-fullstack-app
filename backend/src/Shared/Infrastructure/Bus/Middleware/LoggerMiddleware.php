@@ -1,10 +1,11 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
-
 
 namespace App\Shared\Infrastructure\Bus\Middleware;
 
@@ -26,8 +27,9 @@ readonly class LoggerMiddleware implements MiddlewareInterface
     {
         if ($envelope->last(HandledStamp::class) instanceof StampInterface) {
             $message = $envelope->getMessage();
-            $this->logger->info(Utils::className($message) . ' was handled');
+            $this->logger->info(Utils::className($message).' was handled');
         }
+
         return $stack->next()->handle($envelope, $stack);
     }
 }

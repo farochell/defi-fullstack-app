@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -18,7 +20,6 @@ interface RouteRepositoryInterface
     public function getAnalyticDistances(
         ?\DateTimeImmutable $from,
         ?\DateTimeImmutable $to,
-        ?GroupBy $groupBy
+        ?GroupBy $groupBy,
     ): AnalyticDistances;
-
 }

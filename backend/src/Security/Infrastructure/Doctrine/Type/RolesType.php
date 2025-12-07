@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -22,7 +24,7 @@ class RolesType extends JsonType
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        if ($value === null) {
+        if (null === $value) {
             return null;
         }
 
@@ -37,7 +39,7 @@ class RolesType extends JsonType
     {
         $array = parent::convertToPHPValue($value, $platform);
 
-        if ($array === null) {
+        if (null === $array) {
             return null;
         }
 
@@ -48,5 +50,4 @@ class RolesType extends JsonType
     {
         return true;
     }
-
 }

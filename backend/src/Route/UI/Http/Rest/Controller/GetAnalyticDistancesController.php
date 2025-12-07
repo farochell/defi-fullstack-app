@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -16,7 +18,8 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 
 #[AsController]
-class GetAnalyticDistancesController{
+class GetAnalyticDistancesController
+{
     use ErrorFormatterTrait;
 
     public function __construct(
@@ -25,8 +28,8 @@ class GetAnalyticDistancesController{
     }
 
     public function __invoke(
-#[MapQueryString] ?GetAnalyticInput $analyticInput = null
-    ) : JsonResponse {
+        #[MapQueryString] ?GetAnalyticInput $analyticInput = null,
+    ): JsonResponse {
         try {
             $response = $this->queryBus->ask(
                 new GetAnalyticDistancesQuery(
@@ -35,10 +38,11 @@ class GetAnalyticDistancesController{
                     $analyticInput?->groupBy
                 )
             );
+
             return new JsonResponse($response);
         } catch (\Throwable $e) {
             $errorResponse = $this->formatError($e);
-            if ($errorResponse === null) {
+            if (null === $errorResponse) {
                 return new JsonResponse(
                     ['error' => $e->getMessage()],
                     500

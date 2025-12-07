@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -16,9 +18,9 @@ use App\Route\Domain\ValueObject\GroupBy;
 use App\Route\Infrastructure\Doctrine\Mapping\DoctrineRoute;
 use App\Shared\Domain\Exception\EntityPersistenceException;
 use App\Shared\Infrastructure\Repository\BaseRepository;
-use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
+
 use function Lambdish\Phunctional\map;
 
 /**
@@ -47,7 +49,7 @@ class MysqlRouteRepository extends BaseRepository implements RouteRepositoryInte
         } catch (\Throwable $e) {
             $exception = EntityPersistenceException::fromPrevious($this->entityName, $e);
             $this->logAndThrowException($exception, $route, [
-                'data' => $this->serializeEntity($route)
+                'data' => $this->serializeEntity($route),
             ]);
         }
     }
@@ -55,19 +57,19 @@ class MysqlRouteRepository extends BaseRepository implements RouteRepositoryInte
     public function getAnalyticDistances(
         ?\DateTimeImmutable $from = null,
         ?\DateTimeImmutable $to = null,
-        ?GroupBy $groupBy = null
+        ?GroupBy $groupBy = null,
     ): AnalyticDistances {
         $conn = $this->getEntityManager()->getConnection();
         if (null === $from || null === $to) {
             $minMaxSql = 'SELECT MIN(created_at) AS min_dt, MAX(created_at) AS max_dt FROM route';
             $minMax = $conn->fetchAssociative($minMaxSql);
 
-            if (!$minMax || $minMax['min_dt'] === null || $minMax['max_dt'] === null) {
+            if (!$minMax || null === $minMax['min_dt'] || null === $minMax['max_dt']) {
                 return new AnalyticDistances([]);
             }
 
-            $from = $from ?? new DateTimeImmutable($minMax['min_dt']);
-            $to = $to ?? new DateTimeImmutable($minMax['max_dt']);
+            $from = $from ?? new \DateTimeImmutable($minMax['min_dt']);
+            $to = $to ?? new \DateTimeImmutable($minMax['max_dt']);
         }
 
         $fromStr = $from->format('Y-m-d 00:00:00');
@@ -87,13 +89,13 @@ class MysqlRouteRepository extends BaseRepository implements RouteRepositoryInte
             'analytic_code AS analyticCode',
             'SUM(distance_km) AS totalDistanceKm',
             'DATE(MIN(created_at)) AS periodStart',
-            'DATE(MAX(created_at)) AS periodEnd'
+            'DATE(MAX(created_at)) AS periodEnd',
         ];
 
         $groupByFields = ['analytic_code'];
         $orderByFields = ['analytic_code'];
 
-        if ($groupExpr !== null) {
+        if (null !== $groupExpr) {
             array_splice($selectFields, 1, 0, ["{$groupExpr} AS `group`"]);
             $groupByFields[] = '`group`';
             $orderByFields[] = '`group`';
@@ -114,19 +116,20 @@ class MysqlRouteRepository extends BaseRepository implements RouteRepositoryInte
                 (float) $r['totalDistanceKm'],
                 (string) $r['periodStart'],
                 (string) $r['periodEnd'],
-                $groupExpr !== null ? (string) $r['group'] : null
+                null !== $groupExpr ? (string) $r['group'] : null
             );
         }, $rows);
 
         return new AnalyticDistances($analyticDistances);
     }
 
-    private function toDoctrineEntity(Route $route): DoctrineRoute {
+    private function toDoctrineEntity(Route $route): DoctrineRoute
+    {
         $paths = map(
-            static fn(Station $station) => [
+            static fn (Station $station) => [
                 'id' => $station->id,
                 'shortName' => $station->shortName,
-                'longName' => $station->longName
+                'longName' => $station->longName,
             ],
             $route->path->getIterator()->getArrayCopy()
         );

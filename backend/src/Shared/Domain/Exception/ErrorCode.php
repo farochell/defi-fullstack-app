@@ -1,13 +1,15 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
 namespace App\Shared\Domain\Exception;
 
-enum ErrorCode : string
+enum ErrorCode: string
 {
     case AUTH_MISSING_TOKEN = 'AUTH_MISSING_TOKEN';
     case AUTH_FORBIDDEN = 'AUTH_FORBIDDEN';

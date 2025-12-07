@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -17,7 +19,7 @@ enum AnalyticCodeEnum: string
 
     public static function tryFromName(string $name): self
     {
-        foreach(self::cases() as $case) {
+        foreach (self::cases() as $case) {
             if (strtoupper($name) === $case->name) {
                 return self::from($case->value);
             }

@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -13,12 +15,14 @@ use Doctrine\DBAL\Types\StringType as DoctrineStringType;
 abstract class StringType extends DoctrineStringType
 {
     protected const string TYPE = 'string';
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool {
+
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
         return true;
     }
 
     public function getName(): string
     {
-        return  static::TYPE;
+        return static::TYPE;
     }
 }

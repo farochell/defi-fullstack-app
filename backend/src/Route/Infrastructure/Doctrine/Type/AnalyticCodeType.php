@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -10,12 +12,14 @@ namespace App\Route\Infrastructure\Doctrine\Type;
 use App\Route\Domain\ValueObject\AnalyticCodeEnum;
 use App\Shared\Infrastructure\Doctrine\Type\StringType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Override;
 use Webmozart\Assert\Assert;
 
-class AnalyticCodeType extends StringType {
+class AnalyticCodeType extends StringType
+{
     public const string NAME = 'analytic_code';
-    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?AnalyticCodeEnum {
+
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?AnalyticCodeEnum
+    {
         if (null === $value) {
             return null;
         }
@@ -23,7 +27,7 @@ class AnalyticCodeType extends StringType {
         return AnalyticCodeEnum::tryFrom((string) $value);
     }
 
-    #[Override]
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if (null === $value) {
@@ -37,13 +41,13 @@ class AnalyticCodeType extends StringType {
         return $analyticCodeEnum->value;
     }
 
-    #[Override]
+    #[\Override]
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
 
-    #[Override]
+    #[\Override]
     public function getName(): string
     {
         return self::TYPE;

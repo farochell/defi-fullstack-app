@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -22,11 +24,12 @@ class CalculerRouteController
 
     public function __construct(
         private readonly CommandBus $commandBus,
-        private readonly ValidatorInterface $validator
-    ) {}
+        private readonly ValidatorInterface $validator,
+    ) {
+    }
 
     public function __invoke(
-        RouteInput $input
+        RouteInput $input,
     ): JsonResponse {
         try {
             $this->validator->validate($input);
@@ -37,6 +40,7 @@ class CalculerRouteController
                     $input->analyticCode
                 )
             );
+
             return JsonResponse::fromJsonString((string) json_encode($result), 200);
         } catch (\Throwable $e) {
             return $this->formatError($e);

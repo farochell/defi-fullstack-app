@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -22,11 +24,12 @@ class CalculateRouteCommandHandler implements CommandHandler
         private readonly StationRepositoryInterface $stationRepo,
         private readonly RailNetworkInterface $network,
         private readonly ShortestPathFinderInterface $shortestPathFinder,
-        private readonly RouteRepositoryInterface $routeRepo
-    ) {}
+        private readonly RouteRepositoryInterface $routeRepo,
+    ) {
+    }
 
     public function __invoke(
-        CalculateRouteCommand $command
+        CalculateRouteCommand $command,
     ): RouteResponse {
         $from = $this->stationRepo->findByShortName($command->fromStationId);
         $to = $this->stationRepo->findByShortName($command->toStationId);
@@ -50,7 +53,6 @@ class CalculateRouteCommandHandler implements CommandHandler
             distanceKm: $pathResult->distanceKm,
             path: $pathResult->stations
         );
-
 
         $this->routeRepo->save($route);
 

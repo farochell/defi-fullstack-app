@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -31,5 +33,4 @@ class HashedPassword extends StringValueObject
             throw new InvalidFormat('The hashed password argon2id encoded format');
         }
     }
-
 }

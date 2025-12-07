@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -27,17 +29,14 @@ class JsonStationRepository implements StationRepositoryInterface
 
         $content = file_get_contents($this->stationsFile);
 
-        if ($content === false || trim($content) === '') {
+        if (false === $content || '' === trim($content)) {
             throw new StationsFileEmptyException($this->stationsFile);
         }
 
         $data = json_decode($content, true);
 
         if (!is_array($data)) {
-            throw new StationsFileInvalidJsonException(
-                $this->stationsFile,
-                json_last_error_msg()
-            );
+            throw new StationsFileInvalidJsonException($this->stationsFile, json_last_error_msg());
         }
         $stations = [];
         foreach ($data as $item) {

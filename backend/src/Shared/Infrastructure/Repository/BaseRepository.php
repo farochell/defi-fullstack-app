@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -15,9 +17,10 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @template T of object
+ *
  * @extends ServiceEntityRepository<T>
  */
-abstract class BaseRepository  extends ServiceEntityRepository
+abstract class BaseRepository extends ServiceEntityRepository
 {
     protected string $entityClass;
 
@@ -25,7 +28,7 @@ abstract class BaseRepository  extends ServiceEntityRepository
         ManagerRegistry $managerRegistry,
         string $entityClass,
         protected string $entityName,
-        protected LoggerInterface $logger
+        protected LoggerInterface $logger,
     ) {
         parent::__construct($managerRegistry, $entityClass);
         $this->entityClass = $entityClass;
@@ -37,43 +40,38 @@ abstract class BaseRepository  extends ServiceEntityRepository
         $this->logger->error($entityNotFoundException->getMessage(), [
             'exception' => $entityNotFoundException,
             'entity' => $this->entityName,
-            'id' => $id
+            'id' => $id,
         ]);
     }
 
     /**
-     * @param RepositoryException $repositoryException
-     * @param object $entity
      * @param array<string, mixed> $context Contexte additionnel pour le log
-     *
-     * @return void
      *
      * @throws RepositoryException
      */
     protected function logAndThrowException(
         RepositoryException $repositoryException,
         object $entity,
-        array $context = []
-    ): void  {
+        array $context = [],
+    ): void {
         $this->logger->error($repositoryException->getMessage(), array_merge([
             'exception' => $repositoryException,
             'entity' => $this->entityName,
             'entity_id' => method_exists($entity, 'id')
                 ? $entity->id()->value()
-                : 'unknown'
+                : 'unknown',
         ], $context));
 
         throw $repositoryException;
     }
 
     /**
-     * @param object $entity
      * @return string[]
      */
     protected function serializeEntity(object $entity): array
     {
         return [
-            'id' => method_exists($entity, 'id') ? $entity->id()->value() : 'unknown'
+            'id' => method_exists($entity, 'id') ? $entity->id()->value() : 'unknown',
         ];
     }
 }

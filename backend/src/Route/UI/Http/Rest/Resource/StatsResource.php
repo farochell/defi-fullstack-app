@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -13,7 +15,6 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\Response;
 use App\Route\UI\Http\Rest\Controller\GetAnalyticDistancesController;
-use ArrayObject;
 
 #[ApiResource(
     operations: [
@@ -27,7 +28,7 @@ use ArrayObject;
                 responses: [
                     '200' => new Response(
                         description: 'Agrégations de distances',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
@@ -37,7 +38,7 @@ use ArrayObject;
                                         'groupBy' => [
                                             'type' => 'string',
                                             'enum' => ['day', 'month', 'year', 'none'],
-                                            'default' => 'none'
+                                            'default' => 'none',
                                         ],
                                         'items' => [
                                             'type' => 'array',
@@ -45,7 +46,7 @@ use ArrayObject;
                                                 'type' => 'object',
                                                 'properties' => [
                                                     'analyticCode' => [
-                                                        'type' => 'string' ,
+                                                        'type' => 'string',
                                                         'required' => true,
                                                     ],
                                                     'totalDistanceKm' => [
@@ -58,20 +59,20 @@ use ArrayObject;
                                                     'periodEnd' => ['type' => 'string', 'format' => 'date'],
                                                     'group' => [
                                                         'type' => 'string',
-                                                        'description' => 'Unité de groupement si groupBy est utilisé (ex. 2025-11 pour month)'
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
+                                                        'description' => 'Unité de groupement si groupBy est utilisé (ex. 2025-11 pour month)',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
                                     ],
-                                    'items' => ['type' => 'object']
-                                ]
-                            ]
+                                    'items' => ['type' => 'object'],
+                                ],
+                            ],
                         ])
                     ),
                     '400' => new Response(
                         description: 'Paramètres invalides (ex. from > to)',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
@@ -79,11 +80,11 @@ use ArrayObject;
                                         'code' => ['type' => 'string'],
                                         'message' => ['type' => 'string'],
                                         'details' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                    ]
-                                ]
-                            ]
+                                    ],
+                                ],
+                            ],
                         ])
-                    )
+                    ),
                 ],
                 summary: 'BONUS : Distances agrégées par code analytique', description: 'Retourne la somme des distances parcourues par code analytique sur une
                                    période donnée. Si aucune période n’est fournie, utilise la période
@@ -109,7 +110,7 @@ use ArrayObject;
                         description: 'Optionnel, groupement additionnel',
                         required: false,
                         schema: ['type' => 'string', 'enum' => ['day', 'month', 'year', 'none']]
-                    )
+                    ),
                 ],
             ),
 
@@ -117,7 +118,9 @@ use ArrayObject;
             output: false,
             read: false,
             name: 'get_stats_distances'
-        )
+        ),
     ]
 )]
-class StatsResource {}
+class StatsResource
+{
+}

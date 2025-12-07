@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -15,7 +17,8 @@ use App\Route\Domain\Service\ShortestPathFinderInterface;
 use App\Route\Domain\ValueObject\ShortestPathResult;
 use App\Route\Domain\ValueObject\Stations;
 
-class DijkstraShortestPathFinder implements ShortestPathFinderInterface {
+class DijkstraShortestPathFinder implements ShortestPathFinderInterface
+{
     public function findShortestPath(
         RailNetworkInterface $network,
         Station $from,
@@ -60,7 +63,7 @@ class DijkstraShortestPathFinder implements ShortestPathFinderInterface {
         $path = [];
         $curr = $to;
 
-        while ($curr !== null) {
+        while (null !== $curr) {
             array_unshift($path, $curr);
             $curr = $prev[$curr->shortName] ?? null;
         }

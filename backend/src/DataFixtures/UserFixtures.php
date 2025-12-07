@@ -17,7 +17,9 @@ class UserFixtures extends Fixture
 {
     public function __construct(
         private readonly SecretEncoder $encoder,
-    ) {}
+    ) {
+    }
+
     public function load(ObjectManager $manager): void
     {
         $user = new DoctrineUser();

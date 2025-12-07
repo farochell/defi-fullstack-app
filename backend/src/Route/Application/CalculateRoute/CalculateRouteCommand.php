@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -14,6 +16,7 @@ class CalculateRouteCommand implements Command
     public function __construct(
         public string $fromStationId,
         public string $toStationId,
-        public string $analyticCode
-    ){}
+        public string $analyticCode,
+    ) {
+    }
 }

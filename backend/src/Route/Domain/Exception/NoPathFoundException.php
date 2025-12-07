@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -18,18 +20,20 @@ class NoPathFoundException extends \DomainException implements ApiExceptionInter
     public function __construct(private readonly string $from, private readonly string $to)
     {
         parent::__construct(
-            message: "Trajet non trouvé",
+            message: 'Trajet non trouvé',
             code: 400
         );
     }
 
-    public function getErrorCode(): ErrorCode {
+    public function getErrorCode(): ErrorCode
+    {
         return ErrorCode::EMPTY_PATH;
     }
 
-    public function getDetails(): array {
+    public function getDetails(): array
+    {
         return [
-            'message' => 'Trajet non trouvé entre les stations ' . $this->from . ' et ' . $this->to,
+            'message' => 'Trajet non trouvé entre les stations '.$this->from.' et '.$this->to,
         ];
     }
 }

@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -9,7 +11,8 @@ namespace App\Route\UI\Http\Rest\Input;
 
 use ApiPlatform\Metadata\ApiProperty;
 
-class GetAnalyticInput {
+class GetAnalyticInput
+{
     #[ApiProperty(
         description: 'Date de début (inclus)',
         required: false

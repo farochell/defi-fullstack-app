@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -19,19 +21,18 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
 #[AsController]
-class LoginController {
+class LoginController
+{
     use ErrorFormatterTrait;
 
     public function __construct(
         private readonly QueryBus $queryBus,
-        private readonly AccessTokenGenerator $accessTokenGenerator
-    )
-    {
-
+        private readonly AccessTokenGenerator $accessTokenGenerator,
+    ) {
     }
 
     public function __invoke(
-        #[MapRequestPayload] LoginInput $input
+        #[MapRequestPayload] LoginInput $input,
     ): JsonResponse {
         try {
             /** @var LoginResponse $login */
@@ -45,11 +46,11 @@ class LoginController {
             );
 
             return JsonResponse::fromJsonString(json_encode([
-                    'token' => $this->accessTokenGenerator->generate($userIdentity)
-                ], JSON_THROW_ON_ERROR)
+                'token' => $this->accessTokenGenerator->generate($userIdentity),
+            ], JSON_THROW_ON_ERROR)
             );
         } catch (\Throwable $e) {
-            return  $this->formatError($e);
+            return $this->formatError($e);
         }
     }
 }

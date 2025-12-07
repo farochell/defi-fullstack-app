@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -9,10 +11,7 @@ namespace App\Shared\Infrastructure\Bus;
 
 use App\Shared\Domain\Bus\Event\DomainEvent;
 use App\Shared\Domain\Bus\Event\DomainEventSubscriber;
-use LogicException;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionNamedType;
+
 use function Lambdish\Phunctional\map;
 use function Lambdish\Phunctional\reduce;
 use function Lambdish\Phunctional\reindex;
@@ -21,6 +20,7 @@ final class CallableFirstParameterExtractor
 {
     /**
      * @param iterable<callable> $callables
+     *
      * @return array<string, array<callable>>
      */
     public static function forCallables(iterable $callables): array
@@ -30,6 +30,7 @@ final class CallableFirstParameterExtractor
 
     /**
      * @param iterable<callable> $callables
+     *
      * @return array<class-string<DomainEvent>, array<DomainEventSubscriber>>
      */
     public static function forPipedCallables(iterable $callables): array
@@ -42,7 +43,7 @@ final class CallableFirstParameterExtractor
      */
     private static function classExtractor(CallableFirstParameterExtractor $callableFirstParameterExtractor): callable
     {
-        return static fn(callable $handler): ?string => $callableFirstParameterExtractor->extract($handler);
+        return static fn (callable $handler): ?string => $callableFirstParameterExtractor->extract($handler);
     }
 
     /**
@@ -53,7 +54,7 @@ final class CallableFirstParameterExtractor
         return static function (array $subscribers, DomainEventSubscriber $domainEventSubscriber): array {
             $subscribedEvents = $domainEventSubscriber::subscribedTo();
             foreach ($subscribedEvents as $subscribedEvent) {
-                /** @var class-string<DomainEvent> $subscribedEvent */
+                /* @var class-string<DomainEvent> $subscribedEvent */
                 $subscribers[$subscribedEvent][] = $domainEventSubscriber;
             }
 
@@ -66,13 +67,11 @@ final class CallableFirstParameterExtractor
      */
     private static function unflatten(): callable
     {
-        return static fn($value): array => [$value];
+        return static fn ($value): array => [$value];
     }
 
     /**
-     * @param callable $callable
-     * @return string|null
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function extract(callable $callable): ?string
     {
@@ -80,9 +79,10 @@ final class CallableFirstParameterExtractor
             // On crée un ReflectionFunction pour la closure
             $reflectionFunction = new \ReflectionFunction($callable);
             $params = $reflectionFunction->getParameters();
-            if (count($params) === 1 && $params[0]->getType() instanceof \ReflectionNamedType) {
+            if (1 === count($params) && $params[0]->getType() instanceof \ReflectionNamedType) {
                 return $params[0]->getType()->getName();
             }
+
             return null;
         }
 
@@ -91,9 +91,10 @@ final class CallableFirstParameterExtractor
             $method = $callable[1];
             $reflectionMethod = new \ReflectionMethod($objectOrClass, $method);
             $params = $reflectionMethod->getParameters();
-            if (count($params) === 1 && $params[0]->getType() instanceof \ReflectionNamedType) {
+            if (1 === count($params) && $params[0]->getType() instanceof \ReflectionNamedType) {
                 return $params[0]->getType()->getName();
             }
+
             return null;
         }
 
@@ -103,27 +104,27 @@ final class CallableFirstParameterExtractor
             if ($this->hasOnlyOneParameter($reflectionMethod)) {
                 return $this->firstParameterClassFrom($reflectionMethod);
             }
+
             return null;
         }
 
         throw new \LogicException('Unsupported callable type');
     }
 
-
-    private function firstParameterClassFrom(ReflectionMethod $reflectionMethod): string
+    private function firstParameterClassFrom(\ReflectionMethod $reflectionMethod): string
     {
-        /** @var ?ReflectionNamedType $fistParameterType */
+        /** @var ?\ReflectionNamedType $fistParameterType */
         $fistParameterType = $reflectionMethod->getParameters()[0]->getType();
 
         if (null === $fistParameterType) {
-            throw new LogicException('Missing type hint for the first parameter of __invoke');
+            throw new \LogicException('Missing type hint for the first parameter of __invoke');
         }
 
         return $fistParameterType->getName();
     }
 
-    private function hasOnlyOneParameter(ReflectionMethod $reflectionMethod): bool
+    private function hasOnlyOneParameter(\ReflectionMethod $reflectionMethod): bool
     {
-        return $reflectionMethod->getNumberOfParameters() === 1;
+        return 1 === $reflectionMethod->getNumberOfParameters();
     }
 }

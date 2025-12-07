@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -19,7 +21,7 @@ class DistancesFileEmptyException extends RepositoryException implements ApiExce
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Le fichiers distances.json est vide.",
+            message: 'Le fichiers distances.json est vide.',
             code: 500
         );
     }

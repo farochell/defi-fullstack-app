@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -16,20 +18,23 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<UseItem>
  */
-class NoInfrastructureInApplicationRule implements Rule {
-    public function getNodeType(): string {
+class NoInfrastructureInApplicationRule implements Rule
+{
+    public function getNodeType(): string
+    {
         return UseItem::class;
     }
 
-    public function processNode(Node $node, Scope $scope): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         if (
-            str_contains($scope->getNamespace(), "\Application\\") === false &&
-            str_ends_with($scope->getNamespace(), "\Application\\") === false
+            false === str_contains($scope->getNamespace(), "\Application\\")
+            && false === str_ends_with($scope->getNamespace(), "\Application\\")
         ) {
             return [];
         }
 
-        if (!in_array("Infrastructure", $node->name->getParts(), true)) {
+        if (!in_array('Infrastructure', $node->name->getParts(), true)) {
             return [];
         }
 

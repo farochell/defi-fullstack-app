@@ -11,6 +11,7 @@ use App\Route\Application\GetAnalyticDistances\AnalyticDistancesResponse;
 use App\Route\Application\GetAnalyticDistances\GetAnalyticDistancesQuery;
 use App\Route\Application\GetAnalyticDistances\GetAnalyticDistancesQueryHandler;
 use App\Route\Domain\Repository\RouteRepositoryInterface;
+use App\Route\Domain\ValueObject\AnalyticDistances;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -44,15 +45,13 @@ class GetAnalyticDistancesTest extends KernelTestCase
         );
 
         $response = $handler($query);
-
-        // --- Assertions ---
         $this->assertInstanceOf(AnalyticDistancesResponse::class, $response);
 
         $this->assertSame('2024-01-01', $response->from);
         $this->assertSame('2024-12-31', $response->to);
         $this->assertSame('month', $response->groupBy);
-        $this->assertIsArray($response->items);
-        $this->assertNotNull($response->items);
+        $this->assertInstanceOf(AnalyticDistances::class,  $response->items);
+        $this->assertEmpty($response->items);
     }
 
     public function testGetAnalyticDistancesWithoutFilters(): void
@@ -74,7 +73,8 @@ class GetAnalyticDistancesTest extends KernelTestCase
         $this->assertNull($response->to);
         $this->assertNull($response->groupBy);
 
-        $this->assertIsArray($response->items);
+        $this->assertInstanceOf(AnalyticDistances::class,  $response->items);
+        $this->assertEmpty($response->items);
     }
 
     public function testGetAnalyticDistancesWithInvalidGroupBy(): void
@@ -90,9 +90,9 @@ class GetAnalyticDistancesTest extends KernelTestCase
         );
 
         $response = $handler($query);
-
         $this->assertInstanceOf(AnalyticDistancesResponse::class, $response);
         $this->assertNull($response->groupBy);
-        $this->assertIsArray($response->items);
+        $this->assertInstanceOf(AnalyticDistances::class,  $response->items);
+        $this->assertEmpty($response->items);
     }
 }

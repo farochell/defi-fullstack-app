@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -38,10 +40,12 @@ readonly class InMemoryQueryBus implements QueryBus
         );
     }
 
-    public function ask(Query $query): ?QueryResponse {
+    public function ask(Query $query): ?QueryResponse
+    {
         try {
             /** @var HandledStamp $stamp */
             $stamp = $this->messageBus->dispatch($query)->last(HandledStamp::class);
+
             return $stamp->getResult();
         } catch (HandlerFailedException $error) {
             while ($error instanceof HandlerFailedException) {

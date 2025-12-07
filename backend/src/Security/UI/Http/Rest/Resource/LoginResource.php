@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -14,7 +16,6 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Response;
 use App\Security\UI\Http\Rest\Controller\LoginController;
 use App\Security\UI\Http\Rest\Input\LoginInput;
-use ArrayObject;
 
 #[ApiResource(
     operations: [
@@ -28,20 +29,20 @@ use ArrayObject;
                 responses: [
                     '200' => new Response(
                         description: 'Retourne le token JWT',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
                                     'properties' => [
-                                        'token' => ['type' => 'string']
-                                    ]
-                                ]
-                            ]
+                                        'token' => ['type' => 'string'],
+                                    ],
+                                ],
+                            ],
                         ]),
                     ),
                     '401' => new Response(
                         description: 'Email ou mot de passe incorrect',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
@@ -50,16 +51,16 @@ use ArrayObject;
                                         'message' => ['type' => 'string'],
                                         'details' => [
                                             'type' => 'array',
-                                            'items' => ['type' => 'string']
+                                            'items' => ['type' => 'string'],
                                         ],
-                                    ]
-                                ]
-                            ]
+                                    ],
+                                ],
+                            ],
                         ])
                     ),
                     '422' => new Response(
                         description: 'Email ou mot de passe manquants',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
@@ -68,13 +69,13 @@ use ArrayObject;
                                         'message' => ['type' => 'string'],
                                         'details' => [
                                             'type' => 'array',
-                                            'items' => ['type' => 'string']
+                                            'items' => ['type' => 'string'],
                                         ],
-                                    ]
-                                ]
-                            ]
+                                    ],
+                                ],
+                            ],
                         ])
-                    )
+                    ),
                 ],
                 summary: 'Identification utilisateur',
                 description: 'Identification utilisateur'
@@ -82,7 +83,7 @@ use ArrayObject;
             validationContext: ['groups' => ['login']],
             input: LoginInput::class,
             read: false,
-        )
+        ),
     ]
 )]
 class LoginResource

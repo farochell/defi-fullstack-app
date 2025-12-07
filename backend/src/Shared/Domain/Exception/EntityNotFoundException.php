@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
 namespace App\Shared\Domain\Exception;
-
-use Throwable;
 
 class EntityNotFoundException extends RepositoryException implements ApiExceptionInterface
 {
@@ -16,10 +16,10 @@ class EntityNotFoundException extends RepositoryException implements ApiExceptio
     public function __construct(
         public string $entityName,
         public string $identifier,
-        ?Throwable $previous = null
+        ?\Throwable $previous = null,
     ) {
         parent::__construct(
-            sprintf("Entity %s with ID %s not found", $entityName, $identifier),
+            sprintf('Entity %s with ID %s not found', $entityName, $identifier),
             404,
             $previous
         );

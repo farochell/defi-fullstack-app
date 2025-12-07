@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -14,7 +16,6 @@ use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\OpenApi\Model\Response;
 use App\Route\UI\Http\Rest\Controller\CalculerRouteController;
 use App\Route\UI\Http\Rest\Input\RouteInput;
-use ArrayObject;
 
 #[ApiResource(
     operations: [
@@ -29,7 +30,7 @@ use ArrayObject;
                 responses: [
                     '201' => new Response(
                         description: 'Trajet calculé',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
@@ -46,17 +47,17 @@ use ArrayObject;
                                                 'properties' => [
                                                     'id' => ['type' => 'string'],
                                                     'name' => ['type' => 'string'],
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ])
                     ),
                     '422' => new Response(
                         description: 'Données non valides (ex. station inconnue, réseau non connexe)',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
@@ -64,14 +65,14 @@ use ArrayObject;
                                         'code' => ['type' => 'string'],
                                         'message' => ['type' => 'string'],
                                         'details' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                    ]
-                                ]
-                            ]
+                                    ],
+                                ],
+                            ],
                         ])
                     ),
                     '400' => new Response(
                         description: 'Requête invalide',
-                        content: new ArrayObject([
+                        content: new \ArrayObject([
                             'application/json' => [
                                 'schema' => [
                                     'type' => 'object',
@@ -79,16 +80,16 @@ use ArrayObject;
                                         'code' => ['type' => 'string'],
                                         'message' => ['type' => 'string'],
                                         'details' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                    ]
-                                ]
-                            ]
+                                    ],
+                                ],
+                            ],
                         ])
                     ),
                 ],
                 summary: 'Calculer un trajet A → B',
                 description: 'Calculer un trajet A → B',
                 requestBody: new RequestBody(
-                    content: new ArrayObject([
+                    content: new \ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -96,24 +97,24 @@ use ArrayObject;
                                 'properties' => [
                                     'fromStationId' => [
                                         'type' => 'string',
-                                        'description' => 'ID de la station de départ'
+                                        'description' => 'ID de la station de départ',
                                     ],
                                     'toStationId' => [
                                         'type' => 'string',
-                                        'description' => 'ID de la station d\'arrivée'
+                                        'description' => 'ID de la station d\'arrivée',
                                     ],
                                     'analyticCode' => [
                                         'type' => 'string',
-                                        'description' => 'Code analytique'
+                                        'description' => 'Code analytique',
                                     ],
-                                ]
+                                ],
                             ],
                             'example' => [
                                 'fromStationId' => 'MX',
                                 'toStationId' => 'ZW',
                                 'analyticCode' => 'ANA-123',
-                            ]
-                        ]
+                            ],
+                        ],
                     ]),
                 ),
             ),
@@ -121,7 +122,9 @@ use ArrayObject;
             messenger: false,
             read: false,
             write: false,
-        )
+        ),
     ]
 )]
-class RouteResource {}
+class RouteResource
+{
+}

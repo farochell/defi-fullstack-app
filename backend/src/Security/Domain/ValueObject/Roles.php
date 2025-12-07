@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -29,9 +31,8 @@ class Roles extends Collection
      */
     public static function fromArray(array $roles): self
     {
-
         $roleObjects = array_map(
-            fn(string $role): Role => Role::fromString($role),
+            fn (string $role): Role => Role::fromString($role),
             $roles
         );
 

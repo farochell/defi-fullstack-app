@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -16,12 +18,13 @@ class Station extends AggregateRoot
         public readonly StationId $id,
         public readonly string $shortName,
         public readonly string $longName,
-    ) {}
+    ) {
+    }
 
     public static function create(
         int $id,
         string $shortName,
-        string $longName
+        string $longName,
     ): Station {
         return new self(
             StationId::fromInt($id),

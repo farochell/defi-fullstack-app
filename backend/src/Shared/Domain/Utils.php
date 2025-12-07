@@ -1,32 +1,30 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
 namespace App\Shared\Domain;
 
-use DateTimeImmutable;
-use DateTimeInterface;
-use JsonException;
-use ReflectionClass;
-
 final class Utils
 {
-    public static function dateToString(DateTimeInterface $date): string
+    public static function dateToString(\DateTimeInterface $date): string
     {
-        return $date->format(DateTimeInterface::ATOM);
+        return $date->format(\DateTimeInterface::ATOM);
     }
 
-    public static function stringToDate(string $date): DateTimeImmutable
+    public static function stringToDate(string $date): \DateTimeImmutable
     {
-        return new DateTimeImmutable($date);
+        return new \DateTimeImmutable($date);
     }
 
     /**
      * @param array<mixed> $values
-     * @throws JsonException
+     *
+     * @throws \JsonException
      */
     public static function jsonEncode(array $values): string
     {
@@ -35,7 +33,8 @@ final class Utils
 
     /**
      * @return array<mixed>
-     * @throws JsonException
+     *
+     * @throws \JsonException
      */
     public static function jsonDecode(string $json): array
     {
@@ -54,22 +53,25 @@ final class Utils
 
     /**
      * @param array<mixed> $array
+     *
      * @return array<mixed>
      */
     public static function dot(array $array, string $prepend = ''): array
     {
         $results = [];
         foreach ($array as $key => $value) {
-            if (is_array($value) && $value !== []) {
-                $results = array_merge($results, self::dot($value, $prepend . $key . '.'));
+            if (is_array($value) && [] !== $value) {
+                $results = array_merge($results, self::dot($value, $prepend.$key.'.'));
             } else {
-                $results[$prepend . $key] = $value;
+                $results[$prepend.$key] = $value;
             }
         }
+
         return $results;
     }
 
-    public static function className(object $object): string {
-        return (new ReflectionClass($object))->getShortName();
+    public static function className(object $object): string
+    {
+        return (new \ReflectionClass($object))->getShortName();
     }
 }

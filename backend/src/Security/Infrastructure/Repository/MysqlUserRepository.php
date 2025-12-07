@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -15,7 +17,6 @@ use App\Shared\Domain\Exception\EntityPersistenceException;
 use App\Shared\Infrastructure\Repository\BaseRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 /**
  * @extends BaseRepository<DoctrineUser>
@@ -24,7 +25,7 @@ class MysqlUserRepository extends BaseRepository implements UserRepository
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        LoggerInterface $userLogger
+        LoggerInterface $userLogger,
     ) {
         parent::__construct(
             $managerRegistry,
@@ -33,12 +34,14 @@ class MysqlUserRepository extends BaseRepository implements UserRepository
             $userLogger
         );
     }
-    public function save(User $user): void {
+
+    public function save(User $user): void
+    {
         try {
             $entity = $this->toDoctrineEntity($user);
             $this->getEntityManager()->persist($entity);
             $this->getEntityManager()->flush();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             $exception = EntityPersistenceException::fromPrevious(
                 $this->entityName,
                 $e
@@ -46,23 +49,27 @@ class MysqlUserRepository extends BaseRepository implements UserRepository
             $this->logAndThrowException(
                 $exception,
                 $user,
-                [  'action' => 'save',  'data' => $this->serializeEntity($user)]
+                ['action' => 'save',  'data' => $this->serializeEntity($user)]
             );
         }
     }
 
-    public function findByEmail(Email $email): ?User {
+    public function findByEmail(Email $email): ?User
+    {
         $user = $this->getEntityManager()
             ->getRepository(DoctrineUser::class)
             ->findOneBy(['email' => $email->value()]);
-        if ($user === null) {
+        if (null === $user) {
             $this->logAndThrowNotFoundException($email->value());
+
             return null;
         }
+
         return $this->toDomainEntity($user);
     }
 
-    private function toDomainEntity(DoctrineUser $user): User {
+    private function toDomainEntity(DoctrineUser $user): User
+    {
         return new User(
             $user->id,
             $user->email,

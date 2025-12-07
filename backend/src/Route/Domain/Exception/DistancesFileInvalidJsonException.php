@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -32,7 +34,7 @@ class DistancesFileInvalidJsonException extends RepositoryException implements A
     public function getDetails(): array
     {
         return [
-            'chemin' =>$this->path,
+            'chemin' => $this->path,
             'erreur' => $this->jsonError];
     }
 }

@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -24,10 +26,11 @@ class CreateUserController
     public function __construct(
         private readonly CommandBus $commandBus,
         private readonly ValidatorInterface $validator,
-    ) {}
+    ) {
+    }
 
     public function __invoke(
-        #[MapRequestPayload] CreateUserInput $input
+        #[MapRequestPayload] CreateUserInput $input,
     ): JsonResponse {
         try {
             $this->validator->validate($input);

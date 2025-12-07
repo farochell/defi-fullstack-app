@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -18,15 +20,16 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 use function Lambdish\Phunctional\map;
 
-
 class LoginQueryHandler implements QueryHandler
 {
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly PasswordHasher $passwordHasher,
-    ) {}
+    ) {
+    }
 
-    public function __invoke(LoginQuery $query): LoginResponse {
+    public function __invoke(LoginQuery $query): LoginResponse
+    {
         $user = $this->userRepository->findByEmail(
             Email::fromString($query->email),
         );
@@ -42,7 +45,7 @@ class LoginQueryHandler implements QueryHandler
         }
 
         $roles = map(
-            fn(Role $role): string => $role->value,
+            fn (Role $role): string => $role->value,
             $user->roles
         );
 

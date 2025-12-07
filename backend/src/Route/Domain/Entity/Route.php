@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -21,8 +23,9 @@ class Route extends AggregateRoot
         public readonly AnalyticCodeEnum $analyticCode,
         public readonly float $distanceKm,
         public readonly Stations $path,
-        public readonly \DateTimeImmutable $createdAt
-    ) {}
+        public readonly \DateTimeImmutable $createdAt,
+    ) {
+    }
 
     public static function create(
         Station $fromStation,
@@ -41,6 +44,4 @@ class Route extends AggregateRoot
             new \DateTimeImmutable()
         );
     }
-
-
 }

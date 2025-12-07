@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
 
 namespace App\Security\Domain\ValueObject;
-
-use InvalidArgumentException;
 
 enum Role: string
 {
@@ -17,8 +17,9 @@ enum Role: string
     public static function fromString(string $value): self
     {
         if (!($role = self::tryFrom($value))) {
-            throw new InvalidArgumentException("Invalid value for Role: $value");
+            throw new \InvalidArgumentException("Invalid value for Role: $value");
         }
+
         return $role;
     }
 }

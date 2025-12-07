@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -20,12 +22,13 @@ class User extends AggregateRoot
         public readonly Email $email,
         public readonly HashedPassword $hashedPassword,
         public readonly Roles $roles,
-    ) {}
+    ) {
+    }
 
     public static function create(
         Email $email,
         HashedPassword $hashedPassword,
-        Roles $roles
+        Roles $roles,
     ): User {
         return new self(
             id: UserId::random(),

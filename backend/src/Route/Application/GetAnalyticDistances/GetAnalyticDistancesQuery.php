@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -15,5 +17,6 @@ class GetAnalyticDistancesQuery implements Query
         public readonly ?string $from = null,
         public readonly ?string $to = null,
         public readonly ?string $groupBy = null,
-    ) {}
+    ) {
+    }
 }

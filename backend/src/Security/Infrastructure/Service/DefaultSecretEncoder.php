@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  api-monagil
  */
 declare(strict_types=1);
@@ -14,7 +16,6 @@ class DefaultSecretEncoder implements SecretEncoder
 {
     public function encode(Password $password): Password
     {
-
         $hashedPassword = password_hash(
             $password->value(),
             PASSWORD_ARGON2ID,

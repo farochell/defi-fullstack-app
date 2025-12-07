@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -19,7 +21,7 @@ class StationsFileEmptyException extends RepositoryException implements ApiExcep
     public function __construct(private readonly string $path)
     {
         parent::__construct(
-            message: "Le fichier stations.json est vide.",
+            message: 'Le fichier stations.json est vide.',
             code: 500
         );
     }
@@ -32,7 +34,7 @@ class StationsFileEmptyException extends RepositoryException implements ApiExcep
     public function getDetails(): array
     {
         return [
-            'chemin' =>$this->path
+            'chemin' => $this->path,
         ];
     }
 }

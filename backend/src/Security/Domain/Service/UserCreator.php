@@ -1,6 +1,8 @@
 <?php
+
 /**
  * @author Emile Camara <camara.emile@gmail.com>
+ *
  * @project  defi-fullstack-app
  */
 declare(strict_types=1);
@@ -21,7 +23,8 @@ class UserCreator
     public function __construct(
         private readonly UserRepository $repository,
         private readonly SecretEncoder $encoder,
-    ) {}
+    ) {
+    }
 
     public function create(
         Email $email,
