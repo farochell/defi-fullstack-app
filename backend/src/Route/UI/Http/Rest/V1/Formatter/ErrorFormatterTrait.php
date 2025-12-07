@@ -47,12 +47,12 @@ trait ErrorFormatterTrait
         }
 
         return new JsonResponse([
-            'code' => 'internal_server_error',
-            'message' => 'An unexpected error occurred.',
+            'code' => ErrorCode::UNKNOWN_ERROR,
+            'message' => 'Erreur inconnue.',
             'details' => [
                 $error->getMessage(),
             ],
-        ], 500);
+        ], $error->getCode());
     }
 
     private function getErrorCode(Throwable $error) {

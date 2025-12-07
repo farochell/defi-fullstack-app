@@ -113,7 +113,7 @@ use App\Route\UI\Http\Rest\V1\Input\RouteInput;
                             'example' => [
                                 'fromStationId' => 'MX',
                                 'toStationId' => 'ZW',
-                                'analyticCode' => 'ANA-123',
+                                'analyticCode' => 'fret',
                             ],
                         ],
                     ]),

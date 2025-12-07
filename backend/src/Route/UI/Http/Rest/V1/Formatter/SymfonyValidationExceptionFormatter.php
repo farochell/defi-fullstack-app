@@ -34,7 +34,7 @@ class SymfonyValidationExceptionFormatter
 
         return [
             'code' => ErrorCode::MISSING_PARAMETERS,
-            'message' => 'Les données suivantes sont manquantes:',
+            'message' => 'Donnée invalides.',
             'details' => $details,
         ];
     }

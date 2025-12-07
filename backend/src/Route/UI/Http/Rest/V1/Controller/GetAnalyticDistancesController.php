@@ -41,15 +41,7 @@ class GetAnalyticDistancesController
 
             return new JsonResponse($response);
         } catch (\Throwable $e) {
-            $errorResponse = $this->formatError($e);
-            if (null === $errorResponse) {
-                return new JsonResponse(
-                    ['error' => $e->getMessage()],
-                    500
-                );
-            }
-
-            return $errorResponse;
+            return $this->formatError($e);
         }
     }
 }
