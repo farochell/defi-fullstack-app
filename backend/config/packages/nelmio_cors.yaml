@@ -1,0 +1,16 @@
+nelmio_cors:
+    defaults:
+        allow_credentials: true
+        allow_origin: []
+        allow_headers: ['Content-Type', 'Authorization']
+        allow_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+        max_age: 3600
+
+    paths:
+        '^/':
+            allow_origin:
+                - 'https://app.defifullstack.com'
+                - 'http://localhost:5173'       # pour le dev Vite
+            allow_headers: ['Content-Type', 'Authorization']
+            allow_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+            allow_credentials: true

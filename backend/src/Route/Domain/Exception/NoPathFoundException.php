@@ -29,8 +29,7 @@ class NoPathFoundException extends \DomainException implements ApiExceptionInter
 
     public function getDetails(): array {
         return [
-            'depart' => $this->from,
-            'arrivee' => $this->to
+            'message' => 'Trajet non trouvé entre les stations ' . $this->from . ' et ' . $this->to,
         ];
     }
 }

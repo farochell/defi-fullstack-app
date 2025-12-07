@@ -12,9 +12,12 @@ interface ApiExceptionInterface
     public function getErrorCode(): ErrorCode;
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
     public function getDetails(): array;
 
+    /**
+     * @return mixed[]
+     */
     public function toOpenApiError(): array;
 }

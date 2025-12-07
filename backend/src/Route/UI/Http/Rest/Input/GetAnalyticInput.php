@@ -11,19 +11,22 @@ use ApiPlatform\Metadata\ApiProperty;
 
 class GetAnalyticInput {
     #[ApiProperty(
-        description: 'Date de début (inclus)'
+        description: 'Date de début (inclus)',
+        required: false
     )]
-    public string $from;
+    public ?string $from = null;
 
     #[ApiProperty(
         description: 'Date de fin (inclus)',
+        required: false,
         schema: ['type' => 'string']
     )]
-    public string $to;
+    public ?string $to = null;
 
     #[ApiProperty(
         description: 'Date de fin (inclus)',
+        required: false,
         schema: ['type' => 'string', 'enum' => ['day', 'month', 'year', 'none']]
     )]
-    public string $groupBy;
+    public ?string $groupBy = 'none';
 }

@@ -56,6 +56,7 @@ abstract class Collection implements Countable, IteratorAggregate
         return $this->items === [];
     }
 
+    /** @return array<int, T> */
     public function all(): array
     {
         return $this->items();

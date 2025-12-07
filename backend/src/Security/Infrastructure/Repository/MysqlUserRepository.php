@@ -17,6 +17,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+/**
+ * @extends BaseRepository<DoctrineUser>
+ */
 class MysqlUserRepository extends BaseRepository implements UserRepository
 {
     public function __construct(

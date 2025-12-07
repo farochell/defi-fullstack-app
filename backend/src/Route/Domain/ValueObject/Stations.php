@@ -16,23 +16,17 @@ use function Lambdish\Phunctional\reindex;
  * @extends Collection<Station>
  */
 class Stations extends Collection {
-    private ?array $indexedStationByIds = null;
+
+    /** @var array<string, Station>|null */
     private ?array $indexedStationByShortname = null;
 
     protected function type(): string {
         return Station::class;
     }
 
-    public function indexedStationByIds(): array {
-        if ($this->indexedStationByIds === null) {
-            $this->indexedStationByIds = reindex(
-                static fn (Station $station) => $station->id->value(),
-                $this->items()
-            );
-        }
-        return $this->indexedStationByIds;
-    }
-
+    /**
+     * @return array<string, Station>
+     */
     public function indexedStationByShortname(): array {
         if ($this->indexedStationByShortname === null) {
             $this->indexedStationByShortname = reindex(
@@ -43,26 +37,14 @@ class Stations extends Collection {
         return $this->indexedStationByShortname;
     }
 
-    public function findById(StationId $id): ?Station {
-        $values = $this->indexedStationByIds();
-        return $values[$id->value()] ?? null;
-    }
-
     public function findByShortName(string $shortName): ?Station {
         $values = $this->indexedStationByShortname();
         return $values[$shortName] ?? null;
     }
 
-    public function searchByLongName(string $query): ?Stations
-    {
-        $query = mb_strtolower($query);
-        $results =  array_filter($this->items(), function(Station $station) use ($query) {
-            return mb_stripos($station->longName, $query) !== false;
-        });
-
-        return new Stations($results);
-    }
-
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return map(

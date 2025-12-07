@@ -10,6 +10,7 @@ namespace App\Security\Infrastructure\Doctrine\Type;
 use App\Security\Domain\ValueObject\Email;
 use App\Shared\Infrastructure\Doctrine\Type\StringType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Override;
 
 class EmailType extends StringType
 {

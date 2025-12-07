@@ -9,6 +9,9 @@ namespace App\Route\Domain\ValueObject;
 
 use App\Shared\Domain\Collection;
 
+/**
+ * @extends Collection<DistanceLink>
+ */
 class DistanceLinks extends Collection {
     protected function type(): string {
         return DistanceLink::class;

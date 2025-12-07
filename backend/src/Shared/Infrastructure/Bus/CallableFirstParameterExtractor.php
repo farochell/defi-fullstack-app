@@ -30,7 +30,7 @@ final class CallableFirstParameterExtractor
 
     /**
      * @param iterable<callable> $callables
-     * @return array
+     * @return array<class-string<DomainEvent>, array<DomainEventSubscriber>>
      */
     public static function forPipedCallables(iterable $callables): array
     {

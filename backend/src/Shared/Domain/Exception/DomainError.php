@@ -19,6 +19,4 @@ abstract class DomainError extends DomainException implements ApiExceptionInterf
 
     abstract protected function errorMessage(): string;
 
-    abstract public function errorDetails(): array;
-
 }

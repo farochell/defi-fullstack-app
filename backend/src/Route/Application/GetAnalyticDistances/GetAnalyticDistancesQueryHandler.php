@@ -27,11 +27,11 @@ class GetAnalyticDistancesQueryHandler implements QueryHandler
 
         $distances =  $this->routeRepository->getAnalyticDistances($from, $to, $groupBy);
 
-        return new AnalyticDistancesResponse(
+        return  AnalyticDistancesResponse::fromDomain(
             $from?->format('Y-m-d'),
             $to?->format('Y-m-d'),
             $groupBy?->value,
-            $distances->toArray()
+            $distances
         );
     }
 }

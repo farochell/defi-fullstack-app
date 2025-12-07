@@ -13,6 +13,9 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 
 class SymfonyValidationExceptionFormatter
 {
+    /**
+     * @return mixed[]
+     */
     public static function format(ValidationException $exception): array
     {
         $details = [];

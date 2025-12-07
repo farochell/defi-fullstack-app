@@ -9,6 +9,7 @@ namespace App\Route\UI\Http\Rest\Formatter;
 
 use ApiPlatform\Validator\Exception\ValidationException;
 use App\Route\Domain\Exception\InvalidAnalyticCodeException;
+use App\Route\Domain\Exception\NoPathFoundException;
 use App\Route\Domain\Exception\StationNotFoundException;
 use App\Security\Domain\Exception\EmailAlreadyExistException;
 use App\Security\Domain\Exception\InvalidCredentialsException;
@@ -25,6 +26,7 @@ trait ErrorFormatterTrait {
             || $error instanceof InvalidAnalyticCodeException
             || $error instanceof EmailAlreadyExistException
             || $error instanceof InvalidCredentialsException
+            || $error instanceof NoPathFoundException
         ) {
             return new JsonResponse([
                 'code'    => $error->getErrorCode(),

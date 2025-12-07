@@ -29,8 +29,4 @@ class UnAuthorizedException extends DomainException  implements ApiExceptionInte
     public function getDetails(): array {
         return [];
     }
-
-    public function toOpenApiError(): array {
-        // TODO: Implement toOpenApiError() method.
-    }
 }

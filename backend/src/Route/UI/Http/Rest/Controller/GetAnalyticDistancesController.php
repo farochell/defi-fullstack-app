@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace App\Route\UI\Http\Rest\Controller;
 
-use ApiPlatform\Validator\ValidatorInterface;
 use App\Route\Application\GetAnalyticDistances\GetAnalyticDistancesQuery;
 use App\Route\UI\Http\Rest\Formatter\ErrorFormatterTrait;
 use App\Route\UI\Http\Rest\Input\GetAnalyticInput;
@@ -22,7 +21,6 @@ class GetAnalyticDistancesController{
 
     public function __construct(
         private readonly QueryBus $queryBus,
-        private readonly ValidatorInterface $validator
     ) {
     }
 

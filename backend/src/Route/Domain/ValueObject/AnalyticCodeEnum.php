@@ -15,7 +15,7 @@ enum AnalyticCodeEnum: string
     case PASSAGER = 'PASSAGER';
     case MAINTENANCE = 'MAINTENANCE';
 
-    public static function tryFromName(string $name): ?self
+    public static function tryFromName(string $name): self
     {
         foreach(self::cases() as $case) {
             if (strtoupper($name) === $case->name) {

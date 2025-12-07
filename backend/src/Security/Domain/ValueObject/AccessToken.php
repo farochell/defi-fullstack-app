@@ -9,6 +9,9 @@ namespace App\Security\Domain\ValueObject;
 
 class AccessToken
 {
+    /**
+     * @param string[] $roles
+     */
     public function __construct(
         public string $content,
         public string $id,

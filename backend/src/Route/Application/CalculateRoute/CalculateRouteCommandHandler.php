@@ -54,13 +54,13 @@ class CalculateRouteCommandHandler implements CommandHandler
 
         $this->routeRepo->save($route);
 
-        return new RouteResponse(
+        return RouteResponse::fromDomain(
             $route->id->value(),
             $route->fromStation->shortName,
             $route->toStation->shortName,
             $route->analyticCode->value,
             $route->distanceKm,
-            $route->path->toArray(),
+            $route->path,
             $route->createdAt->format('Y-m-d H:i:s')
         );
     }

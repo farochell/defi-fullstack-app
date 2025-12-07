@@ -16,10 +16,14 @@ use App\Route\Domain\ValueObject\GroupBy;
 use App\Route\Infrastructure\Doctrine\Mapping\DoctrineRoute;
 use App\Shared\Domain\Exception\EntityPersistenceException;
 use App\Shared\Infrastructure\Repository\BaseRepository;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use function Lambdish\Phunctional\map;
 
+/**
+ * @extends BaseRepository<DoctrineRoute>
+ */
 class MysqlRouteRepository extends BaseRepository implements RouteRepositoryInterface
 {
     public function __construct(
@@ -62,8 +66,8 @@ class MysqlRouteRepository extends BaseRepository implements RouteRepositoryInte
                 return new AnalyticDistances([]);
             }
 
-            $from = $from ?? new \DateTimeImmutable($minMax['min_dt']);
-            $to = $to ?? new \DateTimeImmutable($minMax['max_dt']);
+            $from = $from ?? new DateTimeImmutable($minMax['min_dt']);
+            $to = $to ?? new DateTimeImmutable($minMax['max_dt']);
         }
 
         $fromStr = $from->format('Y-m-d 00:00:00');
