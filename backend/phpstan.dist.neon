@@ -1,5 +1,11 @@
 parameters:
     level: 6
     paths:
-        - src/
+        - src
+    excludePaths:
 
+
+rules:
+    - App\Phpstan\Rules\Application\NoInfrastructureInApplicationRule
+    - App\Phpstan\Rules\Domain\NoApplicationInDomainRule
+    - App\Phpstan\Rules\Domain\NoInfrastructureInDomainRule
