@@ -7,19 +7,20 @@
  */
 declare(strict_types=1);
 
-namespace App\Route\UI\Http\Rest\Resource;
+namespace App\Route\UI\Http\Rest\V1\Resource;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\Response;
-use App\Route\UI\Http\Rest\Controller\GetAnalyticDistancesController;
+use App\Route\UI\Http\Rest\V1\Controller\GetAnalyticDistancesController;
 
 #[ApiResource(
     operations: [
         new GetCollection(
             uriTemplate: '/stats/distances',
+            routePrefix: '/v1',
             status: 200,
             controller: GetAnalyticDistancesController::class,
             openapi: new Operation(

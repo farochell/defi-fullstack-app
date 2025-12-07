@@ -7,12 +7,12 @@
  */
 declare(strict_types=1);
 
-namespace App\Route\UI\Http\Rest\Controller;
+namespace App\Route\UI\Http\Rest\V1\Controller;
 
 use ApiPlatform\Validator\ValidatorInterface;
 use App\Route\Application\CalculateRoute\CalculateRouteCommand;
-use App\Route\UI\Http\Rest\Formatter\ErrorFormatterTrait;
-use App\Route\UI\Http\Rest\Input\RouteInput;
+use App\Route\UI\Http\Rest\V1\Formatter\ErrorFormatterTrait;
+use App\Route\UI\Http\Rest\V1\Input\RouteInput;
 use App\Shared\Domain\Bus\Command\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;

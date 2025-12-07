@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Route\UI\Http\Rest\Formatter;
+namespace App\Route\UI\Http\Rest\V1\Formatter;
 
 use ApiPlatform\Validator\Exception\ValidationException;
 use App\Route\Domain\Exception\InvalidAnalyticCodeException;
@@ -18,10 +18,11 @@ use App\Security\Domain\Exception\InvalidCredentialsException;
 use App\Shared\Domain\Exception\ErrorCode;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 trait ErrorFormatterTrait
 {
-    public function formatError(\Throwable $error): ?JsonResponse
+    public function formatError(Throwable $error): ?JsonResponse
     {
         if (
             $error instanceof StationNotFoundException
@@ -42,11 +43,7 @@ trait ErrorFormatterTrait
         }
 
         if ($error instanceof HttpException) {
-            return new JsonResponse([
-                'code' => ErrorCode::MISSING_PARAMETERS,
-                'message' => $error->getMessage(),
-                'details' => [],
-            ]);
+            return new JsonResponse(SymfonyHttpExceptionFormatter::format($error), $error->getStatusCode());
         }
 
         return new JsonResponse([
@@ -56,5 +53,9 @@ trait ErrorFormatterTrait
                 $error->getMessage(),
             ],
         ], 500);
+    }
+
+    private function getErrorCode(Throwable $error) {
+
     }
 }

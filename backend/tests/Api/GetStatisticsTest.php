@@ -25,7 +25,7 @@ class GetStatisticsTest extends ApiTestCase
     #[DependsExternal(SecurityTest::class, 'testLogin')]
     public function testGetStatistics(string $token): void
     {
-        $response = self::$httpClient->request('GET', '/api/stats/distances', [
+        $response = self::$httpClient->request('GET', '/api/v1/stats/distances', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json'

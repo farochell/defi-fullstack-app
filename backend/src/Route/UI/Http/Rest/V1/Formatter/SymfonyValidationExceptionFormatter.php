@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Route\UI\Http\Rest\Formatter;
+namespace App\Route\UI\Http\Rest\V1\Formatter;
 
 use ApiPlatform\Validator\Exception\ValidationException;
 use App\Shared\Domain\Exception\ErrorCode;

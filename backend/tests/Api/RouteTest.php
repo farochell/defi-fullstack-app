@@ -23,7 +23,7 @@ class RouteTest extends ApiTestCase
 
     public function testGetRoutes(): void
     {
-        $response = self::$httpClient->request('POST', '/api/routes', [
+        $response = self::$httpClient->request('POST', '/api/v1/routes', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'fromStationId' => 'IO',
@@ -44,7 +44,7 @@ class RouteTest extends ApiTestCase
 
     public function testCalculateRouteWithInvalidAnalyticCode(): void
     {
-        $response = self::$httpClient->request('POST', '/api/routes', [
+        $response = self::$httpClient->request('POST', '/api/v1/routes', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'fromStationId' => 'IO',
@@ -57,7 +57,7 @@ class RouteTest extends ApiTestCase
 
     public function testCalculateRouteWithInvalidStation(): void
     {
-        self::$httpClient->request('POST', '/api/routes', [
+        self::$httpClient->request('POST', '/api/v1/routes', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'fromStationId' => 'INVALID_STATION',

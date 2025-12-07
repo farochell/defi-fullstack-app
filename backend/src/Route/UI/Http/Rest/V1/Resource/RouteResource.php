@@ -7,21 +7,22 @@
  */
 declare(strict_types=1);
 
-namespace App\Route\UI\Http\Rest\Resource;
+namespace App\Route\UI\Http\Rest\V1\Resource;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\OpenApi\Model\Response;
-use App\Route\UI\Http\Rest\Controller\CalculerRouteController;
-use App\Route\UI\Http\Rest\Input\RouteInput;
+use App\Route\UI\Http\Rest\V1\Controller\CalculerRouteController;
+use App\Route\UI\Http\Rest\V1\Input\RouteInput;
 
 #[ApiResource(
     operations: [
         new Post(
             uriTemplate: '/routes',
             inputFormats: ['json' => ['application/json']],
+            routePrefix: '/v1',
             status: 201,
             controller: CalculerRouteController::class,
             openapi: new Operation(

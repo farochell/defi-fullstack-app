@@ -34,4 +34,12 @@ enum ErrorCode: string
     case INVALID_CREDENTIALS = 'INVALID_CREDENTIALS';
     case INVALID_ANALYTIC_CODE = 'INVALID_ANALYTIC_CODE';
     case ACCESS_FORBIDDEN = 'ACCESS_FORBIDDEN';
+
+    public static function toString(int $errorCode): string
+    {
+        return match ($errorCode) {
+            404 => self::ROUTE_NOT_FOUND->value,
+            default => self::UNKNOWN_ERROR->value
+        };
+    }
 }

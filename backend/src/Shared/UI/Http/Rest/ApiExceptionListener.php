@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace App\Shared\UI\Http\Rest;
 
-use App\Route\UI\Http\Rest\Formatter\ErrorFormatterTrait;
+use App\Route\UI\Http\Rest\V1\Formatter\ErrorFormatterTrait;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

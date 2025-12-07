@@ -7,11 +7,11 @@
  */
 declare(strict_types=1);
 
-namespace App\Route\UI\Http\Rest\Controller;
+namespace App\Route\UI\Http\Rest\V1\Controller;
 
 use App\Route\Application\GetAnalyticDistances\GetAnalyticDistancesQuery;
-use App\Route\UI\Http\Rest\Formatter\ErrorFormatterTrait;
-use App\Route\UI\Http\Rest\Input\GetAnalyticInput;
+use App\Route\UI\Http\Rest\V1\Formatter\ErrorFormatterTrait;
+use App\Route\UI\Http\Rest\V1\Input\GetAnalyticInput;
 use App\Shared\Domain\Bus\Query\QueryBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;

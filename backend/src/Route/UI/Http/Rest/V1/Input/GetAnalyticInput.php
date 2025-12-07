@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Route\UI\Http\Rest\Input;
+namespace App\Route\UI\Http\Rest\V1\Input;
 
 use ApiPlatform\Metadata\ApiProperty;
 
