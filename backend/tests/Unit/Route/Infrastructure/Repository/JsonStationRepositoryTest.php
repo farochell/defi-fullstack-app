@@ -90,4 +90,5 @@ class JsonStationRepositoryTest extends TestCase
 
         new JsonStationRepository($this->tempFile);
     }
+
 }

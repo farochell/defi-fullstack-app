@@ -54,8 +54,4 @@ trait ErrorFormatterTrait
             ],
         ], $error->getCode());
     }
-
-    private function getErrorCode(Throwable $error) {
-
-    }
 }
