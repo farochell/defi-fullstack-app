@@ -39,17 +39,12 @@ jobs:
       - name: Create env files for CI
         working-directory: ./backend
         run: |
-          # Copier .env.example vers .env (fichier de base requis)
-          if [ -f ".env.example" ]; then
-            cp .env.example .env
-            echo ".env created from .env.example"
-          else
-            # Si .env.example n'existe pas, créer un .env minimal
-            cat > .env << 'EOF'
-          APP_ENV=test
-          APP_SECRET=placeholder
-          DATABASE_URL="mysql://root:password@db:3306/symfony?serverVersion=mariadb-10.6.0"
+          # Créer .env avec des valeurs réelles (requis par Symfony)
+          cat > .env << 'EOF'
+          APP_ENV=dev
+          APP_SECRET=test-secret-key-for-ci
           DEFAULT_URI=http://localhost
+          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony?serverVersion=mariadb-10.6.0&charset=utf8mb4"
           CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
           MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
           DOMAIN=localhost
@@ -57,11 +52,10 @@ jobs:
           JWT_PUBLIC_KEY=config/jwt/public.pem
           JWT_PASSPHRASE=''
           EOF
-            echo ".env created from scratch"
-          fi
           
-          # Créer .env.test.local qui va SURCHARGER .env pour les tests
+          # Créer .env.test.local qui surcharge pour l'environnement test
           cat > .env.test.local << 'EOF'
+          APP_ENV=test
           DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4"
           EOF
           
@@ -121,6 +115,10 @@ jobs:
           }
           if (strpos(\$_ENV['DATABASE_URL'], '@db:') !== false) {
               echo 'ERROR: DATABASE_URL still points to @db: instead of @127.0.0.1:' . PHP_EOL;
+              exit(1);
+          }
+          if (strpos(\$_ENV['DATABASE_URL'], '{MYSQL_USER}') !== false || strpos(\$_ENV['DATABASE_URL'], '{MYSQL_PASSWORD}') !== false) {
+              echo 'ERROR: DATABASE_URL contains placeholders!' . PHP_EOL;
               exit(1);
           }
           echo 'DATABASE_URL is correctly configured for CI ✓' . PHP_EOL;
