@@ -232,7 +232,13 @@ make vitest-coverage
 Le rapport de couverture est généré dans le dossier frontend/coverage.
 
 ## 🧹 Qualité du code
-- Analyse avec PhpStan
+
+- Analyse avec PhpStan (backend)
 ``` 
 make phpstan
+``` 
+
+- Analyse avec lint (frontend)
+``` 
+make lint
 ``` 
