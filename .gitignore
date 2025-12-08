@@ -9,3 +9,4 @@
 /backend/var/
 /backend/vendor/
 /backend/config/jwt/*.pem
+generate-certs.sh

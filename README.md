@@ -145,6 +145,7 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
     |__ certs/
     |__ frontend/
     |     |__ src/
+    |     |      |__ tests__/
     |     |      |__ components/
     |     |      |__ data/
     |     |      |__ router/
@@ -152,7 +153,6 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
     |     |      |__ types/
     |     |      |__ views/
     |     |__ public/
-    |     |__ tests/
     |     |__ Dockerfile
     |__ traefik/
     |__ docker-compose.yml
@@ -162,5 +162,28 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
 🚀 Lancer l’application en local
 
 ✅ Prérequis
-- Docker
-- Docker Compose
+- Docker Engine >= 20.10
+- Docker Compose >= 1.29
+
+🌐 Fichiers hosts (obligatoire en local)
+Pour accéder aux domaines configurés dans Traefik, ajouter dans **/etc/hosts**
+``` 
+127.0.0.1   api.defifullstack.com
+127.0.0.1   app.defifullstack.com
+127.0.0.1   traefik.defifullstack.com
+```
+Les certificats SSL sont auto-générés via mkcert et sont disponibles dans le dossier certs.
+
+▶️ Démarrage du projet
+
+🚀 Avec Docker
+
+À la racine du projet :
+
+``` 
+docker compose up -d
+``` 
+
+🧪 Tests & Couverture
+Un fichier Makefile est disponible pour faciliter les tests et la couverture du code.
+
