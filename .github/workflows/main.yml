@@ -36,13 +36,9 @@ jobs:
           coverage: xdebug
           tools: composer:v2
 
-      - name: Clean and create env files for CI
+      - name: Create env files for CI
         working-directory: ./backend
-        run: |
-          # Supprimer tous les fichiers .env existants
-          rm -f .env .env.local .env.*.local
-          
-          # Créer le fichier .env.test.local (priorité maximale)
+        run: |          
           cat > .env.test.local << 'EOF'
           APP_ENV=test
           APP_SECRET=test-secret-key-for-ci-testing
@@ -56,27 +52,8 @@ jobs:
           JWT_PASSPHRASE=''
           EOF
           
-          echo "=== Content of .env.test.local ==="
+          echo "=== .env.test.local created with content: ==="
           cat .env.test.local
-
-      - name: Override phpunit.xml.dist for CI
-        working-directory: ./backend
-        run: |
-          # Créer un phpunit.xml qui surcharge phpunit.xml.dist
-          if [ -f "phpunit.xml.dist" ]; then
-            cp phpunit.xml.dist phpunit.xml
-          
-            # Remplacer toutes les occurrences de DATABASE_URL
-            sed -i 's|mysql://[^"]*@db:[^"]*|mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0\&charset=utf8mb4|g' phpunit.xml
-          
-            # Si DATABASE_URL n'existe pas, l'ajouter
-            if ! grep -q 'name="DATABASE_URL"' phpunit.xml; then
-              sed -i '/<php>/a \        <env name="DATABASE_URL" value="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&amp;charset=utf8mb4"/>' phpunit.xml
-            fi
-          
-            echo "=== Content of phpunit.xml ==="
-            cat phpunit.xml
-          fi
 
       - name: Generate JWT keys
         working-directory: ./backend
@@ -111,29 +88,35 @@ jobs:
           done
           echo "MySQL is ready!"
 
-      - name: Verify DATABASE_URL is correct
+      - name: Verify DATABASE_URL configuration
         working-directory: ./backend
         run: |
+          echo "=== Verifying DATABASE_URL ==="
           php -r "
+          putenv('APP_ENV=test');
           require 'vendor/autoload.php';
           \$dotenv = new Symfony\Component\Dotenv\Dotenv();
-          \$dotenv->loadEnv('.env.test.local');
+          \$dotenv->loadEnv(__DIR__ . '/.env');
           echo 'DATABASE_URL: ' . (\$_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;
-          if (isset(\$_ENV['DATABASE_URL']) && strpos(\$_ENV['DATABASE_URL'], '@db:') !== false) {
-              echo 'ERROR: DATABASE_URL still contains @db:' . PHP_EOL;
+          if (!isset(\$_ENV['DATABASE_URL'])) {
+              echo 'ERROR: DATABASE_URL is not set!' . PHP_EOL;
               exit(1);
           }
-          echo 'DATABASE_URL is correctly configured for CI' . PHP_EOL;
+          if (strpos(\$_ENV['DATABASE_URL'], '@db:') !== false) {
+              echo 'ERROR: DATABASE_URL still points to @db: instead of @127.0.0.1:' . PHP_EOL;
+              exit(1);
+          }
+          echo 'DATABASE_URL is correctly configured for CI ✓' . PHP_EOL;
           "
 
-      - name: Test database connection
+      - name: Test direct database connection
         run: |
           php -r "
           try {
               \$pdo = new PDO('mysql:host=127.0.0.1;port=3306', 'root', 'password');
-              echo 'Direct PDO connection: OK' . PHP_EOL;
+              echo 'Direct PDO connection: SUCCESS ✓' . PHP_EOL;
           } catch(Exception \$e) {
-              echo 'Direct PDO connection failed: ' . \$e->getMessage() . PHP_EOL;
+              echo 'Direct PDO connection FAILED: ' . \$e->getMessage() . PHP_EOL;
               exit(1);
           }
           "
@@ -144,6 +127,24 @@ jobs:
           php bin/console doctrine:database:create --if-not-exists --env=test
           php bin/console doctrine:schema:update --force --env=test
 
+      - name: Load fixtures (if available)
+        working-directory: ./backend
+        run: |
+          if php bin/console list | grep -q "doctrine:fixtures:load"; then
+            php bin/console doctrine:fixtures:load --no-interaction --env=test
+            echo "Fixtures loaded ✓"
+          else
+            echo "No fixtures available (skipped)"
+          fi
+
       - name: Run tests
         working-directory: ./backend
-        run: vendor/bin/phpunit --testdox
+        run: vendor/bin/phpunit --testdox --colors=always
+
+      - name: Upload test coverage (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage
+          path: backend/coverage/
+          if-no-files-found: ignore
