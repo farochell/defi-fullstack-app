@@ -36,9 +36,13 @@ jobs:
           coverage: xdebug
           tools: composer:v2
 
-      - name: Create env file for CI
+      - name: Clean and create env files for CI
         working-directory: ./backend
         run: |
+          # Supprimer tous les fichiers .env existants
+          rm -f .env .env.local .env.*.local
+          
+          # Créer le fichier .env principal
           cat > .env << 'EOF'
           APP_ENV=test
           APP_SECRET=test-secret-key-for-ci-testing
@@ -51,8 +55,34 @@ jobs:
           JWT_PUBLIC_KEY=config/jwt/public.pem
           JWT_PASSPHRASE=''
           EOF
+          
+          # Créer aussi .env.test.local pour être sûr
+          cat > .env.test.local << 'EOF'
+          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4"
+          EOF
+          
           echo "=== Content of .env file ==="
           cat .env
+          echo ""
+          echo "=== Content of .env.test.local file ==="
+          cat .env.test.local
+
+      - name: Check and fix phpunit.xml.dist
+        working-directory: ./backend
+        run: |
+          if [ -f "phpunit.xml.dist" ]; then
+            echo "=== Content of phpunit.xml.dist ==="
+            cat phpunit.xml.dist
+          
+            # Vérifier si DATABASE_URL est définie dans phpunit.xml.dist
+            if grep -q "DATABASE_URL" phpunit.xml.dist; then
+              echo ""
+              echo "WARNING: DATABASE_URL found in phpunit.xml.dist, replacing it..."
+              sed -i 's|<env name="DATABASE_URL" value=".*"|<env name="DATABASE_URL" value="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0\&amp;charset=utf8mb4"|' phpunit.xml.dist
+              echo "=== Updated phpunit.xml.dist ==="
+              cat phpunit.xml.dist
+            fi
+          fi
 
       - name: Generate JWT keys
         working-directory: ./backend
@@ -87,33 +117,24 @@ jobs:
           done
           echo "MySQL is ready!"
 
+      - name: Debug environment variables
+        working-directory: ./backend
+        run: |
+          echo "=== Checking DATABASE_URL ==="
+          php -r "echo 'DATABASE_URL from env: ' . ($_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;"
+          php -r "require 'vendor/autoload.php'; \$dotenv = new Symfony\Component\Dotenv\Dotenv(); \$dotenv->loadEnv('.env'); echo 'DATABASE_URL after loading .env: ' . ($_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;"
+
       - name: Test database connection
         working-directory: ./backend
         run: |
-          php -r "try { \$pdo = new PDO('mysql:host=127.0.0.1;port=3306', 'root', 'password'); echo 'Database connection: OK'; } catch(Exception \$e) { echo 'Connection failed: ' . \$e->getMessage(); exit(1); }"
+          php -r "try { \$pdo = new PDO('mysql:host=127.0.0.1;port=3306', 'root', 'password'); echo 'Database connection: OK' . PHP_EOL; } catch(Exception \$e) { echo 'Connection failed: ' . \$e->getMessage() . PHP_EOL; exit(1); }"
 
       - name: Create database schema
         working-directory: ./backend
         run: |
-          php bin/console doctrine:database:create --if-not-exists --env=test
-          php bin/console doctrine:schema:update --force --env=test
-
-      - name: Load fixtures (optional)
-        working-directory: ./backend
-        run: |
-          if [ -f "bin/console" ] && php bin/console list | grep -q "doctrine:fixtures:load"; then
-            php bin/console doctrine:fixtures:load --no-interaction --env=test
-          else
-            echo "No fixtures to load"
-          fi
+          php bin/console doctrine:database:create --if-not-exists --env=test -vvv
+          php bin/console doctrine:schema:update --force --env=test -vvv
 
       - name: Run tests
         working-directory: ./backend
         run: vendor/bin/phpunit --testdox
-
-      - name: Upload coverage reports (optional)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: backend/coverage/
