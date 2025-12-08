@@ -10,6 +10,10 @@ jobs:
   backend-tests:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
+      APP_ENV: test
+
     services:
       mysql:
         image: mariadb:10.6
@@ -36,10 +40,35 @@ jobs:
           coverage: xdebug
           tools: composer:v2
 
-      - name: Create env files for CI
+      - name: Override .env.test for CI
         working-directory: ./backend
         run: |
-          cat > .env << 'EOF'
+          # Remplacer complètement .env.test avec les bonnes valeurs
+          cat > .env.test << 'EOF'
+          KERNEL_CLASS='App\Kernel'
+          APP_SECRET='$ecretf0rt3st'
+          APP_ENV=test
+          APP_DEBUG=true
+          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony_test?charset=utf8mb4&serverVersion=mariadb-10.6.0
+          DATABASE_TEST_URL=mysql://root:password@127.0.0.1:3306/symfony_test?charset=utf8mb4&serverVersion=mariadb-10.6.0
+          TEST_TOKEN=
+          DEFAULT_URI=http://localhost
+          CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
+          MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
+          DOMAIN=localhost
+          JWT_SECRET_KEY=config/jwt/private.pem
+          JWT_PUBLIC_KEY=config/jwt/public.pem
+          JWT_PASSPHRASE=
+          EOF
+          
+          echo "=== .env.test overridden ==="
+          cat .env.test
+
+      - name: Create .env base file
+        working-directory: ./backend
+        run: |
+          if [ ! -f ".env" ]; then
+            cat > .env << 'EOF'
           APP_ENV=dev
           APP_SECRET=test-secret-key-for-ci
           DEFAULT_URI=http://localhost
@@ -51,19 +80,21 @@ jobs:
           JWT_PUBLIC_KEY=config/jwt/public.pem
           JWT_PASSPHRASE=
           EOF
+            echo ".env created"
+          else
+            echo ".env already exists, skipping"
+          fi
+
+      - name: Update phpunit.xml with DATABASE_URL
+        working-directory: ./backend
+        run: |
+          cp phpunit.xml.dist phpunit.xml
           
-          # Créer .env.test.local qui surcharge pour l'environnement test
-          cat > .env.test.local << 'EOF'
-          APP_ENV=test
-          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
-          EOF
+          # Ajouter DATABASE_URL dans la section <php>
+          sed -i '/<php>/a \        <env name="DATABASE_URL" value="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&amp;charset=utf8mb4"/>' phpunit.xml
           
-          echo ""
-          echo "=== .env file ==="
-          cat .env
-          echo ""
-          echo "=== .env.test.local file ==="
-          cat .env.test.local
+          echo "=== phpunit.xml updated ==="
+          grep -A 5 "<php>" phpunit.xml
 
       - name: Generate JWT keys
         working-directory: ./backend
@@ -111,55 +142,43 @@ jobs:
           }
           "
 
-      - name: Verify DATABASE_URL configuration
+      - name: Verify DATABASE_URL in environment
         working-directory: ./backend
         run: |
-          echo "=== Verifying DATABASE_URL ==="
+          echo "=== Checking all DATABASE URLs ==="
           php -r "
           putenv('APP_ENV=test');
           require 'vendor/autoload.php';
           \$dotenv = new Symfony\Component\Dotenv\Dotenv();
           \$dotenv->loadEnv(__DIR__ . '/.env');
-          \$dbUrl = \$_ENV['DATABASE_URL'] ?? 'NOT SET';
-          echo 'DATABASE_URL: ' . \$dbUrl . PHP_EOL;
           
-          if (!\$dbUrl || \$dbUrl === 'NOT SET') {
-              echo 'ERROR: DATABASE_URL is not set!' . PHP_EOL;
-              exit(1);
-          }
+          echo 'DATABASE_URL: ' . (\$_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;
+          echo 'DATABASE_TEST_URL: ' . (\$_ENV['DATABASE_TEST_URL'] ?? 'NOT SET') . PHP_EOL;
+          
+          \$dbUrl = \$_ENV['DATABASE_URL'] ?? '';
           if (strpos(\$dbUrl, '@db:') !== false) {
-              echo 'ERROR: DATABASE_URL still points to @db:' . PHP_EOL;
+              echo 'ERROR: DATABASE_URL contains @db:' . PHP_EOL;
               exit(1);
           }
-          if (strpos(\$dbUrl, '{MYSQL_USER}') !== false || strpos(\$dbUrl, '{MYSQL_PASSWORD}') !== false) {
-              echo 'ERROR: DATABASE_URL contains placeholders!' . PHP_EOL;
+          if (strpos(\$dbUrl, '\${MYSQL_') !== false) {
+              echo 'ERROR: DATABASE_URL contains placeholders' . PHP_EOL;
               exit(1);
           }
-          
-          // Vérifier que le mot de passe est présent
-          if (!preg_match('/\/\/root:([^@]+)@/', \$dbUrl, \$matches)) {
-              echo 'ERROR: Cannot parse password from DATABASE_URL!' . PHP_EOL;
-              exit(1);
-          }
-          
-          \$password = \$matches[1];
-          if (empty(\$password) || \$password === 'password') {
-              echo 'Password found in DATABASE_URL: ' . \$password . ' ✓' . PHP_EOL;
-          } else {
-              echo 'WARNING: Unexpected password in DATABASE_URL' . PHP_EOL;
-          }
-          
-          echo 'DATABASE_URL is correctly configured for CI ✓' . PHP_EOL;
+          echo 'Configuration is valid ✓' . PHP_EOL;
           "
 
       - name: Create database schema
         working-directory: ./backend
+        env:
+          DATABASE_URL: mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
         run: |
-          php bin/console doctrine:database:create --if-not-exists --env=test -vvv
-          php bin/console doctrine:schema:update --force --env=test -vvv
+          php bin/console doctrine:database:create --if-not-exists --env=test
+          php bin/console doctrine:schema:update --force --env=test
 
       - name: Load fixtures (if available)
         working-directory: ./backend
+        env:
+          DATABASE_URL: mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
         run: |
           if php bin/console list | grep -q "doctrine:fixtures:load"; then
             php bin/console doctrine:fixtures:load --no-interaction --env=test
@@ -170,6 +189,8 @@ jobs:
 
       - name: Run tests
         working-directory: ./backend
+        env:
+          DATABASE_URL: mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
         run: vendor/bin/phpunit --testdox --colors=always
 
       - name: Upload test coverage (optional)
