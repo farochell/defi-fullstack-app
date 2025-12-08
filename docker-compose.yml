@@ -12,7 +12,7 @@ services:
       - ./frontend/vite.config.ts:/app/vite.config.ts
       - ./frontend/public:/app/public
     environment:
-      - VITE_API_BASE_URL=https://api.defifullstack.com
+      - VITE_API_BASE_URL=http://localhost:8000
     command: npm run dev -- --host 0.0.0.0
     ports:
       - "5173:5173" # exposer le port pour Traefik

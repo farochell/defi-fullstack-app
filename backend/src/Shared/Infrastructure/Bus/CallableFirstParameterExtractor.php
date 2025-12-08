@@ -53,8 +53,9 @@ final class CallableFirstParameterExtractor
     {
         return static function (array $subscribers, DomainEventSubscriber $domainEventSubscriber): array {
             $subscribedEvents = $domainEventSubscriber::subscribedTo();
+
             foreach ($subscribedEvents as $subscribedEvent) {
-                /* @var class-string<DomainEvent> $subscribedEvent */
+                /** @var class-string<DomainEvent> $subscribedEvent */
                 $subscribers[$subscribedEvent][] = $domainEventSubscriber;
             }
 

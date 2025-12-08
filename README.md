@@ -24,9 +24,9 @@ __-
 ## 🧩 Technologies & Composants principaux
 L'application repose sur un ensemble de technologies et composants principaux permettant de garantir sa performance, sa sécurité et sa maintenabilité.
 
-🔙 Backend – Symfony (API REST)
+### 🔙 Backend – Symfony (API REST)
 
-🏛 Architecture
+#### 🏛 Architecture
 
 - Clean Architecture (Ports & Adapters)
 Séparation stricte entre Domain, Application, Infrastructure et UI.
@@ -34,7 +34,7 @@ Séparation stricte entre Domain, Application, Infrastructure et UI.
 - Domain-Driven Design (DDD light)
 Entités, Value Objects, Exceptions métier, interfaces de repository.
 
-📚 Principaux composants
+#### 📚 Principaux composants
  - PHP 8.4
  - Symfony 7.4
  - ApiPlatform 4.2
@@ -43,15 +43,15 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
  - PhpUnit 12.4
  - Phpstan 2.1
 
-🎨 Frontend – Vue.js 3 + TypeScript
+### 🎨 Frontend – Vue.js 3 + TypeScript
 
-🧱 Structure
+#### 🧱 Structure
 - Composition API
 - Vue Router
 - Service TypeScript pour l'accès API REST.
 
 
-  📚 Principaux composants
+####  📚 Principaux composants
 - TypeScript 5.9
 - Vue 3.5
 - Vue Router 4.6
@@ -61,7 +61,7 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
 - Fuse.js 7.1
 - Vite 2.9
 
-🌐 Infrastructure
+## 🌐 Infrastructure
 
 - Traefik 2.10 utilisé comme reverse proxy
 - FrankenPHP: serveur d'application pour le backend
@@ -69,7 +69,7 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
 - Certificats auto générés
 - Environnement 100% Docker
 
-🏗 Architecture du projet
+## 🏗 Architecture du projet
 
 ```defi-fullstack-app/
     |__ backend/
@@ -159,22 +159,14 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
     |__ Makefile
 ```
 
-🚀 Lancer l’application en local
+## 🚀 Lancer l’application en local
 
 ✅ Prérequis
 - Docker Engine >= 20.10
 - Docker Compose >= 1.29
 
-🌐 Fichiers hosts (obligatoire en local)
-Pour accéder aux domaines configurés dans Traefik, ajouter dans **/etc/hosts**
-``` 
-127.0.0.1   api.defifullstack.com
-127.0.0.1   app.defifullstack.com
-127.0.0.1   traefik.defifullstack.com
-```
-Les certificats SSL sont auto-générés via mkcert et sont disponibles dans le dossier certs.
 
-▶️ Démarrage du projet
+### ▶️ Démarrage du projet
 
 🚀 Avec Docker
 
@@ -182,8 +174,65 @@ Les certificats SSL sont auto-générés via mkcert et sont disponibles dans le 
 
 ``` 
 docker compose up -d
-``` 
+```  
+Le projet est maintenant accessible sur les domaines suivants :
+- http://localhost:5173 (application frontend)
+- http://localhost:8000/api/docs (documentation API)
 
-🧪 Tests & Couverture
+🌐 Fichiers hosts (optionnel)
+
+En ajoutant les lignes suivantes dans le fichier hosts de votre machine,
+vous pouvez accéder aux applications via les domaines suivants :
+``` 
+127.0.0.1   api.defifullstack.com
+127.0.0.1   app.defifullstack.com
+127.0.0.1   traefik.defifullstack.com
+```
+Le projet est maintenant accessible sur les domaines suivants :
+- https://api.defifullstack.com
+- https://app.defifullstack.com
+
+## 🧪 Tests & Couverture
 Un fichier Makefile est disponible pour faciliter les tests et la couverture du code.
 
+###  Backend
+Avant de lancer les tests, il faut au préalable installer la base de données de test via la commande suivante à la racine du projet:
+
+#### Base de données
+
+``` 
+make db-init-test 
+```  
+#### Fixtures
+
+La commande suivante permet de lancer les fixtures de test :
+``` 
+make fixtures
+```  
+ #### Tests
+``` 
+make test
+``` 
+#### Tests avec couverture
+``` 
+make test-coverage
+```  
+Le rapport de couverture est généré dans le dossier backend/reports/coverage.
+
+###  Frontend
+
+#### Tests
+``` 
+make vitest
+``` 
+#### Tests avec couverture
+``` 
+make vitest-coverage
+``` 
+Le rapport de couverture est généré dans le dossier frontend/coverage.
+
+## 🧹 Qualité du code
+- Analyse avec PhpStan
+``` 
+make phpstan
+``` 

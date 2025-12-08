@@ -6,7 +6,9 @@ else
 	PHP_CONTAINER=backend
 endif
 
-
+# ----------------------------
+# Base de données
+# ----------------------------
 .PHONY: db-create
 db-create:
 	$(DC) exec $(PHP_CONTAINER) php bin/console doctrine:database:create --if-not-exists
@@ -47,7 +49,7 @@ fixtures:
 	$(DC) exec $(PHP_CONTAINER) php bin/console --env=test doctrine:fixtures:load --no-interaction
 
 # ----------------------------
-# Phpstan
+# Phpstan & phpcs
 # ----------------------------
 .PHONY: phpstan
 phpstan:
@@ -57,6 +59,9 @@ phpstan:
 phpcs:
 	$(DC) exec $(PHP_CONTAINER) ./vendor/bin/php-cs-fixer fix src
 
+# ----------------------------
+# Tests PHP
+# ----------------------------
 .PHONY: test
 test:
 	$(DC) exec $(PHP_CONTAINER) ./vendor/bin/phpunit --colors=always
@@ -65,4 +70,15 @@ test:
 test-coverage:
 	$(DC) exec -e XDEBUG_MODE=coverage $(PHP_CONTAINER) ./vendor/bin/phpunit --coverage-html reports/coverage
 
+# ----------------------------
+# Tests Vue.js avec Vitest
+# ----------------------------
+FRONTEND_CONTAINER=frontend
 
+.PHONY: vitest
+vitest:
+	$(DC) exec $(FRONTEND_CONTAINER) npx vitest run
+
+.PHONY: vitest-coverage
+vitest-coverage:
+	$(DC) exec $(FRONTEND_CONTAINER) npx vitest run --coverage
