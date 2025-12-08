@@ -50,7 +50,8 @@ services:
       - web
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   # Base de données
   db:
@@ -68,11 +69,11 @@ services:
       - web
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 40s
 
   # Traefik en statique (sans Docker provider)
   traefik:
