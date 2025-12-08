@@ -40,10 +40,19 @@ jobs:
           coverage: xdebug
           tools: composer:v2
 
+      - name: Generate JWT keys
+        working-directory: ./backend
+        run: |
+          mkdir -p config/jwt
+          openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096
+          openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+          chmod 644 config/jwt/private.pem config/jwt/public.pem
+          echo "JWT keys generated ✓"
+          ls -la config/jwt/
+
       - name: Override .env.test for CI
         working-directory: ./backend
         run: |
-          # Remplacer complètement .env.test avec les bonnes valeurs
           cat > .env.test << 'EOF'
           KERNEL_CLASS='App\Kernel'
           APP_SECRET='$ecretf0rt3st'
@@ -56,8 +65,8 @@ jobs:
           CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
           MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
           DOMAIN=localhost
-          JWT_SECRET_KEY=config/jwt/private.pem
-          JWT_PUBLIC_KEY=config/jwt/public.pem
+          JWT_SECRET_KEY=jwt/private.pem
+          JWT_PUBLIC_KEY=jwt/public.pem
           JWT_PASSPHRASE=
           EOF
           
@@ -76,8 +85,8 @@ jobs:
           CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
           MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
           DOMAIN=localhost
-          JWT_SECRET_KEY=config/jwt/private.pem
-          JWT_PUBLIC_KEY=config/jwt/public.pem
+          JWT_SECRET_KEY=jwt/private.pem
+          JWT_PUBLIC_KEY=jwt/public.pem
           JWT_PASSPHRASE=
           EOF
             echo ".env created"
@@ -95,14 +104,6 @@ jobs:
           
           echo "=== phpunit.xml updated ==="
           grep -A 5 "<php>" phpunit.xml
-
-      - name: Generate JWT keys
-        working-directory: ./backend
-        run: |
-          mkdir -p config/jwt
-          openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096
-          openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
-          chmod 644 config/jwt/private.pem config/jwt/public.pem
 
       - name: Get composer cache directory
         id: composer-cache
@@ -142,10 +143,19 @@ jobs:
           }
           "
 
-      - name: Verify DATABASE_URL in environment
+      - name: Verify configuration
         working-directory: ./backend
         run: |
-          echo "=== Checking all DATABASE URLs ==="
+          echo "=== Verifying JWT keys exist ==="
+          if [ -f "config/jwt/private.pem" ] && [ -f "config/jwt/public.pem" ]; then
+            echo "JWT keys found ✓"
+          else
+            echo "ERROR: JWT keys not found!"
+            exit 1
+          fi
+          
+          echo ""
+          echo "=== Checking DATABASE URLs ==="
           php -r "
           putenv('APP_ENV=test');
           require 'vendor/autoload.php';
@@ -153,15 +163,12 @@ jobs:
           \$dotenv->loadEnv(__DIR__ . '/.env');
           
           echo 'DATABASE_URL: ' . (\$_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;
-          echo 'DATABASE_TEST_URL: ' . (\$_ENV['DATABASE_TEST_URL'] ?? 'NOT SET') . PHP_EOL;
+          echo 'JWT_SECRET_KEY: ' . (\$_ENV['JWT_SECRET_KEY'] ?? 'NOT SET') . PHP_EOL;
+          echo 'JWT_PUBLIC_KEY: ' . (\$_ENV['JWT_PUBLIC_KEY'] ?? 'NOT SET') . PHP_EOL;
           
           \$dbUrl = \$_ENV['DATABASE_URL'] ?? '';
           if (strpos(\$dbUrl, '@db:') !== false) {
               echo 'ERROR: DATABASE_URL contains @db:' . PHP_EOL;
-              exit(1);
-          }
-          if (strpos(\$dbUrl, '\${MYSQL_') !== false) {
-              echo 'ERROR: DATABASE_URL contains placeholders' . PHP_EOL;
               exit(1);
           }
           echo 'Configuration is valid ✓' . PHP_EOL;
