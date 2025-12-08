@@ -42,8 +42,8 @@ jobs:
           # Supprimer tous les fichiers .env existants
           rm -f .env .env.local .env.*.local
           
-          # Créer le fichier .env principal
-          cat > .env << 'EOF'
+          # Créer le fichier .env.test.local (priorité maximale)
+          cat > .env.test.local << 'EOF'
           APP_ENV=test
           APP_SECRET=test-secret-key-for-ci-testing
           DEFAULT_URI=http://localhost
@@ -56,32 +56,26 @@ jobs:
           JWT_PASSPHRASE=''
           EOF
           
-          # Créer aussi .env.test.local pour être sûr
-          cat > .env.test.local << 'EOF'
-          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4"
-          EOF
-          
-          echo "=== Content of .env file ==="
-          cat .env
-          echo ""
-          echo "=== Content of .env.test.local file ==="
+          echo "=== Content of .env.test.local ==="
           cat .env.test.local
 
-      - name: Check and fix phpunit.xml.dist
+      - name: Override phpunit.xml.dist for CI
         working-directory: ./backend
         run: |
+          # Créer un phpunit.xml qui surcharge phpunit.xml.dist
           if [ -f "phpunit.xml.dist" ]; then
-            echo "=== Content of phpunit.xml.dist ==="
-            cat phpunit.xml.dist
+            cp phpunit.xml.dist phpunit.xml
           
-            # Vérifier si DATABASE_URL est définie dans phpunit.xml.dist
-            if grep -q "DATABASE_URL" phpunit.xml.dist; then
-              echo ""
-              echo "WARNING: DATABASE_URL found in phpunit.xml.dist, replacing it..."
-              sed -i 's|<env name="DATABASE_URL" value=".*"|<env name="DATABASE_URL" value="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0\&amp;charset=utf8mb4"|' phpunit.xml.dist
-              echo "=== Updated phpunit.xml.dist ==="
-              cat phpunit.xml.dist
+            # Remplacer toutes les occurrences de DATABASE_URL
+            sed -i 's|mysql://[^"]*@db:[^"]*|mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0\&charset=utf8mb4|g' phpunit.xml
+          
+            # Si DATABASE_URL n'existe pas, l'ajouter
+            if ! grep -q 'name="DATABASE_URL"' phpunit.xml; then
+              sed -i '/<php>/a \        <env name="DATABASE_URL" value="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&amp;charset=utf8mb4"/>' phpunit.xml
             fi
+          
+            echo "=== Content of phpunit.xml ==="
+            cat phpunit.xml
           fi
 
       - name: Generate JWT keys
@@ -117,23 +111,38 @@ jobs:
           done
           echo "MySQL is ready!"
 
-      - name: Debug environment variables
+      - name: Verify DATABASE_URL is correct
         working-directory: ./backend
         run: |
-          echo "=== Checking DATABASE_URL ==="
-          php -r "echo 'DATABASE_URL from env: ' . ($_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;"
-          php -r "require 'vendor/autoload.php'; \$dotenv = new Symfony\Component\Dotenv\Dotenv(); \$dotenv->loadEnv('.env'); echo 'DATABASE_URL after loading .env: ' . ($_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;"
+          php -r "
+          require 'vendor/autoload.php';
+          \$dotenv = new Symfony\Component\Dotenv\Dotenv();
+          \$dotenv->loadEnv('.env.test.local');
+          echo 'DATABASE_URL: ' . (\$_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;
+          if (isset(\$_ENV['DATABASE_URL']) && strpos(\$_ENV['DATABASE_URL'], '@db:') !== false) {
+              echo 'ERROR: DATABASE_URL still contains @db:' . PHP_EOL;
+              exit(1);
+          }
+          echo 'DATABASE_URL is correctly configured for CI' . PHP_EOL;
+          "
 
       - name: Test database connection
-        working-directory: ./backend
         run: |
-          php -r "try { \$pdo = new PDO('mysql:host=127.0.0.1;port=3306', 'root', 'password'); echo 'Database connection: OK' . PHP_EOL; } catch(Exception \$e) { echo 'Connection failed: ' . \$e->getMessage() . PHP_EOL; exit(1); }"
+          php -r "
+          try {
+              \$pdo = new PDO('mysql:host=127.0.0.1;port=3306', 'root', 'password');
+              echo 'Direct PDO connection: OK' . PHP_EOL;
+          } catch(Exception \$e) {
+              echo 'Direct PDO connection failed: ' . \$e->getMessage() . PHP_EOL;
+              exit(1);
+          }
+          "
 
       - name: Create database schema
         working-directory: ./backend
         run: |
-          php bin/console doctrine:database:create --if-not-exists --env=test -vvv
-          php bin/console doctrine:schema:update --force --env=test -vvv
+          php bin/console doctrine:database:create --if-not-exists --env=test
+          php bin/console doctrine:schema:update --force --env=test
 
       - name: Run tests
         working-directory: ./backend
