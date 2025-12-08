@@ -39,24 +39,23 @@ jobs:
       - name: Create env files for CI
         working-directory: ./backend
         run: |
-          # Créer .env avec des valeurs réelles (requis par Symfony)
           cat > .env << 'EOF'
           APP_ENV=dev
           APP_SECRET=test-secret-key-for-ci
           DEFAULT_URI=http://localhost
-          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony?serverVersion=mariadb-10.6.0&charset=utf8mb4"
+          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony?serverVersion=mariadb-10.6.0&charset=utf8mb4
           CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
           MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
           DOMAIN=localhost
           JWT_SECRET_KEY=config/jwt/private.pem
           JWT_PUBLIC_KEY=config/jwt/public.pem
-          JWT_PASSPHRASE=''
+          JWT_PASSPHRASE=
           EOF
           
           # Créer .env.test.local qui surcharge pour l'environnement test
           cat > .env.test.local << 'EOF'
           APP_ENV=test
-          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4"
+          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
           EOF
           
           echo ""
@@ -99,6 +98,19 @@ jobs:
           done
           echo "MySQL is ready!"
 
+      - name: Test direct database connection
+        run: |
+          echo "Testing direct PDO connection..."
+          php -r "
+          try {
+              \$pdo = new PDO('mysql:host=127.0.0.1;port=3306;dbname=symfony_test', 'root', 'password');
+              echo 'Direct PDO connection: SUCCESS ✓' . PHP_EOL;
+          } catch(Exception \$e) {
+              echo 'Direct PDO connection FAILED: ' . \$e->getMessage() . PHP_EOL;
+              exit(1);
+          }
+          "
+
       - name: Verify DATABASE_URL configuration
         working-directory: ./backend
         run: |
@@ -108,39 +120,43 @@ jobs:
           require 'vendor/autoload.php';
           \$dotenv = new Symfony\Component\Dotenv\Dotenv();
           \$dotenv->loadEnv(__DIR__ . '/.env');
-          echo 'DATABASE_URL: ' . (\$_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;
-          if (!isset(\$_ENV['DATABASE_URL'])) {
+          \$dbUrl = \$_ENV['DATABASE_URL'] ?? 'NOT SET';
+          echo 'DATABASE_URL: ' . \$dbUrl . PHP_EOL;
+          
+          if (!\$dbUrl || \$dbUrl === 'NOT SET') {
               echo 'ERROR: DATABASE_URL is not set!' . PHP_EOL;
               exit(1);
           }
-          if (strpos(\$_ENV['DATABASE_URL'], '@db:') !== false) {
-              echo 'ERROR: DATABASE_URL still points to @db: instead of @127.0.0.1:' . PHP_EOL;
+          if (strpos(\$dbUrl, '@db:') !== false) {
+              echo 'ERROR: DATABASE_URL still points to @db:' . PHP_EOL;
               exit(1);
           }
-          if (strpos(\$_ENV['DATABASE_URL'], '{MYSQL_USER}') !== false || strpos(\$_ENV['DATABASE_URL'], '{MYSQL_PASSWORD}') !== false) {
+          if (strpos(\$dbUrl, '{MYSQL_USER}') !== false || strpos(\$dbUrl, '{MYSQL_PASSWORD}') !== false) {
               echo 'ERROR: DATABASE_URL contains placeholders!' . PHP_EOL;
               exit(1);
           }
-          echo 'DATABASE_URL is correctly configured for CI ✓' . PHP_EOL;
-          "
-
-      - name: Test direct database connection
-        run: |
-          php -r "
-          try {
-              \$pdo = new PDO('mysql:host=127.0.0.1;port=3306', 'root', 'password');
-              echo 'Direct PDO connection: SUCCESS ✓' . PHP_EOL;
-          } catch(Exception \$e) {
-              echo 'Direct PDO connection FAILED: ' . \$e->getMessage() . PHP_EOL;
+          
+          // Vérifier que le mot de passe est présent
+          if (!preg_match('/\/\/root:([^@]+)@/', \$dbUrl, \$matches)) {
+              echo 'ERROR: Cannot parse password from DATABASE_URL!' . PHP_EOL;
               exit(1);
           }
+          
+          \$password = \$matches[1];
+          if (empty(\$password) || \$password === 'password') {
+              echo 'Password found in DATABASE_URL: ' . \$password . ' ✓' . PHP_EOL;
+          } else {
+              echo 'WARNING: Unexpected password in DATABASE_URL' . PHP_EOL;
+          }
+          
+          echo 'DATABASE_URL is correctly configured for CI ✓' . PHP_EOL;
           "
 
       - name: Create database schema
         working-directory: ./backend
         run: |
-          php bin/console doctrine:database:create --if-not-exists --env=test
-          php bin/console doctrine:schema:update --force --env=test
+          php bin/console doctrine:database:create --if-not-exists --env=test -vvv
+          php bin/console doctrine:schema:update --force --env=test -vvv
 
       - name: Load fixtures (if available)
         working-directory: ./backend
