@@ -36,9 +36,14 @@ jobs:
           coverage: xdebug
           tools: composer:v2
 
-      - name: Copy env file
+      - name: Create env file for CI
         working-directory: ./backend
-        run: cp .env.example .env
+        run: |
+          cat > .env << EOF
+          APP_ENV=test
+          APP_SECRET=test-secret-key-for-ci
+          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony_test?charset=utf8mb4&serverVersion=mariadb-10.6.0
+          EOF
 
       - name: Get composer cache directory
         id: composer-cache
@@ -62,8 +67,13 @@ jobs:
             echo 'waiting for mysql...'
             sleep 2
           done
-      - name: Run PHPUnit tests
+
+      - name: Create database schema
         working-directory: ./backend
-        env:
-          DATABASE_URL: mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.24
-        run: ./vendor/bin/phpunit --coverage-text
+        run: |
+          php bin/console doctrine:database:create --if-not-exists --env=test
+          php bin/console doctrine:schema:update --force --env=test
+
+      - name: Run tests
+        working-directory: ./backend
+        run: vendor/bin/phpunit
