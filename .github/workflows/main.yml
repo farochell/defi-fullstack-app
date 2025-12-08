@@ -37,6 +37,7 @@ jobs:
           tools: composer:v2
 
       - name: Copy env file
+        working-directory: ./backend
         run: cp .env.example .env
 
       - name: Get composer cache directory
