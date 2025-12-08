@@ -39,12 +39,28 @@ jobs:
       - name: Create env file for CI
         working-directory: ./backend
         run: |
-          cat > .env << EOF
+          cat > .env << 'EOF'
           APP_ENV=test
-          APP_SECRET=test-secret-key-for-ci
-          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony_test?charset=utf8mb4&serverVersion=mariadb-10.6.0
+          APP_SECRET=test-secret-key-for-ci-testing
           DEFAULT_URI=http://localhost
+          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4"
+          CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
+          MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
+          DOMAIN=localhost
+          JWT_SECRET_KEY=config/jwt/private.pem
+          JWT_PUBLIC_KEY=config/jwt/public.pem
+          JWT_PASSPHRASE=''
           EOF
+          echo "=== Content of .env file ==="
+          cat .env
+
+      - name: Generate JWT keys
+        working-directory: ./backend
+        run: |
+          mkdir -p config/jwt
+          openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096
+          openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+          chmod 644 config/jwt/private.pem config/jwt/public.pem
 
       - name: Get composer cache directory
         id: composer-cache
@@ -64,10 +80,17 @@ jobs:
 
       - name: Wait for MySQL
         run: |
+          echo "Waiting for MySQL to be ready..."
           until mysqladmin ping -h127.0.0.1 -P3306 -uroot -ppassword --silent; do
             echo 'waiting for mysql...'
             sleep 2
           done
+          echo "MySQL is ready!"
+
+      - name: Test database connection
+        working-directory: ./backend
+        run: |
+          php -r "try { \$pdo = new PDO('mysql:host=127.0.0.1;port=3306', 'root', 'password'); echo 'Database connection: OK'; } catch(Exception \$e) { echo 'Connection failed: ' . \$e->getMessage(); exit(1); }"
 
       - name: Create database schema
         working-directory: ./backend
@@ -75,6 +98,22 @@ jobs:
           php bin/console doctrine:database:create --if-not-exists --env=test
           php bin/console doctrine:schema:update --force --env=test
 
+      - name: Load fixtures (optional)
+        working-directory: ./backend
+        run: |
+          if [ -f "bin/console" ] && php bin/console list | grep -q "doctrine:fixtures:load"; then
+            php bin/console doctrine:fixtures:load --no-interaction --env=test
+          else
+            echo "No fixtures to load"
+          fi
+
       - name: Run tests
         working-directory: ./backend
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --testdox
+
+      - name: Upload coverage reports (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/coverage/
