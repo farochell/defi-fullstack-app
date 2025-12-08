@@ -1,142 +1,166 @@
 # 🚆 Défi Full stack - Routage de Train & Statistiques
 
-Bienvenue dans notre défi technique !  
-Avant même l’envoi de ton CV, nous te proposons de passer par cette étape pratique. Pourquoi ? Parce que nous croyons que **le code parle plus fort que les mots**.
+Application complète permettant de calculer la distance entre deux stations de train.
+Il est possible de visualiser les statistiques par code analytique via l'accès à un espace sécurisé.
+__-
 
-Ce défi est ton ticket d’entrée : il te permet de nous montrer l’étendue de tes capacités à **collaborer, analyser et livrer du code de qualité**. Tu le réalises chez toi, dans ton environnement, avec tes outils, mais l’objectif est de voir comment tu t’adaptes à notre culture technique et à nos pratiques **DevSecOps**.
+## 📌 Fonctionnalités
+🛠 Backend (Symfony + ApiPlatform)
+- API REST conforme à la spécification OpenApi fournie. Dans le cadre de la gestion des comptes utilisateurs, il a toutefois été enrechi.
+- Calcul du plus court chemin entre deux stations de train via l'algorithme de Dijkstra et intégration des stations entre les deux destinations.
+- Gestion du réseau ferroviaire via le fichier JSON de stations et de distances.
+- Exceptions métier et gestion des erreurs.
+- Récupération des statistiques par code analytique.
+- Sécurité JWT pour protéger l'endpoint de récupération des statistiques.
 
----
+🎯 Frontend (Vue.js)
+- Formulaire de calcul de la distance entre deux stations de train.
+- Affichage du trajet et des stations parcourues.
+- Formulaires de création de compte et de connexion.
+- Accès à un espace sécurisé pour consulter les statistiques.
+- Recherche et visualisation des statistiques  par code analytique dans un grahique Chart.js.
 
-## 🤝 Esprit du défi
-Ce défi est autant une **démonstration de tes compétences** qu’une **simulation de collaboration** dans notre environnement.  
-Nous ne cherchons pas la perfection : nous voulons voir ta capacité à t’approprier un contexte technique exigeant, à produire du code de qualité et à réfléchir comme un membre de l’équipe.
 
-Tu es invité à démontrer ta capacité à :
-- Travailler avec des outils similaires aux nôtres (**Docker, Composer, GitLab, PHPUnit**, etc.)
-- Appliquer des pratiques comme **l’analyse statique**, le **TDD**, le **DDD** et l’**intégration/déploiement continus**
-- Produire un code **propre, maintenable et réfléchi**, comme si tu faisais déjà partie de l’équipe
+## 🧩 Technologies & Composants principaux
+L'application repose sur un ensemble de technologies et composants principaux permettant de garantir sa performance, sa sécurité et sa maintenabilité.
 
-> 💡 Conseil : documente tes choix, structure ton code et montre-nous comment tu raisonnes. C’est tout aussi important que le résultat final.
+🔙 Backend – Symfony (API REST)
 
----
+🏛 Architecture
 
-## 🧩 Notre environnement
-Nous produisons des applications web modernes, sécurisées et performantes, en utilisant principalement :
-- **Backend** : PHP 8 (Symfony 7 et CakePHP 5)
-- **Frontend** : Vue.js 3 + Vuetify 3 + TypeScript
-- **Tests** : PHPUnit, Vitest, Jest
-- **Linter** : PHPCS, ESLint, Prettier
-- **UI/UX** : Storybook
-- **Base de données** : PostgreSQL ou MariaDB
-- **Infrastructure** : Docker, Docker Compose, TeamCity (CI/CD), Gitlab (code versioning)
-- **Méthodologies** : TDD, DDD, XP
+- Clean Architecture (Ports & Adapters)
+Séparation stricte entre Domain, Application, Infrastructure et UI.
 
-> 💡 Conseil : inspire-toi de nos pratiques et de nos outils.
+- Domain-Driven Design (DDD light)
+Entités, Value Objects, Exceptions métier, interfaces de repository.
 
----
+📚 Principaux composants
+ - PHP 8.4
+ - Symfony 7.4
+ - ApiPlatform 4.2
+ - Doctrine ORM 3.5
+ - Firebase PHP-JWT 6.11
+ - PhpUnit 12.4
+ - Phpstan 2.1
 
-# 🧾 Instructions pour réaliser le défi
-Tu dois réaliser une solution à minimum deux niveaux. Un backend PHP 8 exposant une API REST conforme à la spécification OpenAPI fournie ainsi qu'un frontend TypeScript consommant cette API.
+🎨 Frontend – Vue.js 3 + TypeScript
 
-## Le contexte
-Dans le métier de la circulation ferroviaire, les trajets de chaque train sont répertoriés dans un système de gestion du trafic. Un train circule sur une ligne, ces lignes sont parfois connectées, permettant à un train de circuler sur plusieurs lignes.
-Chaque trajet est associé à un code analytique, qui permet de catégoriser le type de trajet (ex : fret, passager, maintenance, etc.).
-Les données de statistiques générées sont ensuite utilisées pour diverses analyses.
+🧱 Structure
+- Composition API
+- Vue Router
+- Service TypeScript pour l'accès API REST.
 
-## Le besoin métier
-La solution doit permettre à l'utilisateur de calculer une distance entre deux stations de train. La liste des stations ainsi que les distances entre les stations sont fournies dans les fichiers `stations.json` et `distances.json`.
 
-Tu peux choisir de persister les saisies des utilisateurs, cela t'aidera à compléter les points Bonus (voir ci-dessous), mais ce n'est pas obligatoire.
+  📚 Principaux composants
+- TypeScript 5.9
+- Vue 3.5
+- Vue Router 4.6
+- Tailwind CSS 4.1
+- Axios 1.13
+- Chart.js 4.5
+- Fuse.js 7.1
+- Vite 2.9
 
-Il se peut que tu aies des questions ou des incertitudes sur la compréhension du besoin, dans ce cas, tu es libre de faire des hypothèses raisonnables et de les documenter.
+🌐 Infrastructure
 
-> 💡 Conseil : applique le principe fondamental de [qualité du craftsmanship](https://fr.wikipedia.org/wiki/Software_craftsmanship#Fondamentalement_:_un_retour_non_r%C3%A9f%C3%A9renc%C3%A9_%C3%A0_XP).
+- Traefik 2.10 utilisé comme reverse proxy
+- FrankenPHP: serveur d'application pour le backend
+- Mariadb 10.6: base de données de l'application
+- Certificats auto générés
+- Environnement 100% Docker
 
-## Livrables attendus
-Lorsque tu as terminé, envoie à n.girardet[at]mob[point]ch, ton dossier de candidature complet ainsi qu'un lien vers le projet contenant :
-- Le projet prêt à déployer, au format que tu préfères : un repo GitHub avec un docker-compose, une image publiée dans un registre, un fichier zip dans une release GitHub...
-- Les instructions de déploiement claires
-- L'accès au repository du code source, y compris l'historique des commits
+🏗 Architecture du projet
 
-> ⚠️ Assure-toi qu'un lien vers ton projet est visible et actif dans ton e-mail. 👉 Nous ne traiterons pas les dossiers de candidatures avant d'avoir vu le code.
+```defi-fullstack-app/
+    |__ backend/
+    |      |__ src/
+    |      |     |__ DataFixtures/
+    |      |     |__ Phpstan/
+    |      |     |__ Route/
+    |      |     |    |__ Application/
+    |      |     |    |     |__ CalculateRoute/
+    |      |     |    |     |__ GetStats/
+    |      |     |    |__ Domain/
+    |      |     |    |     |__ Entity/
+    |      |     |    |     |__ Exception/
+    |      |     |    |     |__ Repository/
+    |      |     |    |     |__ Service/
+    |      |     |    |     |__ ValueObject/
+    |      |     |    |__ Infrastructure/
+    |      |     |    |     |__ Doctrine/
+    |      |     |    |     |    |__ Mapping/
+    |      |     |    |     |    |__ Type/
+    |      |     |    |     |__ Repository/
+    |      |     |    |     |__ Service/
+    |      |     |    |__ UI/
+    |      |     |          |__ Http/
+    |      |     |               |__ Rest/
+    |      |     |                    |__ V1/
+    |      |     |                        |__ Controller/
+    |      |     |                        |__ Formatter/
+    |      |     |                        |__ Input/
+    |      |     |                        |__ Resource/ 
+    |      |     |__ Security
+    |      |     |    |__ Application/
+    |      |     |    |     |__ CreateUser/
+    |      |     |    |     |__ Login/
+    |      |     |    |__ Domain/
+    |      |     |    |     |__ Entity/
+    |      |     |    |     |__ Exception/
+    |      |     |    |     |__ Repository/
+    |      |     |    |     |__ Service/
+    |      |     |    |     |__ ValueObject/
+    |      |     |    |__ Infrastructure/
+    |      |     |    |     |__ Context/
+    |      |     |    |     |__ Doctrine/
+    |      |     |    |     |    |__ Mapping/
+    |      |     |    |     |    |__ Type/
+    |      |     |    |     |__ EventSubscriber/
+    |      |     |    |     |__ Repository/
+    |      |     |    |     |__ Service/
+    |      |     |    |__ UI/
+    |      |     |          |__ Http/
+    |      |     |               |__ Rest/
+    |      |     |                          |__ Controller/
+    |      |     |                          |__ Input/
+    |      |     |                          |__ Resource/
+    |      |     |__ Shared/
+    |      |          |__ Application/
+    |      |          |__ Domain/
+    |      |          |    |__ Aggregate/
+    |      |          |    |__ Bus/
+    |      |          |    |__ Exception/
+    |      |          |    |__ ValueObject/
+    |      |          |__ Infrastructure/
+    |      |          |    |__ Bus/
+    |      |          |    |__ Doctrine/
+    |      |          |    |    |__ Type/
+    |      |          |    |__ Repository/
+    |      |          |    |__ Service/
+    |      |          |__ UI/
+    |      |                |__ Http/
+    |      |                     |__ Rest/
+    |      |__ tests/
+    |      |__ Dockerfile
+    |__ certs/
+    |__ frontend/
+    |     |__ src/
+    |     |      |__ components/
+    |     |      |__ data/
+    |     |      |__ router/
+    |     |      |__ services/
+    |     |      |__ types/
+    |     |      |__ views/
+    |     |__ public/
+    |     |__ tests/
+    |     |__ Dockerfile
+    |__ traefik/
+    |__ docker-compose.yml
+    |__ Makefile
+```
 
-## ⏳ Durée du défi
+🚀 Lancer l’application en local
 
-Tu n’as aucune limite de temps pour réaliser ce défi. Avance à ton rythme, prends le temps de réfléchir et de coder comme tu le souhaites. Ce repository restera ouvert tant que nous n’aurons pas trouvé la bonne personne pour rejoindre l’équipe. Une fois que ce sera le cas, nous le fermerons.
-
-> 💡 Même si la vitesse n’est pas un critère, nous examinerons les candidatures dans l’ordre où elles nous parviennent.
-
-## Et après ?
-Nous procéderons à une revue de ton code et nous te contacterons pour t'informer de la suite.
-
-> 🚫 N'envoie pas de fichiers volumineux (ex : 30 Mo) par e-mail
-
----
-
-## 🎯 Objectifs
-
-- Implémenter un **backend PHP 8** exposant une API conforme à la spécification **OpenAPI** fournie.
-- Développer un **frontend TypeScript** consommant cette API.
-- Fournir une **couverture de code** mesurable (tests unitaires et d’intégration).
-- Déployer l’application avec un minimum d’opérations via **Docker** ou **Docker Compose**.
-- Mettre en place un **pipeline CI/CD complet** (build, tests, coverage, lint, déploiement).
-- Utiliser un **versioning de code** clair et structuré.
-- Garantir des **communications sécurisées** (HTTPS, gestion des secrets, authentification).
-
----
-
-## 🏗️ Architecture attendue
-
-- **Backend**  
-  - PHP 8.4 obligatoire.
-  - Utilisation d'un Framework (Symfony, CakePHP, Slim, Laravel,...) facultatif.  
-  - Implémentation stricte de l’API OpenAPI fournie.  
-  - Tests avec PHPUnit + rapport de couverture.  
-
-- **Frontend**
-  - TypeScript 5 obligatoire.
-  - Interface utilisateur pour :  
-    - Créer un trajet (station A → station B) + type de trajet.  
-    - Consulter les statistiques par code analytique.
-  - Tests avec Vitest/Jest + rapport de couverture.
-
-- **Infrastructure** 
-  - Docker Engine 25
-  - Docker/Docker Compose pour orchestrer backend, frontend, base de données et reverse proxy (si nécessaire).  
-  - Déploiement en une commande (`docker compose up -d`).  
-
-> 💡 Conseil : documente tes choix dans une documentation.
-
----
-
-## 🔄 CI/CD complet
-
-Voici notre point de vue de la représentation d'un CI/CD complet :
-- Build : images backend/frontend
-- Qualité : lint + tests + coverage (fail si seuils non atteints)
-- Sécurité : SAST/DAST (ex: phpstan, npm audit, Trivy)
-- Release : tagging sémantique ou calendaire, changelog
-- Delivery : push images vers registry, déploiement automatisé (Compose ou SSH)
-
-## 🤖 Code généré par IA
-
-Tu es libre d’utiliser les outils qui te semblent les plus adaptés pour réaliser ce défi. Cela inclut bien sûr le code généré par des intelligences artificielles. Nous savons que ces outils font partie du quotidien des développeurs, et nous voulons voir comment tu es capable de les intégrer intelligemment dans ta solution.
-
-## 🎁 Les points Bonus
-- Implémenter un algorithme de routage (ex. Dijkstra) pour calculer la distance entre deux stations.
-- Exposer un endpoint de statistiques agrégées par code analytique.
-- Visualiser ces statistiques dans le frontend (graphique/tableau).
-
-## ✅ Critères d’évaluation
-- Couverture : rapports générés et seuils respectés
-- OpenAPI : conformité stricte des endpoints et schémas
-- Docker : démarrage en une ou deux commandes, documentation claire
-- Frontend : UX propre, typé en TypeScript, tests présents
-- CI/CD : pipeline fiable, scans basiques de sécurité, images publiées
-- Sécurité : HTTPS, auth, headers, gestion des secrets
-- Qualité : code lisible, commits atomiques, architecture cohérente
-
----
-## 🚀 À toi de jouer !
-Nous avons hâte de découvrir ta solution et de voir comment tu abordes ce défi.  
-Bonne chance, et surtout amuse-toi en codant !
+✅ Prérequis
+- Docker
+- Docker Compose

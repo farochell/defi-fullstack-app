@@ -1,8 +1,11 @@
-# Nom du container PHP
-PHP_CONTAINER=backend
+ifeq ($(CI), true)
+	DC=docker compose -f ./docker-compose.ci.yml
+	PHP_CONTAINER=backend
+else
+	DC=docker compose -f ./docker-compose.yml --env-file ./.env
+	PHP_CONTAINER=backend
+endif
 
-# Commande docker-compose (depuis backend/)
-DC=docker compose -f ./docker-compose.yml --env-file ./.env
 
 .PHONY: db-create
 db-create:
@@ -29,7 +32,7 @@ db-schema-update:
 	$(DC) exec $(PHP_CONTAINER) php bin/console doctrine:schema:update --force
 
 # ----------------------------
-# Initialisation complète
+# Initialisation BDD complète
 # ----------------------------
 .PHONY: db-init
 db-init: db-create db-migrations db-migrate
@@ -42,3 +45,24 @@ db-init-test: db-create-test db-update-test
 .PHONY: fixtures
 fixtures:
 	$(DC) exec $(PHP_CONTAINER) php bin/console --env=test doctrine:fixtures:load --no-interaction
+
+# ----------------------------
+# Phpstan
+# ----------------------------
+.PHONY: phpstan
+phpstan:
+	$(DC) exec $(PHP_CONTAINER) ./vendor/bin/phpstan analyse --memory-limit=2G
+
+.PHONY: phpcs
+phpcs:
+	$(DC) exec $(PHP_CONTAINER) ./vendor/bin/php-cs-fixer fix src
+
+.PHONY: test
+test:
+	$(DC) exec $(PHP_CONTAINER) ./vendor/bin/phpunit --colors=always
+
+.PHONY: test-coverage
+test-coverage:
+	$(DC) exec -e XDEBUG_MODE=coverage $(PHP_CONTAINER) ./vendor/bin/phpunit --coverage-html reports/coverage
+
+
