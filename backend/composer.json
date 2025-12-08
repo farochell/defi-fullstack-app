@@ -28,7 +28,7 @@
         "symfony/uid": "7.4.*",
         "symfony/validator": "7.4.*",
         "symfony/yaml": "7.4.*",
-        "webmozart/assert": "*"
+        "webmozart/assert": "1.12.1"
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "*",
