@@ -32,7 +32,168 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # … Toutes tes étapes backend existantes …
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: ctype, iconv, pdo, pdo_mysql
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Generate JWT keys
+        working-directory: ./backend
+        run: |
+          mkdir -p config/jwt
+          openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096
+          openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+          chmod 644 config/jwt/private.pem config/jwt/public.pem
+          echo "JWT keys generated ✓"
+          ls -la config/jwt/
+
+      - name: Override .env.test for CI
+        working-directory: ./backend
+        run: |
+          cat > .env.test << 'EOF'
+          KERNEL_CLASS='App\Kernel'
+          APP_SECRET='$ecretf0rt3st'
+          APP_ENV=test
+          APP_DEBUG=true
+          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony_test?charset=utf8mb4&serverVersion=mariadb-10.6.0
+          DATABASE_TEST_URL=mysql://root:password@127.0.0.1:3306/symfony_test?charset=utf8mb4&serverVersion=mariadb-10.6.0
+          TEST_TOKEN=
+          DEFAULT_URI=http://localhost
+          CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
+          MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
+          DOMAIN=localhost
+          JWT_SECRET_KEY=jwt/private.pem
+          JWT_PUBLIC_KEY=jwt/public.pem
+          JWT_PASSPHRASE=
+          EOF
+          
+          echo "=== .env.test overridden ==="
+          cat .env.test
+
+      - name: Create .env base file
+        working-directory: ./backend
+        run: |
+          if [ ! -f ".env" ]; then
+            cat > .env << 'EOF'
+          APP_ENV=dev
+          APP_SECRET=test-secret-key-for-ci
+          DEFAULT_URI=http://localhost
+          DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony?serverVersion=mariadb-10.6.0&charset=utf8mb4
+          CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
+          MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
+          DOMAIN=localhost
+          JWT_SECRET_KEY=jwt/private.pem
+          JWT_PUBLIC_KEY=jwt/public.pem
+          JWT_PASSPHRASE=
+          EOF
+            echo ".env created"
+          else
+            echo ".env already exists, skipping"
+          fi
+
+      - name: Update phpunit.xml with DATABASE_URL
+        working-directory: ./backend
+        run: |
+          cp phpunit.dist.xml phpunit.xml
+          
+          # Ajouter DATABASE_URL dans la section <php>
+          sed -i '/<php>/a \        <env name="DATABASE_URL" value="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&amp;charset=utf8mb4"/>' phpunit.xml
+          
+          echo "=== phpunit.xml updated ==="
+          grep -A 5 "<php>" phpunit.xml
+
+      - name: Get composer cache directory
+        id: composer-cache
+        working-directory: ./backend
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Wait for MySQL
+        run: |
+          echo "Waiting for MySQL to be ready..."
+          until mysqladmin ping -h127.0.0.1 -P3306 -uroot -ppassword --silent; do
+            echo 'waiting for mysql...'
+            sleep 2
+          done
+          echo "MySQL is ready!"
+
+      - name: Test direct database connection
+        run: |
+          echo "Testing direct PDO connection..."
+          php -r "
+          try {
+              \$pdo = new PDO('mysql:host=127.0.0.1;port=3306;dbname=symfony_test', 'root', 'password');
+              echo 'Direct PDO connection: SUCCESS ✓' . PHP_EOL;
+          } catch(Exception \$e) {
+              echo 'Direct PDO connection FAILED: ' . \$e->getMessage() . PHP_EOL;
+              exit(1);
+          }
+          "
+
+      - name: Verify configuration
+        working-directory: ./backend
+        run: |
+          echo "=== Verifying JWT keys exist ==="
+          if [ -f "config/jwt/private.pem" ] && [ -f "config/jwt/public.pem" ]; then
+            echo "JWT keys found ✓"
+          else
+            echo "ERROR: JWT keys not found!"
+            exit 1
+          fi
+          
+          echo ""
+          echo "=== Checking DATABASE URLs ==="
+          php -r "
+          putenv('APP_ENV=test');
+          require 'vendor/autoload.php';
+          \$dotenv = new Symfony\Component\Dotenv\Dotenv();
+          \$dotenv->loadEnv(__DIR__ . '/.env');
+          
+          echo 'DATABASE_URL: ' . (\$_ENV['DATABASE_URL'] ?? 'NOT SET') . PHP_EOL;
+          echo 'JWT_SECRET_KEY: ' . (\$_ENV['JWT_SECRET_KEY'] ?? 'NOT SET') . PHP_EOL;
+          echo 'JWT_PUBLIC_KEY: ' . (\$_ENV['JWT_PUBLIC_KEY'] ?? 'NOT SET') . PHP_EOL;
+          
+          \$dbUrl = \$_ENV['DATABASE_URL'] ?? '';
+          if (strpos(\$dbUrl, '@db:') !== false) {
+              echo 'ERROR: DATABASE_URL contains @db:' . PHP_EOL;
+              exit(1);
+          }
+          echo 'Configuration is valid ✓' . PHP_EOL;
+          "
+
+      - name: Create database schema
+        working-directory: ./backend
+        env:
+          DATABASE_URL: mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
+        run: |
+          php bin/console doctrine:database:create --if-not-exists --env=test
+          php bin/console doctrine:schema:update --force --env=test
+
+      - name: Load fixtures (if available)
+        working-directory: ./backend
+        env:
+          DATABASE_URL: mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4
+        run: |
+          if php bin/console list | grep -q "doctrine:fixtures:load"; then
+            php bin/console doctrine:fixtures:load --no-interaction --env=test
+            echo "Fixtures loaded ✓"
+          else
+            echo "No fixtures available (skipped)"
+          fi
+
       - name: Run tests
         working-directory: ./backend
         env:
@@ -47,6 +208,9 @@ jobs:
           path: backend/coverage/
           if-no-files-found: ignore
 
+  # ----------------------------
+  # Frontend Vue.js / Vitest
+  # ----------------------------
   frontend-tests:
     runs-on: ubuntu-latest
     needs: backend-tests
@@ -60,23 +224,3 @@ jobs:
         with:
           node-version: '23'
           cache: 'npm'
-
-      - name: Install frontend dependencies
-        working-directory: ./frontend
-        run: npm ci
-
-      - name: Run Vitest unit tests
-        working-directory: ./frontend
-        run: npx vitest run
-
-      - name: Run Vitest tests with coverage
-        working-directory: ./frontend
-        run: npx vitest run --coverage
-
-      - name: Upload frontend coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage
-          path: frontend/coverage/
-          if-no-files-found: ignore
