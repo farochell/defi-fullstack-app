@@ -165,17 +165,37 @@ Entités, Value Objects, Exceptions métier, interfaces de repository.
 - Docker Engine >= 20.10
 - Docker Compose >= 1.29
 
+### Récupération du projet
+```
+git clone https://github.com/farochell/defi-fullstack-app.git
+```
 
 ### ▶️ Démarrage du projet
 
+Une fois le projet récupéré, se placer dans le dossier récupéré.
+
+Créer et modifier un fichier .env à partir du fichier **.env.example.**
+
+```
+  cp .env.example .env
+```
+Vous pouvez renseigner les valeurs de des variables d'environnement contenus dans ce fichier **.env**.
+```
+    MYSQL_ROOT_PASSWORD=password
+    MYSQL_DATABASE=symfony
+    MYSQL_USER=symfony
+    MYSQL_PASSWORD=password
+```
+
 🚀 Avec Docker
 
-À la racine du projet :
+Une fois le fichier .env renseigné vous pouvez lancer la commande suivante:
 
 ``` 
 docker compose up -d
 ```  
 Le projet est maintenant accessible sur les domaines suivants :
+
 - http://localhost:5173 (application frontend)
 - http://localhost:8000/api/docs (documentation API)
 
