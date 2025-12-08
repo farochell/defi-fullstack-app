@@ -233,3 +233,11 @@ jobs:
       - name: Run Vitest
         working-directory: ./frontend
         run: npm run test:unit
+
+      - name: Upload Vitest coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-coverage
+          path: frontend/coverage/
+          if-no-files-found: warn
