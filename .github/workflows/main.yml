@@ -38,12 +38,18 @@ jobs:
 
       - name: Create env files for CI
         working-directory: ./backend
-        run: |          
-          cat > .env.test.local << 'EOF'
+        run: |
+          # Copier .env.example vers .env (fichier de base requis)
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            echo ".env created from .env.example"
+          else
+            # Si .env.example n'existe pas, créer un .env minimal
+            cat > .env << 'EOF'
           APP_ENV=test
-          APP_SECRET=test-secret-key-for-ci-testing
+          APP_SECRET=placeholder
+          DATABASE_URL="mysql://root:password@db:3306/symfony?serverVersion=mariadb-10.6.0"
           DEFAULT_URI=http://localhost
-          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4"
           CORS_ALLOW_ORIGIN=^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
           MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
           DOMAIN=localhost
@@ -51,8 +57,19 @@ jobs:
           JWT_PUBLIC_KEY=config/jwt/public.pem
           JWT_PASSPHRASE=''
           EOF
+            echo ".env created from scratch"
+          fi
           
-          echo "=== .env.test.local created with content: ==="
+          # Créer .env.test.local qui va SURCHARGER .env pour les tests
+          cat > .env.test.local << 'EOF'
+          DATABASE_URL="mysql://root:password@127.0.0.1:3306/symfony_test?serverVersion=mariadb-10.6.0&charset=utf8mb4"
+          EOF
+          
+          echo ""
+          echo "=== .env file ==="
+          cat .env
+          echo ""
+          echo "=== .env.test.local file ==="
           cat .env.test.local
 
       - name: Generate JWT keys
