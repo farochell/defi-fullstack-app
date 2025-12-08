@@ -43,6 +43,7 @@ jobs:
           APP_ENV=test
           APP_SECRET=test-secret-key-for-ci
           DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony_test?charset=utf8mb4&serverVersion=mariadb-10.6.0
+          DEFAULT_URI=http://localhost
           EOF
 
       - name: Get composer cache directory
