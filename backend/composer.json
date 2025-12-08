@@ -1,4 +1,13 @@
 {
+    "name": "defi-fullstack/backend",
+    "version": "1.0.0",
+    "description": "Backend for Defi Fullstack",
+    "authors": [
+        {
+            "name": "Emile Camara",
+            "email": "camara.emile@gmail.com"
+        }
+    ],
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "dev",
