@@ -3,6 +3,7 @@ import { mount } from "@vue/test-utils"
 
 vi.mock("chart.js", () => {
   const mockDestroy = vi.fn()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const MockChart = vi.fn(function(this: any) {
     this.destroy = mockDestroy
     return this
@@ -117,7 +118,7 @@ describe("DistanceChart", () => {
       props: { data: mockData },
     })
 
-    const callCount = (Chart as any).mock.calls.length
+    const callCount = vi.mocked(Chart).mock.calls.length
 
     // Mettre à jour les données
     await wrapper.setProps({
@@ -138,7 +139,7 @@ describe("DistanceChart", () => {
     await wrapper.vm.$nextTick()
 
     // Le graphique devrait être créé à nouveau (détruit et recréé)
-    expect((Chart as any).mock.calls.length).toBeGreaterThan(callCount)
+    expect(vi.mocked(Chart).mock.calls.length).toBeGreaterThan(callCount)
   })
 
   it("gère correctement les différentes valeurs analyticCode", () => {

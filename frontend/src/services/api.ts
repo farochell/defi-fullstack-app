@@ -72,7 +72,7 @@ class ApiService {
 
   private handleError(error: unknown, defaultMessage: string, defaultCode: string): ApiError {
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<any>
+      const axiosError = error as AxiosError<ApiError>
 
       if (axiosError.response?.data) {
         return {

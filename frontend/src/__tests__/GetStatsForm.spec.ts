@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect } from "vitest"
 import { mount } from "@vue/test-utils"
 import GetStatsForm from "../components/GetStatsForm.vue"
 
@@ -105,7 +105,7 @@ describe("GetStatsForm", () => {
     await fromInput.setValue("2024-01-01")
 
     expect(wrapper.emitted()).toHaveProperty("update:modelValue")
-    const emitted = wrapper.emitted("update:modelValue") as any[]
+    const emitted = wrapper.emitted("update:modelValue") as unknown[][]
     expect(emitted[0][0].from).toBe("2024-01-01")
   })
 
@@ -118,7 +118,7 @@ describe("GetStatsForm", () => {
     await toInput.setValue("2024-12-31")
 
     expect(wrapper.emitted()).toHaveProperty("update:modelValue")
-    const emitted = wrapper.emitted("update:modelValue") as any[]
+    const emitted = wrapper.emitted("update:modelValue") as unknown[][]
     expect(emitted[0][0].to).toBe("2024-12-31")
   })
 
@@ -131,7 +131,7 @@ describe("GetStatsForm", () => {
     await select.setValue("day")
 
     expect(wrapper.emitted()).toHaveProperty("update:modelValue")
-    const emitted = wrapper.emitted("update:modelValue") as any[]
+    const emitted = wrapper.emitted("update:modelValue") as unknown[][]
     expect(emitted[0][0].groupBy).toBe("day")
   })
 
@@ -206,7 +206,7 @@ describe("GetStatsForm", () => {
 
     for (const value of groupByValues) {
       await select.setValue(value)
-      const emitted = wrapper.emitted("update:modelValue") as any[]
+      const emitted = wrapper.emitted("update:modelValue") as unknown[][]
       const lastEmit = emitted[emitted.length - 1][0]
       expect(lastEmit.groupBy).toBe(value)
     }
@@ -218,12 +218,8 @@ describe("GetStatsForm", () => {
     })
 
     const form = wrapper.find("form")
-    const event = new Event("submit")
-    const preventDefaultSpy = vi.spyOn(event, "preventDefault")
-
     await form.trigger("submit")
 
-    // Le @submit.prevent devrait gérer cela, mais nous vérifions que le formulaire a le bon gestionnaire
     expect(wrapper.emitted()).toHaveProperty("submit")
   })
 
@@ -263,7 +259,7 @@ describe("GetStatsForm", () => {
     const form = wrapper.find("form")
     await form.trigger("submit.prevent")
 
-    const submitEmitted = wrapper.emitted("submit") as any[]
+    const submitEmitted = wrapper.emitted("submit") as unknown[][]
     const submittedValue = submitEmitted[0][0]
 
     expect(submittedValue.from).toBe("2024-01-01")

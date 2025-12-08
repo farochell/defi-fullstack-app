@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { apiService } from '@/services/api'
 
-const props = defineProps<{
+defineProps<{
   show: boolean
 }>()
 

@@ -102,9 +102,6 @@ const handleRegisterSuccess = () => {
   showLoginModal.value = true
 }
 
-const handleCloseModal = () => {
-  showLoginModal.value = false
-}
 const closeAllModals = () => {
   showLoginModal.value = false
   showRegisterModal.value = false

@@ -1,11 +1,24 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import axios from "axios"
+import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from "vitest"
+import axios, { type AxiosInstance } from 'axios'
 import type { Router } from "vue-router"
 
-// Mock axios
+interface MockAxiosInstance extends Partial<AxiosInstance> {
+  post: Mock
+  get: Mock
+  defaults: {
+    headers: {
+      common: Record<string, string | undefined>
+    }
+  }
+  interceptors: {
+    response: {
+      use: Mock
+    }
+  }
+}
+
 vi.mock("axios")
 
-// Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {}
   return {
@@ -27,18 +40,20 @@ Object.defineProperty(window, "localStorage", {
 })
 
 describe("ApiService", () => {
-  let ApiService: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let ApiService: new () => any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let apiService: any
-  let mockAxiosInstance: any
-  let mockRouter: Router
-  let baseGet: any
-  let basePost: any
+  let mockAxiosInstance: MockAxiosInstance
+  let mockRouter: Partial<Router>
+  let baseGet: Mock
+  let basePost: Mock
 
   beforeEach(async () => {
     vi.clearAllMocks()
     localStorageMock.clear()
 
-    let errorInterceptor: any = null
+    let errorInterceptor: ((error: unknown) => Promise<void>) | null = null
     baseGet = vi.fn()
     basePost = vi.fn()
 
@@ -82,14 +97,14 @@ describe("ApiService", () => {
       }
     })
 
-    vi.mocked(axios.create).mockReturnValue(mockAxiosInstance as any)
-    vi.mocked(axios.isAxiosError).mockImplementation((error: any) => {
-      return error && error.isAxiosError === true
+    vi.mocked(axios.create).mockReturnValue(mockAxiosInstance as unknown as AxiosInstance)
+    vi.mocked(axios.isAxiosError).mockImplementation((error: unknown) => {
+      return !!error && typeof error === 'object' && 'isAxiosError' in error && error.isAxiosError === true
     })
 
     mockRouter = {
       push: vi.fn().mockResolvedValue(undefined),
-    } as any
+    }
 
     const module = await import("../services/api")
     ApiService = module.apiService.constructor

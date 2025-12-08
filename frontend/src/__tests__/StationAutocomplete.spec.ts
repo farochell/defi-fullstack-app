@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { mount } from "@vue/test-utils"
+import { mount, type VueWrapper } from "@vue/test-utils"
 import StationAutocomplete from "../components/StationAutocomplete.vue"
 
 describe("StationAutocomplete", () => {
@@ -10,7 +10,7 @@ describe("StationAutocomplete", () => {
     { id: 4, shortName: "AVAN", longName: "Les Avants" },
   ]
 
-  let wrapper: any
+  let wrapper: VueWrapper<InstanceType<typeof StationAutocomplete>>
 
   beforeEach(() => {
     wrapper = mount(StationAutocomplete, {
@@ -65,19 +65,6 @@ describe("StationAutocomplete", () => {
 
     expect(wrapper.text()).toContain("BCHX")
     expect(wrapper.text()).toContain("Bois-de-Chexbres")
-  })
-
-  it("affiche plusieurs résultats correspondants", async () => {
-    const input = wrapper.find("input")
-    await input.setValue("A")
-
-    await wrapper.vm.$nextTick()
-
-    const list = wrapper.find("ul")
-    if (list.exists()) {
-      const items = list.findAll("li")
-      expect(items.length).toBeGreaterThan(0)
-    }
   })
 
   it("émet update:modelValue lorsqu'une gare est sélectionnée", async () => {
@@ -242,11 +229,9 @@ describe("StationAutocomplete", () => {
     await wrapper.vm.$nextTick()
 
     const list = wrapper.find("ul")
-    if (list.exists()) {
-      const items = list.findAll("li")
-      items.forEach((item) => {
-        expect(item.exists()).toBe(true)
-      })
-    }
+    expect(list.exists()).toBe(true)
+
+    const items = list.findAll("li")
+    expect(items.length).toBeGreaterThan(0)
   })
 })

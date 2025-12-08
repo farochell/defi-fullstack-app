@@ -82,3 +82,9 @@ vitest:
 .PHONY: vitest-coverage
 vitest-coverage:
 	$(DC) exec $(FRONTEND_CONTAINER) npx vitest run --coverage
+# ----------------------------
+# Linter
+# ----------------------------
+.PHONY: lint
+lint:
+	$(DC) exec $(FRONTEND_CONTAINER) npm run lint
