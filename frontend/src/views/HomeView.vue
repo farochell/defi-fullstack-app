@@ -18,6 +18,7 @@ onMounted(() => {
 const TRAFFIC_TYPES = {
   FRET: 'fret',
   PASSAGER: 'passager',
+  MAINTENANCE: 'maintenance'
 } as const
 
 const fromStationId = ref('')
@@ -155,6 +156,7 @@ const closeAllModals = () => {
           >
             <option :value="TRAFFIC_TYPES.FRET">Fret</option>
             <option :value="TRAFFIC_TYPES.PASSAGER">Passager</option>
+            <option :value="TRAFFIC_TYPES.MAINTENANCE">Maintenance</option>
           </select>
         </div>
 

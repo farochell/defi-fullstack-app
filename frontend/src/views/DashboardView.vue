@@ -57,7 +57,7 @@ const loadStats = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div class="min-h-screen  from-blue-50 to-indigo-100">
     <HeaderFixed logoSrc="/logo.svg" title="Tableau de bord" />
 
     <div class="max-w-6xl mx-auto p-6 mt-24">

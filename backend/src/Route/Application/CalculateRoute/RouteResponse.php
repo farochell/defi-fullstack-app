@@ -56,7 +56,7 @@ class RouteResponse extends SerializableResponse implements CommandResponse
             'fromStationId' => $this->fromStationId,
             'toStationId' => $this->toStationId,
             'analyticCode' => $this->analyticCode,
-            'distanceKm' => $this->distanceKm,
+            'distanceKm' => round($this->distanceKm, 2),
             'path' => map(
                 fn (Station $station) => StationResponse::fromDomain($station),
                 $this->path

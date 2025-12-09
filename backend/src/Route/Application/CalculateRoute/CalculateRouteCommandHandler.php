@@ -11,7 +11,6 @@ namespace App\Route\Application\CalculateRoute;
 
 use App\Route\Domain\Entity\Route;
 use App\Route\Domain\Exception\StationNotFoundException;
-use App\Route\Domain\Repository\RouteRepositoryInterface;
 use App\Route\Domain\Repository\StationRepositoryInterface;
 use App\Route\Domain\Service\RailNetworkInterface;
 use App\Route\Domain\Service\ShortestPathFinderInterface;
@@ -55,7 +54,6 @@ class CalculateRouteCommandHandler implements CommandHandler
             path: $pathResult->stations
         );
 
-       // $this->routeRepo->save($route);
         $this->bus->publish(...$route->pullDomainEvents());
 
         return RouteResponse::fromDomain(
