@@ -35,6 +35,8 @@ enum ErrorCode: string
     case INVALID_ANALYTIC_CODE = 'INVALID_ANALYTIC_CODE';
     case ACCESS_FORBIDDEN = 'ACCESS_FORBIDDEN';
 
+    case EVENT_SUBSCRIBER_EXCEPTION = 'EVENT_SUBSCRIBER_EXCEPTION';
+
     public static function toString(int $errorCode): string
     {
         return match ($errorCode) {

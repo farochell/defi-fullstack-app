@@ -15,6 +15,7 @@ use App\Route\Domain\Repository\RouteRepositoryInterface;
 use App\Route\Domain\Repository\StationRepositoryInterface;
 use App\Route\Domain\Service\RailNetworkInterface;
 use App\Route\Domain\Service\ShortestPathFinderInterface;
+use App\Shared\Domain\Bus\Event\EventBus;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -39,8 +40,8 @@ class CalculateRouteTest extends KernelTestCase
         $stationRepo = $this->container->get(StationRepositoryInterface::class);
         $network = $this->container->get(RailNetworkInterface::class);
         $shortestPathFinder = $this->container->get(ShortestPathFinderInterface::class);
-        $routeRepo = $this->container->get(RouteRepositoryInterface::class);
-        $handler = new CalculateRouteCommandHandler($stationRepo, $network, $shortestPathFinder, $routeRepo);
+        $eventBus = $this->container->get(EventBus::class);
+        $handler = new CalculateRouteCommandHandler($stationRepo, $network, $shortestPathFinder, $eventBus);
         $response = $handler(new CalculateRouteCommand('IO', 'SP', 'fret'));
         $this->assertInstanceOf(RouteResponse::class, $response);
         $this->assertNotEmpty($response->path);
@@ -51,8 +52,8 @@ class CalculateRouteTest extends KernelTestCase
         $stationRepo = $this->container->get(StationRepositoryInterface::class);
         $network = $this->container->get(RailNetworkInterface::class);
         $shortestPathFinder = $this->container->get(ShortestPathFinderInterface::class);
-        $routeRepo = $this->container->get(RouteRepositoryInterface::class);
-        $handler = new CalculateRouteCommandHandler($stationRepo, $network, $shortestPathFinder, $routeRepo);
+        $eventBus = $this->container->get(EventBus::class);
+        $handler = new CalculateRouteCommandHandler($stationRepo, $network, $shortestPathFinder, $eventBus);
         $this->expectException(StationNotFoundException::class);
         $handler(new CalculateRouteCommand('IOS', 'SP', 'fret'));
     }

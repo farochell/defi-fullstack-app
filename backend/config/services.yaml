@@ -39,6 +39,9 @@ services:
     App\Shared\Infrastructure\Bus\Query\InMemoryQueryBus:
         arguments: [ !tagged_iterator app.query_handler ]
 
+    App\Shared\Infrastructure\Bus\Event\InMemoryEventBus:
+        arguments: [ !tagged_iterator app.domain_event_subscriber ]
+
     App\Route\Infrastructure\Repository\JsonStationRepository:
         arguments:
             $stationsFile: '%kernel.project_dir%/public/data/stations.json'

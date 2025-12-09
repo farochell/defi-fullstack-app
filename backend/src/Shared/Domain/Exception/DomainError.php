@@ -11,12 +11,8 @@ namespace App\Shared\Domain\Exception;
 
 abstract class DomainError extends \DomainException implements ApiExceptionInterface
 {
-    public function __construct()
+    public function __construct(public string $msg = '')
     {
-        parent::__construct($this->errorMessage());
+        parent::__construct($msg);
     }
-
-    abstract public function errorCode(): string;
-
-    abstract protected function errorMessage(): string;
 }

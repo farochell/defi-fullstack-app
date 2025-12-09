@@ -12,7 +12,7 @@ namespace App\Route\Domain\Entity;
 use App\Route\Domain\ValueObject\StationId;
 use App\Shared\Domain\Aggregate\AggregateRoot;
 
-class Station extends AggregateRoot
+class Station
 {
     public function __construct(
         public readonly StationId $id,

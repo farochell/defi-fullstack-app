@@ -17,6 +17,7 @@ use App\Route\Domain\Service\RailNetworkInterface;
 use App\Route\Domain\Service\ShortestPathFinderInterface;
 use App\Route\Domain\ValueObject\AnalyticCodeEnum;
 use App\Shared\Domain\Bus\Command\CommandHandler;
+use App\Shared\Domain\Bus\Event\EventBus;
 
 class CalculateRouteCommandHandler implements CommandHandler
 {
@@ -24,7 +25,7 @@ class CalculateRouteCommandHandler implements CommandHandler
         private readonly StationRepositoryInterface $stationRepo,
         private readonly RailNetworkInterface $network,
         private readonly ShortestPathFinderInterface $shortestPathFinder,
-        private readonly RouteRepositoryInterface $routeRepo,
+        private readonly EventBus $bus,
     ) {
     }
 
@@ -54,7 +55,8 @@ class CalculateRouteCommandHandler implements CommandHandler
             path: $pathResult->stations
         );
 
-        $this->routeRepo->save($route);
+       // $this->routeRepo->save($route);
+        $this->bus->publish(...$route->pullDomainEvents());
 
         return RouteResponse::fromDomain(
             $route->id->value(),

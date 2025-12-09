@@ -13,9 +13,8 @@ use App\Security\Domain\ValueObject\Email;
 use App\Security\Domain\ValueObject\HashedPassword;
 use App\Security\Domain\ValueObject\Roles;
 use App\Security\Domain\ValueObject\UserId;
-use App\Shared\Domain\Aggregate\AggregateRoot;
 
-class User extends AggregateRoot
+class User
 {
     public function __construct(
         public readonly UserId $id,
