@@ -80,7 +80,7 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
         $uri = rtrim(
             substr(
                 $request->getRequestUri(),
-                strlen($request->getBaseUrl(),),
+                strlen($request->getBaseUrl()),
             ),
             '/',
         );
@@ -94,4 +94,5 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
             || str_starts_with($uri, '/_wdt/')
             || str_starts_with($uri, '/_fragment/');
     }
+
 }

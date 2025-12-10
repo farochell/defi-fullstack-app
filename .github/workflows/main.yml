@@ -213,6 +213,15 @@ jobs:
           path: backend/coverage/
           if-no-files-found: ignore
 
+      - name: Run PHPStan
+        working-directory: ./backend
+        run: vendor/bin/phpstan analyse src
+
+      - name: Run PHPCS
+        working-directory: ./backend
+        run: |
+          vendor/bin/phpcs --standard=PSR12 src
+
   # ----------------------------
   # Frontend Vue.js / Vitest
   # ----------------------------
