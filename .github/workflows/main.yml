@@ -222,6 +222,13 @@ jobs:
         run: |
           vendor/bin/phpcs --standard=PSR12 src
 
+      - name: Run PHP-CS-Fixer
+        working-directory: ./backend
+        run: |
+          vendor/bin/php-cs-fixer fix src
+          
+      
+
   # ----------------------------
   # Frontend Vue.js / Vitest
   # ----------------------------
