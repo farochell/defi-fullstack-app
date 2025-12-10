@@ -224,11 +224,18 @@ jobs:
 
       - name: Run PHP-CS-Fixer
         working-directory: ./backend
-        continue-on-error: true
         run: |
           vendor/bin/php-cs-fixer fix src --dry-run --diff || true
-          
-      
+          vendor/bin/php-cs-fixer fix src --dry-run --diff --format=json > php-cs-fixer-report.json || true
+      - name: Upload PHP-CS-Fixer report
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-cs-fixer-report
+          path: backend/php-cs-fixer-report.json
+          if-no-files-found: ignore
+
+
+
 
   # ----------------------------
   # Frontend Vue.js / Vitest
