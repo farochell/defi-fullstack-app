@@ -225,13 +225,12 @@ jobs:
       - name: Run PHP-CS-Fixer (check)
         working-directory: ./backend
         continue-on-error: true
-        run: vendor/bin/php-cs-fixer fix src --dry-run --diff
+        run: vendor/bin/php-cs-fixer fix src --dry-run --diff || true
 
       - name: Generate PHP-CS-Fixer JSON report
         working-directory: ./backend
         continue-on-error: true
-        run: vendor/bin/php-cs-fixer fix src --dry-run --diff --format=json > php-cs-fixer-report.json
-
+        run: vendor/bin/php-cs-fixer fix src --dry-run --diff --format=json > php-cs-fixer-report.json || true
 
       - name: Upload PHP-CS-Fixer report
         uses: actions/upload-artifact@v4
