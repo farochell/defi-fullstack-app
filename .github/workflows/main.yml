@@ -226,7 +226,7 @@ jobs:
         continue-on-error: true
         working-directory: ./backend
         run: |
-          vendor/bin/php-cs-fixer fix src --dry-run --diff || echo "::warning::PHP-CS-Fixer found formatting issues"
+          vendor/bin/php-cs-fixer fix src --dry-run --diff
           
       
 
