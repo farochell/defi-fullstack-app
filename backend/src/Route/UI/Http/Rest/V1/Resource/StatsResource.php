@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Route\UI\Http\Rest\V1\Resource;
@@ -87,7 +88,8 @@ use App\Route\UI\Http\Rest\V1\Controller\GetStatsController;
                         ])
                     ),
                 ],
-                summary: 'BONUS : Distances agrégées par code analytique', description: 'Retourne la somme des distances parcourues par code analytique sur une
+                summary: 'BONUS : Distances agrégées par code analytique',
+                description: 'Retourne la somme des distances parcourues par code analytique sur une
                                    période donnée. Si aucune période n’est fournie, utilise la période
                                    complète disponible.',
                 parameters: [
@@ -114,7 +116,6 @@ use App\Route\UI\Http\Rest\V1\Controller\GetStatsController;
                     ),
                 ],
             ),
-
             paginationEnabled: false,
             output: false,
             read: false,

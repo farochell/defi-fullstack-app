@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Route\Infrastructure\Service;
@@ -50,7 +51,7 @@ class JsonRailNetwork implements RailNetworkInterface
                 $to = $this->stationRepo->findByShortName($item['child']);
 
                 if (!$from || !$to) {
-                    throw new StationNotFoundException('Station inconnue dans distances.json : '.$item['parent'].' ou '.$item['child']);
+                    throw new StationNotFoundException('Station inconnue dans distances.json : ' . $item['parent'] . ' ou ' . $item['child']);
                 }
 
                 $this->links[] = new DistanceLink(

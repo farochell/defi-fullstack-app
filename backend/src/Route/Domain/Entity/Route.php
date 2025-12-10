@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Route\Domain\Entity;
@@ -14,6 +15,7 @@ use App\Route\Domain\ValueObject\AnalyticCodeEnum;
 use App\Route\Domain\ValueObject\RouteId;
 use App\Route\Domain\ValueObject\Stations;
 use App\Shared\Domain\Aggregate\AggregateRoot;
+
 use function Lambdish\Phunctional\map;
 
 class Route extends AggregateRoot
@@ -71,6 +73,7 @@ class Route extends AggregateRoot
                 $route->createdAt->format('Y-m-d H:i:s')
             )
         );
+
         return $route;
     }
 }

@@ -5,6 +5,7 @@
  *
  * @project  api-monagil
  */
+
 declare(strict_types=1);
 
 namespace App\Security\Infrastructure\Service;

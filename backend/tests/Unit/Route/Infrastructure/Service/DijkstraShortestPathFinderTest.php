@@ -37,7 +37,7 @@ class DijkstraShortestPathFinderTest extends TestCase
         $network->method('getStationByShortName')->willReturnMap([
             [$stationA->shortName, $stationA],
             [$stationB->shortName, $stationB],
-            [$stationB->shortName, $stationC]
+            [$stationC->shortName, $stationC]
         ]);
 
         $network->method('getOutgoingLinks')->willReturnMap([

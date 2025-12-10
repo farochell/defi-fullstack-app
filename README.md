@@ -28,7 +28,7 @@ L'application repose sur un ensemble de technologies et composants principaux pe
 
 #### 🏛 Architecture
 
-- Clean Architecture (Ports & Adapters)
+- Clean Architecture
 Séparation stricte entre Domain, Application, Infrastructure et UI.
 
 - Domain-Driven Design (DDD light)

@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Shared\Infrastructure\Bus;
@@ -55,7 +56,7 @@ final class CallableFirstParameterExtractor
             $subscribedEvents = $domainEventSubscriber::subscribedTo();
 
             foreach ($subscribedEvents as $subscribedEvent) {
-                /** @var class-string<DomainEvent> $subscribedEvent */
+                /* @var class-string<DomainEvent> $subscribedEvent */
                 $subscribers[$subscribedEvent][] = $domainEventSubscriber;
             }
 

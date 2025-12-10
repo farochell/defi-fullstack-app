@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Shared\Domain\Aggregate;
@@ -23,6 +24,7 @@ abstract class AggregateRoot
     {
         $events = $this->domainEvents;
         $this->domainEvents = [];
+
         return $events;
     }
 

@@ -2,7 +2,6 @@
 
 /**
  * @author Emile Camara <camara.emile@gmail.com>
- *
  * @project  defi-fullstack-app
  */
 
@@ -15,25 +14,27 @@ use App\Shared\Domain\Exception\ApiExceptionTrait;
 use App\Shared\Domain\Exception\ErrorCode;
 use DomainException;
 
-class UnAuthorizedException extends DomainException implements ApiExceptionInterface
+class UserNotFoundException extends DomainException implements ApiExceptionInterface
 {
     use ApiExceptionTrait;
 
-    public function __construct()
+    public function __construct(private readonly string $email)
     {
         parent::__construct(
-            message: 'Access Forbidden',
-            code: 403
+            message: 'Utilisateur non trouvé',
+            code: 400
         );
     }
 
     public function getErrorCode(): ErrorCode
     {
-        return ErrorCode::ACCESS_FORBIDDEN;
+        return ErrorCode::USER_NOT_FOUND;
     }
 
     public function getDetails(): array
     {
-        return [];
+        return [
+            'message' => 'Utilisateur avec email ' . $this->email . ' introuvable'
+        ];
     }
 }

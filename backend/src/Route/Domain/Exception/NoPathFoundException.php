@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Route\Domain\Exception;
@@ -33,7 +34,7 @@ class NoPathFoundException extends \DomainException implements ApiExceptionInter
     public function getDetails(): array
     {
         return [
-            'message' => 'Trajet non trouvé entre les stations '.$this->from.' et '.$this->to,
+            'message' => 'Trajet non trouvé entre les stations ' . $this->from . ' et ' . $this->to,
         ];
     }
 }

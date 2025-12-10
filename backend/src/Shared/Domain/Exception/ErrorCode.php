@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Shared\Domain\Exception;
@@ -37,11 +38,13 @@ enum ErrorCode: string
 
     case EVENT_SUBSCRIBER_EXCEPTION = 'EVENT_SUBSCRIBER_EXCEPTION';
 
+    case USER_NOT_FOUND = 'USER_NOT_FOUND';
+
     public static function toString(int $errorCode): string
     {
         return match ($errorCode) {
             404 => self::ROUTE_NOT_FOUND->value,
-            default => self::UNKNOWN_ERROR->value
+            default => self::UNKNOWN_ERROR->value,
         };
     }
 }

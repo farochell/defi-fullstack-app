@@ -5,12 +5,12 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Route\Domain\Entity;
 
 use App\Route\Domain\ValueObject\StationId;
-use App\Shared\Domain\Aggregate\AggregateRoot;
 
 class Station
 {

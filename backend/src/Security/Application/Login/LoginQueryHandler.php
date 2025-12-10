@@ -5,18 +5,19 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Security\Application\Login;
 
 use App\Security\Domain\Exception\InvalidCredentialsException;
+use App\Security\Domain\Exception\UserNotFoundException;
 use App\Security\Domain\Repository\UserRepository;
 use App\Security\Domain\Service\PasswordHasher;
 use App\Security\Domain\ValueObject\Email;
 use App\Security\Domain\ValueObject\Password;
 use App\Security\Domain\ValueObject\Role;
 use App\Shared\Domain\Bus\Query\QueryHandler;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 use function Lambdish\Phunctional\map;
 
@@ -33,14 +34,17 @@ class LoginQueryHandler implements QueryHandler
         $user = $this->userRepository->findByEmail(
             Email::fromString($query->email),
         );
+
         if (!$user) {
             throw new UserNotFoundException($query->email);
         }
 
-        if (!$this->passwordHasher->verify(
-            $user->hashedPassword,
-            Password::fromString($query->password)
-        )) {
+        if (
+            !$this->passwordHasher->verify(
+                $user->hashedPassword,
+                Password::fromString($query->password)
+            )
+        ) {
             throw new InvalidCredentialsException();
         }
 
@@ -48,7 +52,6 @@ class LoginQueryHandler implements QueryHandler
             fn (Role $role): string => $role->value,
             $user->roles
         );
-
         return new LoginResponse(
             $user->id->value(),
             $user->email->value(),

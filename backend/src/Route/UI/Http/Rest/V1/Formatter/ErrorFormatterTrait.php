@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Route\UI\Http\Rest\V1\Formatter;
@@ -15,14 +16,14 @@ use App\Route\Domain\Exception\NoPathFoundException;
 use App\Route\Domain\Exception\StationNotFoundException;
 use App\Security\Domain\Exception\EmailAlreadyExistException;
 use App\Security\Domain\Exception\InvalidCredentialsException;
+use App\Security\Domain\Exception\UserNotFoundException;
 use App\Shared\Domain\Exception\ErrorCode;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Throwable;
 
 trait ErrorFormatterTrait
 {
-    public function formatError(Throwable $error): ?JsonResponse
+    public function formatError(\Throwable $error): ?JsonResponse
     {
         if (
             $error instanceof StationNotFoundException
@@ -30,6 +31,7 @@ trait ErrorFormatterTrait
             || $error instanceof EmailAlreadyExistException
             || $error instanceof InvalidCredentialsException
             || $error instanceof NoPathFoundException
+            || $error instanceof UserNotFoundException
         ) {
             return new JsonResponse([
                 'code' => $error->getErrorCode(),

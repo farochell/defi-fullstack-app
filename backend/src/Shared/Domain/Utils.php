@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Shared\Domain;
@@ -61,9 +62,9 @@ final class Utils
         $results = [];
         foreach ($array as $key => $value) {
             if (is_array($value) && [] !== $value) {
-                $results = array_merge($results, self::dot($value, $prepend.$key.'.'));
+                $results = array_merge($results, self::dot($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend . $key] = $value;
             }
         }
 

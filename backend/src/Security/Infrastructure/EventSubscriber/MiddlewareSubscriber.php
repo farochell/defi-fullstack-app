@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Security\Infrastructure\EventSubscriber;
@@ -79,8 +80,7 @@ readonly class MiddlewareSubscriber implements EventSubscriberInterface
         $uri = rtrim(
             substr(
                 $request->getRequestUri(),
-                strlen($request->getBaseUrl(),
-                ),
+                strlen($request->getBaseUrl(),),
             ),
             '/',
         );

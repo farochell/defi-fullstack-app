@@ -55,7 +55,7 @@ fixtures:
 phpstan:
 	$(DC) exec $(PHP_CONTAINER) ./vendor/bin/phpstan analyse --memory-limit=2G
 
-.PHONY: phpcs
+.PHONY: php-cs-fixer
 phpcs:
 	$(DC) exec $(PHP_CONTAINER) ./vendor/bin/php-cs-fixer fix src
 

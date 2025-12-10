@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Route\Application\GetStats;
@@ -12,7 +13,6 @@ namespace App\Route\Application\GetStats;
 use App\Route\Domain\Repository\RouteRepositoryInterface;
 use App\Route\Domain\ValueObject\GroupBy;
 use App\Shared\Domain\Bus\Query\QueryHandler;
-use DateTimeImmutable;
 
 class GetStatsQueryHandler implements QueryHandler
 {
@@ -22,8 +22,8 @@ class GetStatsQueryHandler implements QueryHandler
 
     public function __invoke(GetStatsQuery $query): AnalyticDistancesResponse
     {
-        $from = $query->from ? new DateTimeImmutable($query->from) : null;
-        $to = $query->to ? new DateTimeImmutable($query->to) : null;
+        $from = $query->from ? new \DateTimeImmutable($query->from) : null;
+        $to = $query->to ? new \DateTimeImmutable($query->to) : null;
 
         $groupBy = $query->groupBy ? GroupBy::tryFrom($query->groupBy) : null;
 

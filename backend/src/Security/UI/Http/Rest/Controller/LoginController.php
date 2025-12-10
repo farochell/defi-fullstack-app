@@ -5,6 +5,7 @@
  *
  * @project  defi-fullstack-app
  */
+
 declare(strict_types=1);
 
 namespace App\Security\UI\Http\Rest\Controller;
@@ -47,8 +48,7 @@ class LoginController
 
             return JsonResponse::fromJsonString(json_encode([
                 'token' => $this->accessTokenGenerator->generate($userIdentity),
-            ], JSON_THROW_ON_ERROR)
-            );
+            ], JSON_THROW_ON_ERROR));
         } catch (\Throwable $e) {
             return $this->formatError($e);
         }
