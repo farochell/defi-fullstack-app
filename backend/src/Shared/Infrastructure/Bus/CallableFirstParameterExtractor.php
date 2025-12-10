@@ -57,7 +57,7 @@ final class CallableFirstParameterExtractor
 
             /* @var class-string<DomainEvent> $subscribedEvent */
             foreach ($subscribedEvents as $subscribedEvent) {
-                $subscribers[$subscribedEvent][] = $domainEventSubscriber;
+                $subscribers[(string)$subscribedEvent][] = $domainEventSubscriber;
             }
 
             return $subscribers;
