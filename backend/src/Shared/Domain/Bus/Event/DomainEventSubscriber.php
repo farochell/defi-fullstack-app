@@ -13,7 +13,7 @@ namespace App\Shared\Domain\Bus\Event;
 interface DomainEventSubscriber
 {
     /**
-     * @return array<DomainEvent>
+     * @return array<class-string<DomainEvent>>
      */
     public static function subscribedTo(): array;
 }
