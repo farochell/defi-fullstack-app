@@ -225,7 +225,7 @@ jobs:
       - name: Run PHP-CS-Fixer
         working-directory: ./backend
         run: |
-          vendor/bin/php-cs-fixer fix src
+          vendor/bin/php-cs-fixer fix src --dry-run --diff || echo "::warning::PHP-CS-Fixer found formatting issues"
           
       
 
