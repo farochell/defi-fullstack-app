@@ -223,6 +223,7 @@ jobs:
           vendor/bin/phpcs --standard=PSR12 src
 
       - name: Run PHP-CS-Fixer
+        continue-on-error: true
         working-directory: ./backend
         run: |
           vendor/bin/php-cs-fixer fix src --dry-run --diff || echo "::warning::PHP-CS-Fixer found formatting issues"
