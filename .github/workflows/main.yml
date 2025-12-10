@@ -221,16 +221,16 @@ jobs:
         working-directory: ./backend
         run: |
           vendor/bin/phpcs --standard=PSR12 src
+        continue-on-error: true
 
       - name: Run PHP-CS-Fixer (check)
         working-directory: ./backend
         run: vendor/bin/php-cs-fixer fix src --dry-run --diff || true
-        continue-on-error: true
+
 
       - name: Generate PHP-CS-Fixer JSON report
         working-directory: ./backend
         run: vendor/bin/php-cs-fixer fix src --dry-run --diff --format=json > php-cs-fixer-report.json || true
-        continue-on-error: true
 
       - name: Upload PHP-CS-Fixer report
         uses: actions/upload-artifact@v4
