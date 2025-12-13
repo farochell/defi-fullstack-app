@@ -5,6 +5,12 @@ echo "🚀 ENTRYPOINT STARTED"
 
 cd /app
 
+# --------Copy default .env if none exists
+if [ ! -f ".env" ] && [ -f ".env.example" ]; then
+    echo "📄 Copying default .env file..."
+    cp .env.example .env
+fi
+
 # Composer
 if [ -f "composer.json" ]; then
     echo "📦 Installing Composer dependencies..."
